@@ -1,8 +1,6 @@
 set nu rnu         " set number and relative number
 
-execute pathogen#infect()
 filetype plugin indent on
-
 
 " open a NERDTree automatically when vim starts up
 " autocmd vimenter * NERDTree

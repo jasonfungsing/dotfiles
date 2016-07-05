@@ -1,6 +1,6 @@
 # Path to your oh-my-zsh installation.
+# export ZSH=/Users/jasonfeng/.oh-my-zsh
 export ZSH=~/.oh-my-zsh
-
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -50,14 +50,14 @@ ZSH_THEME="mh"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew npm osx aws github gitignore golang grunt gulp mvn python scala spring sublime z xcode zsh-syntax-highlighting) 
+plugins=(git brew npm osx aws github gitignore golang mvn python scala sublime xcode zsh-syntax-highlighting)
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
-fpath=(/usr/local/share/zsh-completions $fpath)
+source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -84,5 +84,6 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-#source ~/.bash_profile
-. `brew --prefix`/etc/profile.d/z.sh
+fpath=(/usr/local/share/zsh-completions $fpath)
+
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
