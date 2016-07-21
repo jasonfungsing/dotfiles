@@ -46,9 +46,10 @@
     co = checkout
     aa = add --all
     fu = fetch upstream
+    rbum = rebease upstream/master
     cm = commit -m
     ca = commit --amend
     b = branch
-    bd = branch -D
+    bd = branch -d 
 [push]
     default = simple

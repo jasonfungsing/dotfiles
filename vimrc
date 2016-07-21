@@ -1,16 +1,12 @@
-set nu rnu         " set number and relative number
+set nu
+" set cursorline
 
-filetype plugin indent on
-
-" open a NERDTree automatically when vim starts up
-" autocmd vimenter * NERDTree
-
-" open a NERDTree automatically when vim starts up if no files were specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-"close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+call plug#begin('~/.vim/plugged')
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'gavocanov/vim-js-indent', { 'for': 'javascript' }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
+call plug#end()
 
 " Disable Arrows Keys
 nnoremap <Left> :echoe "Use h"<CR>
