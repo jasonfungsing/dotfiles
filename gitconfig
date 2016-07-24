@@ -1,6 +1,6 @@
 [user]
     name = Jason Feng
-    email = jason.feng@ratecity.com.au
+    email = jason@foxlime.io 
 [credential]
     helper = osxkeychain
 [filter "lfs"]
