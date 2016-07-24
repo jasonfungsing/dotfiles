@@ -42,11 +42,11 @@
     mtsl = mergetool --tool=sublimerge
     tree = log --branches --remotes --tags --graph --oneline --abbrev-commit --author-date-order --decorate --format=format:'%C(bold blue)%h%C(reset) %C(reset)%C(bold yellow)%d%C(reset) - %C(dim white)%aD (%ar)%C(reset)%n'' %C(bold cyan)%s%C(reset) %C(white)- %an%C(reset)'
     cl = clone
-    st = status
+    s = status
     co = checkout
     aa = add --all
     fu = fetch upstream
-    rbum = rebease upstream/master
+    rbum = rebase upstream/master
     cm = commit -m
     ca = commit --amend
     b = branch
