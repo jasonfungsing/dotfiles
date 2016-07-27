@@ -3,7 +3,7 @@ set nocompatible
 set laststatus=2
 filetype plugin on
 runtime mrcros/matchit.vim
-" set cursorline
+set cursorline
 
 " Open a NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
