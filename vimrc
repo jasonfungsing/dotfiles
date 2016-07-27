@@ -1,5 +1,6 @@
 set nu
 set nocompatible
+set laststatus=2
 filetype plugin on
 runtime mrcros/matchit.vim
 " set cursorline
@@ -20,6 +21,8 @@ Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'rizzatti/dash.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 call plug#end()
 
 " Set up leader key to <,>
