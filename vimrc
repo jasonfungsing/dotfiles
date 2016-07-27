@@ -3,8 +3,14 @@ set nocompatible
 filetype plugin on
 runtime mrcros/matchit.vim
 " set cursorline
-" open a NERDTree automatically when vim starts up
-autocmd vimenter * NERDTree
+
+" Open a NERDTree automatically when vim starts up if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Close vim if the only window left open is a NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'gavocanov/vim-js-indent', { 'for': 'javascript' }
@@ -13,7 +19,17 @@ Plug 'tpope/vim-surround'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'rizzatti/dash.vim'
 call plug#end()
+
+" Set up leader key to <,>
+let mapleader = ","
+
+" Key mapping for open NERDTree
+nmap <leader>ne :NERDTreeToggle<cr>
+
+" Key mapping for Dash
+:nmap <silent> <leader>d <Plug>DashSearch
 
 " Disable Arrows Keys
 nnoremap <Left> :echoe "Use h"<CR>
