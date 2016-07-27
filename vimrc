@@ -4,7 +4,27 @@ set laststatus=2
 filetype plugin on
 runtime mrcros/matchit.vim
 set cursorline
+set nrformats=
+set noswapfile
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set suffixesadd+=.js
 
+" Set up leader key to <,>
+let mapleader = ","
+
+" Key mapping for open NERDTree
+nmap <leader>ne :NERDTreeToggle<cr>
+
+" Key mapping for Dash
+:nmap <silent> <leader>d <Plug>DashSearch
+
+" Disable Arrows Keys
+nnoremap <Left> :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+nnoremap <Up> :echoe "Use k"<CR>
+nnoremap <Down> :echoe "Use j"<CR>
 " Open a NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -24,25 +44,3 @@ Plug 'rizzatti/dash.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 call plug#end()
-
-" Set up leader key to <,>
-let mapleader = ","
-
-" Key mapping for open NERDTree
-nmap <leader>ne :NERDTreeToggle<cr>
-
-" Key mapping for Dash
-:nmap <silent> <leader>d <Plug>DashSearch
-
-" Disable Arrows Keys
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
-
-set nrformats=
-set noswapfile
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-set suffixesadd+=.js
