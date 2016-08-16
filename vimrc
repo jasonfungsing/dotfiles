@@ -50,4 +50,5 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'rizzatti/dash.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'scrooloose/nerdcommenter'
 call plug#end()
