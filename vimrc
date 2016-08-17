@@ -6,8 +6,8 @@ runtime mrcros/matchit.vim
 set cursorline
 set nrformats=
 set noswapfile
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set suffixesadd+=.js
 
