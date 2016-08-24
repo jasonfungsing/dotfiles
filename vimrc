@@ -14,8 +14,23 @@ set suffixesadd+=.js
 " Set up leader key to <,>
 let mapleader = ","
 
+" This allows buffers to be hidden if you've modified a buffer.
+set hidden
+
+" ------ NERD Tree ------
 " Key mapping for open NERDTree
 nmap <leader>ne :NERDTreeToggle<cr>
+
+" Key mapping to find the current file in the tree
+nmap <leader>n :NERDTreeFind<cr>
+
+" Open a NERDTree automatically when vim starts up if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Close vim if the only window left open is a NERDTree
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" ------
 
 " Key mapping for Dash
 :nmap <silent> <leader>d <Plug>DashSearch
@@ -32,6 +47,9 @@ map <C-K> :bprev<CR>
 map <C-L> :tabn<CR>
 map <C-H> :tabp<CR>
 
+" To open a new empty buffer
+map <C-T> :enew<CR>
+
 " Map keys to insert empty line without enter insert mode
 map <Enter> o<ESC>
 map <S-Enter> O<ESC>
@@ -39,12 +57,13 @@ map <S-Enter> O<ESC>
 " Map key to insert empty space without enter insert mode
 :nnoremap <space> i<space><esc>
 
-" Open a NERDTree automatically when vim starts up if no files were specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" ------ airline ------
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
 
-" Close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" " Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+" ------
 
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
