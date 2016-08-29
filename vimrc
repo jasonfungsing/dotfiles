@@ -10,6 +10,7 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 set suffixesadd+=.js
+set visualbell                  "No sounds
 
 " Set up leader key to <,>
 let mapleader = ","
