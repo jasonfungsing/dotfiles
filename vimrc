@@ -81,4 +81,5 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'dkprice/vim-easygrep'
+Plug 'valloric/YouCompleteMe'
 call plug#end()
