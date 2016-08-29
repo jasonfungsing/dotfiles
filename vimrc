@@ -10,6 +10,7 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 set suffixesadd+=.js
+set visualbell                  "No sounds
 
 " Set up leader key to <,>
 let mapleader = ","
@@ -80,6 +81,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'dkprice/vim-easygrep'
+Plug 'valloric/YouCompleteMe'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'morhetz/gruvbox'
