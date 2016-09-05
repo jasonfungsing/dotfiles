@@ -95,4 +95,5 @@ export NVM_DIR="$HOME/.nvm"
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
-alias vi=vim
+alias vi=nvim
+eval "$(rbenv init -)"
