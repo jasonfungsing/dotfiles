@@ -10,8 +10,9 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 set suffixesadd+=.js
-set visualbell                  "No sounds
-set hlsearch
+
+" Automatically remove all trailing whitespace before saving
+autocmd BufWritePre * %s/\s\+$//e
 
 " Set up leader key to <,>
 let mapleader = ","
@@ -108,3 +109,16 @@ nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 
 nnoremap \ :Ag<SPACE>
+
+" Map CTRL+Q to close buffer
+map <C-q> :bp\|bd #<cr>
+imap <C-q> <ESC>:bp\|bd #<cr>
+
+" Map CTRL+T for tab
+map <C-t> <esc>:tabnew<CR>
+
+" NERDTree configuration
+let g:NERDTreeDirArrows=0
+let NERDTreeChDirMode=2
+let NERDTreeShowLineNumbers=1
+
