@@ -1,6 +1,6 @@
 [user]
     name = Jason Feng
-    email = jason@foxlime.io 
+    email = jfeng@dius.com.au
 [credential]
     helper = osxkeychain
 [filter "lfs"]
@@ -21,7 +21,7 @@
     keepBackup = true
     prompt = false
 [merge]
-    tool = Kaleidoscope 
+    tool = Kaleidoscope
 
 
 [difftool "Kaleidoscope"]
@@ -31,7 +31,7 @@
 [difftool]
     prompt = false
 [diff]
-    tool = Kaleidoscope 
+    tool = Kaleidoscope
     algorithm = patience
 
 
@@ -54,6 +54,7 @@
     cm = commit -m
     ca = commit --amend
     b = branch
-    bd = branch -d 
+    bd = branch -d
+    psuo = push --set-upstream origin
 [push]
     default = simple
