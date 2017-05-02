@@ -51,7 +51,7 @@ ZSH_THEME="cobalt2"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew npm osx aws github gitignore golang mvn python scala sublime xcode zsh-syntax-highlighting z)
+plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode zsh-syntax-highlighting z)
 
 # User configuration
 
