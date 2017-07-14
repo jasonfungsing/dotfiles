@@ -51,7 +51,7 @@ ZSH_THEME="cobalt2"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode zsh-syntax-highlighting z)
+plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime zsh-syntax-highlighting xcode z)
 
 # User configuration
 
@@ -102,4 +102,7 @@ if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc' ]; then s
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
 export PATH="/usr/local/sbin:$PATH"
+
+eval "$(direnv hook zsh)"
