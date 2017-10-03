@@ -106,3 +106,4 @@ if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc' ]; 
 export PATH="/usr/local/sbin:$PATH"
 
 eval "$(direnv hook zsh)"
+export PATH="/usr/local/opt/curl/bin:$PATH"
