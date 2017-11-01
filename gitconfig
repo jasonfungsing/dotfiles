@@ -18,7 +18,7 @@
     cmd = subl -n --wait \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\" --command \"sublimerge_diff_views\"
     trustExitCode = false
 [mergetool]
-    keepBackup = true
+	keepBackup = false
     prompt = false
 [merge]
     tool = Kaleidoscope

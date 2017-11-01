@@ -107,3 +107,7 @@ export PATH="/usr/local/sbin:$PATH"
 
 eval "$(direnv hook zsh)"
 export PATH="/usr/local/opt/curl/bin:$PATH"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+
+alias gt='gittower'
