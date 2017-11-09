@@ -5,11 +5,28 @@ filetype plugin on
 runtime mrcros/matchit.vim
 set cursorline
 set nrformats=
-set noswapfile
+
+syntax enable
+
+set suffixesadd+=.js
+
+" Indentation
+set autoindent
+set smartindent
+set smarttab
 set shiftwidth=2
 set softtabstop=2
+set tabstop=2
 set expandtab
-set suffixesadd+=.js
+
+" Auto indent pasted text
+nnoremap p p=`]<C-o>
+nnoremap P P=`]<C-o>
+
+" Turn Off Swap Files
+set noswapfile
+set nobackup
+set nowb
 
 " Automatically remove all trailing whitespace before saving
 autocmd BufWritePre * %s/\s\+$//e
@@ -30,6 +47,10 @@ nmap <leader>n :NERDTreeFind<cr>
 " Open a NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" makes the nerdTree prettier
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 
 " Close vim if the only window left open is a NERDTree
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
