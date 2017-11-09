@@ -74,7 +74,6 @@ Plug 'gavocanov/vim-js-indent', { 'for': 'javascript' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'tpope/vim-surround'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
-Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'rizzatti/dash.vim'
 Plug 'vim-airline/vim-airline'
@@ -83,9 +82,14 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'pangloss/vim-javascript'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'scrooloose/syntastic'
+Plug 'majutsushi/tagbar'
+Plug 'godlygeek/tabular'
+Plug 'valloric/youcompleteme'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -118,7 +122,7 @@ imap <C-q> <ESC>:bp\|bd #<cr>
 map <C-t> <esc>:tabnew<CR>
 
 " NERDTree configuration
-let g:NERDTreeDirArrows=0
+let NERDTreeDirArrows=0
 let NERDTreeChDirMode=2
 let NERDTreeShowLineNumbers=1
 
