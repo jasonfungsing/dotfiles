@@ -56,7 +56,9 @@
     ca = commit --amend
     b = branch
     bd = branch -d
+    bD = branch -D
     psuo = push --set-upstream origin
+    rmlb = branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d
 
 [push]
     default = simple

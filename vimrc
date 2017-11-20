@@ -134,6 +134,7 @@ Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'godlygeek/tabular'
 Plug 'valloric/youcompleteme'
+Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 call plug#end()
@@ -166,6 +167,9 @@ imap <C-q> <ESC>:bp\|bd #<cr>
 
 " Map CTRL+T for tab
 map <C-t> <esc>:tabnew<CR>
+
+" Tagbar Toggle
+nmap <F8> :TagbarToggle<CR>
 
 " NERDTree configuration
 let NERDTreeDirArrows=0
