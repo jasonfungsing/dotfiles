@@ -23,7 +23,6 @@
 [merge]
     tool = Kaleidoscope
 
-
 [difftool "Kaleidoscope"]
     cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool "sublimerge"]
@@ -40,10 +39,12 @@
     dtkc=difftool --cached
     mtk=mergetool
     mtkc=mergetool --cached
+
     dts = difftool --tool=sublimerge
     dtsc = difftool --tool=sublimerge --cached
     mts = mergetool --tool=sublimerge
     mtsc = mergetool --tool=sublimerge --cached
+
     tree = log --branches --remotes --tags --graph --oneline --abbrev-commit --author-date-order --decorate --format=format:'%C(bold blue)%h%C(reset) %C(reset)%C(bold yellow)%d%C(reset) - %C(dim white)%aD (%ar)%C(reset)%n'' %C(bold cyan)%s%C(reset) %C(white)- %an%C(reset)'
     cl = clone
     s = status
@@ -56,9 +57,6 @@
     b = branch
     bd = branch -d
     psuo = push --set-upstream origin
-
-    # Remove all local branches that are not on (merged) remote
-    clb = fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -d $branch; done
 
 [push]
     default = simple

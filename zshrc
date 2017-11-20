@@ -109,3 +109,4 @@ eval "$(jenv init -)"
 alias t='tmux'
 alias gt='gittower'
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval $(thefuck --alias)
