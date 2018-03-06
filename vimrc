@@ -63,8 +63,7 @@ let g:NERDSpaceDelims = 1
 " Use compact syntax for prettified multi-line comments
 let g:NERDCompactSexyComs = 1
 
-" Align line-wise comment delimiters flush left instead of following code
-" indentation
+" Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDDefaultAlign = 'left'
 
 " Set a language to use its alternate delimiters by default
@@ -119,6 +118,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'gavocanov/vim-js-indent', { 'for': 'javascript' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-markdown'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'rizzatti/dash.vim'
