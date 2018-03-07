@@ -1,3 +1,5 @@
+DEFAULT_USER="Jason"
+
 # Path to your oh-my-zsh installation.
 # export ZSH=/Users/jasonfeng/.oh-my-zsh
 export ZSH=~/.oh-my-zsh
@@ -115,3 +117,7 @@ eval $(thefuck --alias)
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+prompt_context() {
+  prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
+}
