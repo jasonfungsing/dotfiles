@@ -53,7 +53,7 @@ export UPDATE_ZSH_DAYS=1
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime zsh-syntax-highlighting xcode z)
+plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime zsh-syntax-highlighting xcode z tmuxinator)
 
 # User configuration
 
@@ -122,3 +122,4 @@ export PATH="/usr/local/opt/icu4c/bin:$PATH"
 export PATH="/usr/local/opt/icu4c/sbin:$PATH"
 
 export EDITOR='vim'
+source ~/.bin/tmuxinator.zsh
