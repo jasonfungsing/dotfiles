@@ -123,3 +123,8 @@ export PATH="/usr/local/opt/icu4c/sbin:$PATH"
 
 export EDITOR='vim'
 source ~/.bin/tmuxinator.zsh
+
+export GOPATH=$HOME/Code/Go
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin

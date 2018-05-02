@@ -8,6 +8,7 @@ set nrformats=
 
 syntax enable
 
+set modifiable
 set suffixesadd+=.js
 
 " Indentation
