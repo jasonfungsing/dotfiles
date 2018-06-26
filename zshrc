@@ -105,10 +105,6 @@ export PATH="/usr/local/sbin:$PATH"
 
 eval "$(direnv hook zsh)"
 export PATH="/usr/local/opt/curl/bin:$PATH"
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"
-alias jenv_set_java_home='export JAVA_HOME="$HOME/.jenv/versions/`jenv version-name`"'
 
 alias t='tmux'
 alias gt='gittower'
@@ -131,3 +127,12 @@ export PATH=$PATH:$GOROOT/bin
 
 export NVM_DIR="$HOME/.nvm"
   . "/usr/local/opt/nvm/nvm.sh"
+
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Java Versions
+alias jdk10="export JAVA_HOME=`/usr/libexec/java_home -v 10` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
+# alias jdk9="export JAVA_HOME=`/usr/libexec/java_home -v 9` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
+alias jdk8="export JAVA_HOME=`/usr/libexec/java_home -v 1.8` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
+# alias jdk7="export JAVA_HOME=`/usr/libexec/java_home -v 1.7` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
+export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
