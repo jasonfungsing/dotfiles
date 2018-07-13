@@ -49,6 +49,7 @@
     cl = clone
     s = status
     co = checkout
+    d = diff
     p = pull --rebase
     aa = add --all
     fu = fetch upstream
