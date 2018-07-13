@@ -1,6 +1,6 @@
 [user]
     name = Jason Feng
-    email = jfeng@dius.com.au
+	email = jason@foxlime.io
 [credential]
     helper = osxkeychain
 [filter "lfs"]

@@ -1,3 +1,8 @@
+" fix the you complete me python issue
+if has('python3')
+  silent! python3 1
+endif
+
 set nu
 set nocompatible
 set laststatus=2
@@ -140,6 +145,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go'
 Plug 'mdempsky/gocode'
+Plug 'benmills/vimux'
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -178,4 +184,3 @@ nmap <F8> :TagbarToggle<CR>
 let NERDTreeDirArrows=0
 let NERDTreeChDirMode=2
 let NERDTreeShowLineNumbers=1
-
