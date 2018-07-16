@@ -93,7 +93,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
-alias v=vim
+alias v=nvim
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc'; fi

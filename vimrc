@@ -7,14 +7,21 @@ set nu
 set nocompatible
 set laststatus=2
 filetype plugin on
+filetype indent on
 runtime mrcros/matchit.vim
 set cursorline
+set showmatch
 set nrformats=
+set number
 
 syntax enable
 
 set modifiable
 set suffixesadd+=.js
+
+" natural split
+set splitbelow
+set splitright
 
 " Indentation
 set autoindent
