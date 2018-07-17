@@ -187,4 +187,4 @@ imap <C-q> <ESC>:bp\|bd #<cr>
 map <C-t> <esc>:tabnew<CR>
 
 " Tagbar Toggle
-nmap <F8> :TagbarToggle<CR>
+nmap <leader>t :TagbarToggle<CR>
