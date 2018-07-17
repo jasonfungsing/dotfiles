@@ -64,6 +64,8 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " makes the nerdTree prettier
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+let NERDTreeChDirMode = 2
+let NERDTreeShowLineNumbers = 1
 
 " Close vim if the only window left open is a NERDTree
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -103,10 +105,10 @@ nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
 
 " Map Keys for Managing Buffers
-map <C-J> :bnext<CR>
-map <C-K> :bprev<CR>
-map <C-L> :tabn<CR>
-map <C-H> :tabp<CR>
+" map <C-J> :bnext<CR>
+" map <C-K> :bprev<CR>
+" map <C-L> :tabn<CR>
+" map <C-H> :tabp<CR>
 
 " To open a new empty buffer
 map <C-T> :enew<CR>
@@ -186,8 +188,3 @@ map <C-t> <esc>:tabnew<CR>
 
 " Tagbar Toggle
 nmap <F8> :TagbarToggle<CR>
-
-" NERDTree configuration
-let NERDTreeDirArrows=0
-let NERDTreeChDirMode=2
-let NERDTreeShowLineNumbers=1
