@@ -95,12 +95,6 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 alias v=nvim
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
 export PATH="/usr/local/sbin:$PATH"
 
 eval "$(direnv hook zsh)"
@@ -136,3 +130,16 @@ alias jdk10="export JAVA_HOME=`/usr/libexec/java_home -v 10` && export PATH=$JAV
 alias jdk8="export JAVA_HOME=`/usr/libexec/java_home -v 1.8` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 # alias jdk7="export JAVA_HOME=`/usr/libexec/java_home -v 1.7` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Auto complete for kubernetes
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
+export PATH="/usr/local/opt/texinfo/bin:$PATH"
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
