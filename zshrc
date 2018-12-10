@@ -96,6 +96,7 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 alias v=nvim
 
 export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/bin:$PATH"
 
 eval "$(direnv hook zsh)"
 export PATH="/usr/local/opt/curl/bin:$PATH"
@@ -119,9 +120,6 @@ export GOROOT=/usr/local/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 
-export NVM_DIR="$HOME/.nvm"
-  . "/usr/local/opt/nvm/nvm.sh"
-
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Java Versions
@@ -143,3 +141,5 @@ if [ $commands[kubectl] ]; then
 fi
 export PATH="/usr/local/opt/texinfo/bin:$PATH"
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
