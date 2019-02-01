@@ -123,6 +123,7 @@ export PATH=$PATH:$GOROOT/bin
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Java Versions
+alias jdk11="export JAVA_HOME=`/usr/libexec/java_home -v 11` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 alias jdk10="export JAVA_HOME=`/usr/libexec/java_home -v 10` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 # alias jdk9="export JAVA_HOME=`/usr/libexec/java_home -v 9` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 alias jdk8="export JAVA_HOME=`/usr/libexec/java_home -v 1.8` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
