@@ -104,6 +104,8 @@ export PATH="/usr/local/opt/curl/bin:$PATH"
 alias t='tmux'
 alias gt='gittower'
 alias mux="tmuxinator"
+alias ekc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = true;'"
+alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;'"
 eval $(thefuck --alias)
 
 prompt_context() {
@@ -111,6 +113,7 @@ prompt_context() {
 }
 export PATH="/usr/local/opt/icu4c/bin:$PATH"
 export PATH="/usr/local/opt/icu4c/sbin:$PATH"
+export PATH="/Users/jasonfungsing/Library/Python/3.7/bin:$PATH"
 
 export EDITOR='vim'
 source ~/.bin/tmuxinator.zsh

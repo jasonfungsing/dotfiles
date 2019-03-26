@@ -155,6 +155,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go'
 Plug 'mdempsky/gocode'
 Plug 'benmills/vimux'
+Plug '/usr/local/opt/fzf'
+Plug 'tpope/vim-projectionist'
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
