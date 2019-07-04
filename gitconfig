@@ -46,6 +46,7 @@
     co = checkout
     d = diff
     p = pull --rebase
+    ph = push
     aa = add --all
     fu = fetch upstream
     rbum = rebase upstream/master
