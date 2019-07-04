@@ -53,7 +53,7 @@ export UPDATE_ZSH_DAYS=1
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode z tmuxinator)
+plugins=(git zsh-z tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode z tmuxinator)
 
 # User configuration
 
@@ -107,6 +107,7 @@ alias mux="tmuxinator"
 alias ekc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = true;'"
 alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;'"
 alias sl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
+alias sm="/Applications/Sublime\ Merge.app/Contents/SharedSupport/bin/smerge"
 eval $(thefuck --alias)
 
 prompt_context() {
@@ -128,8 +129,6 @@ export PATH=$PATH:$GOROOT/bin
 
 # Java Versions
 alias jdk11="export JAVA_HOME=`/usr/libexec/java_home -v 11` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
-# alias jdk10="export JAVA_HOME=`/usr/libexec/java_home -v 10` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
-# alias jdk9="export JAVA_HOME=`/usr/libexec/java_home -v 9` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 alias jdk8="export JAVA_HOME=`/usr/libexec/java_home -v 1.8` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 alias jdk7="export JAVA_HOME=`/usr/libexec/java_home -v 1.7` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 

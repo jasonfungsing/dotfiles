@@ -11,6 +11,8 @@
     excludesfile = ~/.gitignore_global
     ignorecase = false
 
+[mergetool "SublimeMerge"]
+    cmd = smerge mergetool \"$BASE\" \"$REMOTE\" \"$LOCAL\" -o \"$MERGED\"
 [mergetool "Kaleidoscope"]
     cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
     trustexitcode = true
@@ -34,6 +36,11 @@
     dtkc=difftool --cached
     mtk=mergetool
     mtkc=mergetool --cached
+
+    dts=difftool --tool=SublimeMerge
+    dtsc=difftool --tool=SublimeMerge --cached
+    mts=mergetool --tool=SublimeMerge
+    mtsc=mergetool --tool=SublimeMerge --cached
 
     dtv = difftool --tool=vimdiff
     dtvc = difftool --tool=vimdiff --cached
