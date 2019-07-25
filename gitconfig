@@ -1,6 +1,8 @@
 [user]
 	name = Jason Feng
 	email = jason@foxlime.io
+[includeIf "gitdir:~/Code/siteminder/"]
+    path = ~/.siteminder.gitconfig
 [credential]
     helper = osxkeychain
 [filter "lfs"]
@@ -25,6 +27,8 @@
 
 [difftool "Kaleidoscope"]
     cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[difftool "SublimeMerge"]
+    cmd = smerge mergetool \"$LOCAL\" \"$REMOTE\" -o \"$MERGED\"
 [difftool]
     prompt = false
 [diff]
@@ -55,6 +59,7 @@
     p = pull --rebase
     ph = push
     aa = add --all
+    al = add --patch
     fu = fetch upstream
     rbum = rebase upstream/master
     rbom = rebase origin/master
