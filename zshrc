@@ -102,6 +102,7 @@ alias gt='gittower'
 alias mux="tmuxinator"
 alias ekc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = true;'"
 alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;'"
+alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
 
 prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
