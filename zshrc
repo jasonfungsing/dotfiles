@@ -103,6 +103,7 @@ alias mux="tmuxinator"
 alias ekc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = true;'"
 alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;'"
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
+alias bu="brew update && brew upgrade && brew cleanup"
 
 prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
@@ -149,7 +150,8 @@ fi
 export PATH="/usr/local/opt/texinfo/bin:$PATH"
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
+eval "$(rbenv init -)"
+
 # SDKMAN - THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/jasonfeng/.sdkman"
 [[ -s "/Users/jasonfeng/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/jasonfeng/.sdkman/bin/sdkman-init.sh"
-eval "$(rbenv init -)"
