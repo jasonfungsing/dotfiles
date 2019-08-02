@@ -36,20 +36,20 @@
     algorithm = patience
 
 [alias]
-    dtk=difftool
-    dtkc=difftool --cached
-    mtk=mergetool
-    mtkc=mergetool --cached
+    dk=difftool
+    dkc=difftool --cached
+    mk=mergetool
+    mkc=mergetool --cached
 
-    dts=difftool --tool=SublimeMerge
-    dtsc=difftool --tool=SublimeMerge --cached
-    mts=mergetool --tool=SublimeMerge
-    mtsc=mergetool --tool=SublimeMerge --cached
+    ds=difftool --tool=SublimeMerge
+    dsc=difftool --tool=SublimeMerge --cached
+    ms=mergetool --tool=SublimeMerge
+    msc=mergetool --tool=SublimeMerge --cached
 
-    dtv = difftool --tool=vimdiff
-    dtvc = difftool --tool=vimdiff --cached
-    mtv = mergetool --tool=vimdiff
-    mtvc = mergetool --tool=vimdiff --cached
+    dv = difftool --tool=vimdiff
+    dvc = difftool --tool=vimdiff --cached
+    mv = mergetool --tool=vimdiff
+    mvc = mergetool --tool=vimdiff --cached
 
     tree = log --branches --remotes --tags --graph --oneline --abbrev-commit --author-date-order --decorate --format=format:'%C(bold blue)%h%C(reset) %C(reset)%C(bold yellow)%d%C(reset) - %C(dim white)%aD (%ar)%C(reset)%n'' %C(bold cyan)%s%C(reset) %C(white)- %an%C(reset)%C(white) <%ae%C(reset)%C(white)>'
     cl = clone
