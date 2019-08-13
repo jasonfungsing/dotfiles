@@ -63,6 +63,7 @@
     fu = fetch upstream
     rbum = rebase upstream/master
     rbom = rebase origin/master
+    c = commit
     cm = commit -m
     ca = commit --amend
     b = branch
