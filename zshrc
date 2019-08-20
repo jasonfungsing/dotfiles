@@ -130,7 +130,6 @@ source ~/.nvm/nvm.sh
 # Java Versions
 alias jdk11="export JAVA_HOME=`/usr/libexec/java_home -v 11` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 alias jdk8="export JAVA_HOME=`/usr/libexec/java_home -v 1.8` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
-alias jdk7="export JAVA_HOME=`/usr/libexec/java_home -v 1.7` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 # Python 3 as default
 alias python=python3
 
