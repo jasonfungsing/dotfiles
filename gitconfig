@@ -9,6 +9,7 @@
     clean = git lfs clean %f
     smudge = git lfs smudge %f
     required = true
+  	process = git-lfs filter-process
 [core]
     excludesfile = ~/.gitignore_global
     ignorecase = false
@@ -16,7 +17,7 @@
 [mergetool "SublimeMerge"]
     cmd = smerge mergetool \"$BASE\" \"$REMOTE\" \"$LOCAL\" -o \"$MERGED\"
 [mergetool "Kaleidoscope"]
-    cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
+  	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
     trustexitcode = true
 [mergetool]
     keepBackup = false

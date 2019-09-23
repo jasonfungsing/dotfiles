@@ -1,5 +1,3 @@
-DEFAULT_USER="Jason"
-
 # Load private config files
 if [ -f ~/.siteminderrc ]; then
     source ~/.siteminderrc
@@ -98,7 +96,6 @@ eval "$(direnv hook zsh)"
 eval "$(thefuck --alias)"
 
 alias t='tmux'
-alias gt='gittower'
 alias mux="tmuxinator"
 alias ekc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = true;'"
 alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;'"
@@ -130,6 +127,8 @@ source ~/.nvm/nvm.sh
 # Java Versions
 alias jdk11="export JAVA_HOME=`/usr/libexec/java_home -v 11` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
 alias jdk8="export JAVA_HOME=`/usr/libexec/java_home -v 1.8` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
+alias jdk7="export JAVA_HOME=`/usr/libexec/java_home -v 1.7` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
+
 # Python 3 as default
 alias python=python3
 
