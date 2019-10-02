@@ -94,6 +94,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 eval "$(direnv hook zsh)"
 eval "$(thefuck --alias)"
+eval "$(hub alias -s)"
 
 alias t='tmux'
 alias mux="tmuxinator"
