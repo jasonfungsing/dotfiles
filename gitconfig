@@ -1,8 +1,6 @@
 [user]
 	name = Jason Feng
 	email = jason@foxlime.io
-[includeIf "gitdir:~/Code/siteminder/"]
-    path = ~/.siteminder.gitconfig
 [credential]
     helper = osxkeychain
 [filter "lfs"]
