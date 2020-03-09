@@ -1,6 +1,6 @@
 # Load private config files
-if [ -f ~/.siteminderrc ]; then
-    source ~/.siteminderrc
+if [ -f ~/.xx ]; then
+  source ~/.xx
 fi
 
 # Path to your oh-my-zsh installation.
@@ -50,11 +50,13 @@ export UPDATE_ZSH_DAYS=1
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+ZSH_DISABLE_COMPFIX=true
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode)
+plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode kubectl zsh-syntax-highlighting zsh-autosuggestions)
 
 # User configuration
 
@@ -90,8 +92,6 @@ source $ZSH/oh-my-zsh.sh
 
 fpath=(/usr/local/share/zsh-completions $fpath)
 
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 eval "$(direnv hook zsh)"
 eval "$(thefuck --alias)"
 eval "$(hub alias -s)"
@@ -102,6 +102,8 @@ alias ekc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = true;'
 alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;'"
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
 alias bu="brew update && brew upgrade && brew cleanup"
+alias n="npm"
+alias y="yarn"
 
 prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
@@ -133,8 +135,6 @@ alias jdk8="export JAVA_HOME=`/usr/libexec/java_home -v 1.8` && export PATH=$JAV
 alias python=python3
 
 export EDITOR='vim'
-source ~/.bin/tmuxinator.zsh
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc'; fi
@@ -155,3 +155,8 @@ eval "$(rbenv init -)"
 # SDKMAN - THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/jasonfeng/.sdkman"
 [[ -s "/Users/jasonfeng/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/jasonfeng/.sdkman/bin/sdkman-init.sh"
+
+[ -s "/Users/jasonfungsing/.jabba/jabba.sh" ] && source "/Users/jasonfungsing/.jabba/jabba.sh"
+if [ /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi
+export PATH="/usr/local/opt/helm@2/bin:$PATH"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
