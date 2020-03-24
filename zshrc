@@ -1,6 +1,6 @@
 # Load private config files
-if [ -f ~/.xx ]; then
-  source ~/.xx
+if [ -f ~/.zshrc.private ]; then
+  source ~/.zshrc.private
 fi
 
 # Path to your oh-my-zsh installation.
