@@ -128,7 +128,9 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 " ------
 
+" Plug plugins https://github.com/junegunn/vim-plug
 call plug#begin('~/.vim/plugged')
+
 Plug 'scrooloose/nerdtree'
 Plug 'gavocanov/vim-js-indent', { 'for': 'javascript' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
@@ -148,7 +150,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'godlygeek/tabular'
-Plug 'valloric/youcompleteme'
+" Plug 'valloric/youcompleteme'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -157,6 +159,8 @@ Plug 'mdempsky/gocode'
 Plug 'benmills/vimux'
 Plug '/usr/local/opt/fzf'
 Plug 'tpope/vim-projectionist'
+Plug 'frazrepo/vim-rainbow'
+
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -180,6 +184,10 @@ nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 
 nnoremap \ :Ag<SPACE>
+
+" Rainbow parentheses plugin
+let g:rainbow_active = 1
+let g:rainbow_ctermfgs = ['green', 'yellow', 'cyan', 'magenta', 'red']
 
 " Map CTRL+Q to close buffer
 map <C-q> :bp\|bd #<cr>
