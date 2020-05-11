@@ -1,7 +1,5 @@
-" fix the you complete me python issue
-if has('python3')
-  silent! python3 1
-endif
+" Set up leader key to ,
+let mapleader = ","
 
 set nu
 set nocompatible
@@ -27,10 +25,19 @@ set splitright
 set autoindent
 set smartindent
 set smarttab
+
+" Softtabs, 2 spaces
 set shiftwidth=2
 set softtabstop=2
 set tabstop=2
 set expandtab
+
+" Display extra whitespace
+set list listchars=tab:»·,trail:·,nbsp:·
+
+" Make it obvious where 80 characters is
+set textwidth=80
+set colorcolumn=+1
 
 " Auto indent pasted text
 nnoremap p p=`]<C-o>
@@ -44,10 +51,7 @@ set nowb
 " Automatically remove all trailing whitespace before saving
 autocmd BufWritePre * %s/\s\+$//e
 
-" Set up leader key to <,>
-let mapleader = ","
-
-" This allows buffers to be hidden if you've modified a buffer.
+" This allows buffers to be hidden if modified a buffer.
 set hidden
 
 " ------ NERD Tree ------
@@ -95,9 +99,6 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 " ------
 
-" Key mapping for Dash
-:nmap <silent> <leader>d <Plug>DashSearch
-
 " Disable Arrows Keys
 nnoremap <Left> :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
@@ -105,13 +106,16 @@ nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
 
 " Map Keys for Managing Buffers
-" map <C-J> :bnext<CR>
-" map <C-K> :bprev<CR>
-" map <C-L> :tabn<CR>
-" map <C-H> :tabp<CR>
+map <C-J> :bnext<CR>
+map <C-K> :bprev<CR>
+map <C-L> :tabn<CR>
+map <C-H> :tabp<CR>
 
 " To open a new empty buffer
 map <C-T> :enew<CR>
+
+" Map CTRL+T for tab
+map <C-t> <esc>:tabnew<CR>
 
 " Map keys to insert empty line without enter insert mode
 map <Enter> o<ESC>
@@ -150,7 +154,6 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'godlygeek/tabular'
-" Plug 'valloric/youcompleteme'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -160,6 +163,7 @@ Plug 'benmills/vimux'
 Plug '/usr/local/opt/fzf'
 Plug 'tpope/vim-projectionist'
 Plug 'frazrepo/vim-rainbow'
+Plug 'yuttie/comfortable-motion.vim'
 
 call plug#end()
 
@@ -192,9 +196,6 @@ let g:rainbow_ctermfgs = ['green', 'yellow', 'cyan', 'magenta', 'red']
 " Map CTRL+Q to close buffer
 map <C-q> :bp\|bd #<cr>
 imap <C-q> <ESC>:bp\|bd #<cr>
-
-" Map CTRL+T for tab
-map <C-t> <esc>:tabnew<CR>
 
 " Tagbar Toggle
 nmap <leader>t :TagbarToggle<CR>
