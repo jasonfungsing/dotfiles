@@ -55,12 +55,13 @@
     s = status
     co = checkout
     d = diff
-    p = pull --rebase
+    p = pull
+    pa = pull --all
     ph = push
     aa = add --all
+    f = fetch
+    fa = fetch --all
     al = add --patch
-    fu = fetch upstream
-    rbum = rebase upstream/master
     rbom = rebase origin/master
     c = commit
     cm = commit -m
@@ -70,11 +71,12 @@
     bD = branch -D
 
     undo = reset --soft HEAD~1
+
     pr= "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+
     trim = !git branch --merged | grep -v '*' | xargs -n 1 git branch -d
 
     clean = "git fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done"
-
 [push]
     default = simple
 [hub]
