@@ -75,9 +75,6 @@
     pr= "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
 
     trim = !git branch --merged | grep -v '*' | xargs -n 1 git branch -d
-
-    # Delete all the local branches that not on remote anymore
-    cleanup = "git fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done"
 [push]
     default = simple
 [hub]
