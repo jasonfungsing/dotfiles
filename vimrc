@@ -164,6 +164,7 @@ Plug '/usr/local/opt/fzf'
 Plug 'tpope/vim-projectionist'
 Plug 'frazrepo/vim-rainbow'
 Plug 'yuttie/comfortable-motion.vim'
+Plug 'kristijanhusak/vim-carbon-now-sh'
 
 call plug#end()
 

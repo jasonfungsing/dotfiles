@@ -159,3 +159,6 @@ export SDKMAN_DIR="/Users/jasonfeng/.sdkman"
 if [ /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi
 export PATH="/usr/local/opt/helm@2/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+alias k=kubectl
+complete -F __start_kubectl k
+alias awsdigioadmin='saml2aws login --session-duration 28800 --skip-prompt --profile digio-admin --role arn:aws:iam::864141050364:role/Okta-Administrator --password $(security find-generic-password -a ${USER} -s saml2aws -w -D "application password") && export AWS_PROFILE=digio-admin'
