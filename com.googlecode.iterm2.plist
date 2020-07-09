@@ -675,13 +675,35 @@
 		<integer>1</integer>
 	</dict>
 	<key>NSWindow Frame NSNavPanelAutosaveName</key>
+<<<<<<< HEAD
 	<string>315 1711 1088 628 0 0 1792 1097 </string>
 	<key>NSWindow Frame SUStatusFrame</key>
 	<string>659 2103 400 129 -421 1120 2560 1440 </string>
+||||||| parent of 78b3355... iterm
+	<string>496 486 799 448 0 0 1792 1097 </string>
+=======
+	<string>496 486 799 448 0 0 1792 1097 </string>
+	<key>NSWindow Frame SUAutomaticUpdateAlert</key>
+	<string>588 692 616 174 0 0 1792 1097 </string>
+	<key>NSWindow Frame SUStatusFrame</key>
+	<string>-1480 983 400 129 -2560 0 2560 1440 </string>
+>>>>>>> 78b3355... iterm
 	<key>NSWindow Frame SUUpdateAlert</key>
+<<<<<<< HEAD
 	<string>549 1906 620 392 -421 1120 2560 1440 </string>
+||||||| parent of 78b3355... iterm
+	<string>586 528 620 392 0 0 1792 1097 </string>
+=======
+	<string>-1590 768 620 392 -2560 0 2560 1417 </string>
+>>>>>>> 78b3355... iterm
 	<key>NSWindow Frame iTerm Window 0</key>
+<<<<<<< HEAD
 	<string>0 -24 1792 1121 0 0 1792 1097 </string>
+||||||| parent of 78b3355... iterm
+	<string>-2560 0 2560 1440 -2560 0 2560 1417 </string>
+=======
+	<string>-2305 178 2050 1239 -2560 0 2560 1417 </string>
+>>>>>>> 78b3355... iterm
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1614,24 +1636,59 @@
 	</array>
 	<key>NoSyncAllAppVersions</key>
 	<array>
+<<<<<<< HEAD
 		<string>3.3.12</string>
 		<string>3.3.11</string>
+||||||| parent of 78b3355... iterm
+		<string>3.3.7</string>
+		<string>3.3.8</string>
+		<string>3.3.9</string>
+=======
+		<string>3.3.9</string>
+		<string>3.3.8</string>
+		<string>3.3.11</string>
+		<string>3.3.7</string>
+		<string>3.3.12</string>
+	</array>
+	<key>NoSyncBFPFavorites</key>
+	<array>
+		<string>Inconsolata for Powerline</string>
+>>>>>>> 78b3355... iterm
 	</array>
 	<key>NoSyncBFPRecents</key>
 	<array>
+<<<<<<< HEAD
 		<string>Monaco</string>
+||||||| parent of 78b3355... iterm
+		<string>Meslo LG L for Powerline</string>
+=======
+		<string>Monaco</string>
+		<string>Inconsolata for Powerline</string>
+>>>>>>> 78b3355... iterm
 	</array>
 	<key>NoSyncFrame_SharedPreferences</key>
 	<dict>
 		<key>screenFrame</key>
 		<string>{{0, 0}, {1792, 1120}}</string>
 		<key>topLeft</key>
+<<<<<<< HEAD
 		<string>{400, 821}</string>
+||||||| parent of 78b3355... iterm
+		<string>{-1627, 1139}</string>
+=======
+		<string>{-1629, 983}</string>
+>>>>>>> 78b3355... iterm
 	</dict>
 	<key>NoSyncInstallationId</key>
 	<string>AEB87A5A-20A5-45EE-8DCE-598AE379C37B</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
+<<<<<<< HEAD
 	<integer>30</integer>
+||||||| parent of 78b3355... iterm
+	<integer>210</integer>
+=======
+	<integer>246</integer>
+>>>>>>> 78b3355... iterm
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2426,7 +2483,13 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
+<<<<<<< HEAD
 	<date>2020-07-05T23:09:31Z</date>
+||||||| parent of 78b3355... iterm
+	<date>2020-06-03T23:08:43Z</date>
+=======
+	<date>2020-07-09T12:13:28Z</date>
+>>>>>>> 78b3355... iterm
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>
