@@ -1,6 +1,9 @@
 [user]
 	name = Jason Feng
 	email = jason@foxlime.io
+[github]
+    user = jasonfungsing
+
 [credential]
 	helper = osxkeychain
 [filter "lfs"]
@@ -16,7 +19,7 @@
 [mergetool "SublimeMerge"]
     cmd = smerge mergetool \"$BASE\" \"$REMOTE\" \"$LOCAL\" -o \"$MERGED\"
 [mergetool "Kaleidoscope"]
-  	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
+    cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
     trustexitcode = true
 [mergetool]
     keepBackup = false
@@ -74,6 +77,7 @@
     undo = reset --soft HEAD~1
 
     pr= "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+    cleanup = "!git fetch -p origin && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D"
 
 [push]
     default = simple
@@ -83,3 +87,7 @@
 	sslVerify = false
 [pull]
 	ff = only
+    rebase = true
+[rebase]
+    instructionFormat = "[%an - %ar] %s"
+    autoStash = true
