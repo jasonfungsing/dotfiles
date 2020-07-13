@@ -45,7 +45,15 @@ brew "youtube-dl"
 brew "z"
 brew "zsh"
 
+brew "serverless"
+brew "jabba"
+brew "minikube"
+
 # Applications
+cask "virtualbox"
+
+
+
 cask "notion"
 cask "istat-menus"
 cask "paw"
