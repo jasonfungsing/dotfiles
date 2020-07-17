@@ -114,9 +114,6 @@ export PATH="/usr/local/opt/icu4c/sbin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 
-# Java Versions
-alias jdk11="export JAVA_HOME=`/usr/libexec/java_home -v 11` && export PATH=$JAVA_HOME/bin:$PATH; java -version"
-
 # Python 3 as default
 alias python=python3
 
