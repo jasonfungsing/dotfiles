@@ -171,8 +171,16 @@ Plug 'tpope/vim-projectionist'
 Plug 'frazrepo/vim-rainbow'
 Plug 'yuttie/comfortable-motion.vim'
 Plug 'kristijanhusak/vim-carbon-now-sh'
+Plug 'neoclide/coc.nvim' , { 'branch' : 'release' }
 
 call plug#end()
+
+" Source Vim configuration file and updateplugins
+nnoremap <silent><leader>1 :source ~/.vimrc \| :PlugUpdate<CR>
+
+" Autocomplete extension for neoclide
+let g:coc_global_extensions = [ 'coc-tsserver', 'coc-python', 'coc-git',
+'coc-java', 'coc-json'  ]
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " The Silver Searcher <http://robots.thoughtbot.com/faster-grepping-in-vim>
