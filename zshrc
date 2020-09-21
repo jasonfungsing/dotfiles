@@ -100,7 +100,7 @@ alias mux="tmuxinator"
 alias ekc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = true;'"
 alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;'"
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
-alias update="brew update && brew upgrade && brew cleanup && brew cask upgrade && omz update"
+alias update="brew update && brew upgrade && brew cleanup && brew upgrade --cask && omz update"
 alias n="npm"
 alias y="yarn"
 
