@@ -56,7 +56,7 @@ ZSH_DISABLE_COMPFIX=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode kubectl zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode kubectl zsh-syntax-highlighting zsh-autosuggestions autojump)
 
 # User configuration
 
@@ -103,6 +103,7 @@ alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;
 alias update="brew update && brew upgrade && brew cleanup && brew upgrade --cask && omz update"
 alias n="npm"
 alias y="yarn"
+alias weather='f() { curl wttr.in/$1. };f'
 
 prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
