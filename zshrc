@@ -103,6 +103,7 @@ alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;
 alias update="brew update && brew upgrade && brew cleanup && brew upgrade --cask && omz update"
 alias n="npm"
 alias y="yarn"
+alias v="vim"
 alias weather='f() { curl wttr.in/$1. };f'
 
 prompt_context() {
