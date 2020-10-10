@@ -63,8 +63,6 @@ plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala subl
 # export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
-source $ZSH/oh-my-zsh.sh
-
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -105,19 +103,21 @@ alias n="npm"
 alias y="yarn"
 alias v="vim"
 alias weather='f() { curl wttr.in/$1. };f'
+alias k=kubectl
+alias python=python3
+alias awsdigiosandboxadmin='saml2aws login --skip-prompt --profile digio-sandbox-admin --role arn:aws:iam::864141050364:role/Okta-Administrator --session-duration 28800 --password $(security find-generic-password -D "application password" -s "okta-mantel-password" -a "${USER}" -w && export AWS_PROFILE=digio-sandbox-admin'
 
 prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
 }
 
+export PATH="/usr/local/opt/helm@2/bin:$PATH"
+export PATH="/usr/local/opt/texinfo/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 export PATH="/usr/local/opt/icu4c/bin:$PATH"
 export PATH="/usr/local/opt/icu4c/sbin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/bin:$PATH"
-
-# Python 3 as default
-alias python=python3
 
 export EDITOR='vim'
 
@@ -132,7 +132,6 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-export PATH="/usr/local/opt/texinfo/bin:$PATH"
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 # SDKMAN - THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
@@ -140,8 +139,6 @@ export SDKMAN_DIR="/Users/jasonfeng/.sdkman"
 [[ -s "/Users/jasonfeng/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/jasonfeng/.sdkman/bin/sdkman-init.sh"
 
 [ -s "/Users/jasonfungsing/.jabba/jabba.sh" ] && source "/Users/jasonfungsing/.jabba/jabba.sh"
-export PATH="/usr/local/opt/helm@2/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-alias k=kubectl
+
 complete -F __start_kubectl k
-alias awsdigiosandboxadmin='saml2aws login --skip-prompt --profile digio-sandbox-admin --role arn:aws:iam::864141050364:role/Okta-Administrator --session-duration 28800 --password $(security find-generic-password -D "application password" -s "okta-mantel-password" -a "${USER}" -w && export AWS_PROFILE=digio-sandbox-admin'
