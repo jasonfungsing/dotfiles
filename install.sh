@@ -10,8 +10,8 @@ ln -s $PWD/vimrc $HOME/.vimrc
 ln -s $PWD/zshrc $HOME/.zshrc
 ln -s $PWD/tmux.conf $HOME/.tmux.conf
 ln -s $PWD/gitconfig $HOME/.gitconfig
-ln -s $PWD/hushlogin $HOME/hushlogin
-
+ln -s $PWD/hushlogin $HOME/.hushlogin
+ln -s $PWD/alias_prompt.sh $HOME/.alias_prompt.sh
 
 if test ! "$( command -v brew )"; then
     echo "Installing homebrew"
