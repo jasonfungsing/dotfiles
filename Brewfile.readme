@@ -1,0 +1,2 @@
+`brew bundle dump` will generated all the installed apps including cask
+`brew bundle` will install everything from the Brewfile
