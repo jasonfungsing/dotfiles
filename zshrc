@@ -108,6 +108,7 @@ alias vu="vim +PlugUpdate +qa"
 alias n="npm"
 alias y="yarn"
 alias v="vim"
+alias gt="gittower"
 alias weather='f() { curl wttr.in/$1. };f'
 alias k=kubectl
 alias python=python3
@@ -148,3 +149,10 @@ export SDKMAN_DIR="/Users/jasonfeng/.sdkman"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 complete -F __start_kubectl k
+
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi

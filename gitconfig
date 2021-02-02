@@ -3,6 +3,8 @@
 	email = jason@foxlime.io
 [github]
     user = jasonfungsing
+[gitlab]
+    user = jasonfungsing
 
 [credential]
 	helper = osxkeychain
