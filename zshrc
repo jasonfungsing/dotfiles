@@ -95,7 +95,6 @@ source $ZSH/oh-my-zsh.sh
 
 fpath=(/usr/local/share/zsh-completions $fpath)
 
-eval "$(direnv hook zsh)"
 eval "$(thefuck --alias)"
 
 alias t='tmux'
@@ -103,7 +102,7 @@ alias mux="tmuxinator"
 alias ekc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = true;'"
 alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;'"
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
-alias update="brew update && brew upgrade && brew cleanup && brew upgrade --cask && omz update && vim +PlugUpdate +qa"
+alias update="brew update; brew upgrade; brew cleanup; omz update; vim +PlugUpdate +qa"
 alias vu="vim +PlugUpdate +qa"
 alias n="npm"
 alias y="yarn"
@@ -112,6 +111,7 @@ alias gt="gittower"
 alias weather='f() { curl wttr.in/$1. };f'
 alias k=kubectl
 alias python=python3
+alias mnk=minikube
 alias awsdigiosandboxadmin='saml2aws login --skip-prompt --profile digio-sandbox-admin --role arn:aws:iam::864141050364:role/Okta-Administrator --session-duration 28800 --password $(security find-generic-password -D "application password" -s "okta-mantel-password" -a "${USER}" -w && export AWS_PROFILE=digio-sandbox-admin'
 
 prompt_context() {
@@ -141,10 +141,6 @@ fi
 
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
-# SDKMAN - THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/jasonfeng/.sdkman"
-[[ -s "/Users/jasonfeng/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/jasonfeng/.sdkman/bin/sdkman-init.sh"
-
 [ -s "/Users/jasonfungsing/.jabba/jabba.sh" ] && source "/Users/jasonfungsing/.jabba/jabba.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
@@ -156,3 +152,11 @@ if type brew &>/dev/null; then
   autoload -Uz compinit
   compinit
 fi
+
+export GOPATH=/Users/jasonfungsing/go
+export PATH=$GOPATH/bin:$PATH
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(direnv hook zsh)"
+export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.1/bin:$PATH"
