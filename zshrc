@@ -59,7 +59,7 @@ ZSH_DISABLE_COMPFIX=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux brew npm osx aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode kubectl zsh-syntax-highlighting zsh-autosuggestions autojump)
+plugins=(git tmux brew npm macos aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode kubectl zsh-syntax-highlighting zsh-autosuggestions autojump)
 
 # User configuration
 
