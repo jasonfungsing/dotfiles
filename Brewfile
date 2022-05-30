@@ -1,76 +1,125 @@
-# taps
+tap "aws/tap"
+tap "github/gh"
 tap "homebrew/bundle"
 tap "homebrew/cask"
-tap "homebrew/core"
+tap "homebrew/cask-drivers"
 tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "jesseduffield/lazygit"
+tap "microsoft/git"
 tap "schniz/tap"
-
-# packages
+tap "teamookla/speedtest"
+tap "versent/taps"
 brew "ack"
+brew "autojump"
+brew "awscli"
 brew "bat"
+brew "cheat"
 brew "cloc"
+brew "cmake"
+brew "cmatrix"
+brew "cocoapods"
+brew "coreutils"
+brew "go"
+brew "dep"
 brew "diff-so-fancy"
+brew "direnv"
+brew "docker-completion", link: false
 brew "entr"
 brew "exa"
 brew "fd"
-brew "fzf"
+brew "figlet"
+brew "fnm"
+brew "gcc"
 brew "gh"
 brew "git"
+brew "git-lfs"
 brew "gnupg"
+brew "gradle"
 brew "grep"
+brew "helm"
+brew "helm@2"
 brew "highlight"
 brew "htop"
 brew "hub"
+brew "jabba"
 brew "jq"
+brew "kind"
+brew "kubernetes-cli"
+brew "kops"
+brew "kubectx"
+brew "kustomize"
+brew "lastpass-cli"
 brew "lazydocker"
 brew "lazygit"
+brew "make"
 brew "markdown"
 brew "mas"
+brew "maven"
+brew "minikube"
+brew "mono"
+brew "mosh"
+brew "mutt"
+brew "navi"
 brew "nmap"
+brew "nnn"
+brew "node"
 brew "noti"
-brew "python"
+brew "nvm"
+brew "pipenv"
+brew "postgresql"
+brew "rbenv"
 brew "reattach-to-user-namespace"
 brew "ripgrep"
-brew "schniz/tap/fnm"
+brew "ruby"
 brew "shellcheck"
+brew "skaffold"
+brew "stern"
 brew "the_silver_searcher"
+brew "thefuck"
 brew "tig"
 brew "tldr"
 brew "tmux"
 brew "tree"
 brew "vim"
 brew "wdiff"
+brew "weechat"
 brew "wget"
+brew "wtf"
+brew "yarn"
 brew "youtube-dl"
 brew "z"
 brew "zsh"
-
-brew "serverless"
-brew "jabba"
-brew "minikube"
-
-# Applications
-cask "virtualbox"
-
-
-
-cask "notion"
-cask "istat-menus"
-cask "paw"
-
-# Browsers
-cask "google-chrome"
-
-# Fonts
+brew "zsh-completions"
+brew "zsh-syntax-highlighting"
+brew "aws/tap/aws-sam-cli"
+brew "teamookla/speedtest/speedtest"
+brew "versent/taps/saml2aws"
+cask "bartender"
+cask "docker"
+cask "drawio"
+cask "font-3270-nerd-font"
+cask "font-cascadia-mono"
 cask "font-fira-code"
 cask "font-jetbrains-mono"
-cask "font-cascadia-mono"
-cask "font-3270-nerd-font"
-
-# macOS App Store
-mas "Drafts", id: 1435957248
-mas "Fantastical", id: 975937182
-mas "Xcode", id: 497799835
-mas "Reeder", id: 1449412482
-mas "Magnet", id: 441258766
-mas "Octotree Pro", id: 1457450145
+cask "git-credential-manager-core"
+cask "ksdiff"
+cask "logitech-g-hub"
+cask "microsoft-auto-update"
+cask "microsoft-teams"
+cask "spotify"
+cask "sublime-merge"
+cask "sublime-text"
+cask "zoom"
+mas "Compressor", id: 424390742
+mas "Day One", id: 1055511498
+mas "Final Cut Pro", id: 424389933
+mas "Kindle", id: 405399194
+mas "Notability", id: 360593530
+mas "PDF Expert", id: 1055273043
+mas "Reeder", id: 1529448980
+mas "Things", id: 904280696
+mas "Tweetbot", id: 1384080005
+mas "WeChat", id: 836500024
