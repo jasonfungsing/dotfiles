@@ -128,7 +128,6 @@ cask "whatsapp"
 cask "wechat"
 cask "via"
 cask "private-internet-access"
-mas "Compressor", id: 424390742
 mas "Day One", id: 1055511498
 mas "Final Cut Pro", id: 424389933
 mas "Kindle", id: 405399194
