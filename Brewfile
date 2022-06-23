@@ -97,7 +97,6 @@ brew "zsh-syntax-highlighting"
 brew "aws/tap/aws-sam-cli"
 brew "teamookla/speedtest/speedtest"
 brew "versent/taps/saml2aws"
-cask "bartender"
 cask "docker"
 cask "drawio"
 cask "font-3270-nerd-font"
@@ -112,7 +111,23 @@ cask "microsoft-teams"
 cask "spotify"
 cask "sublime-merge"
 cask "sublime-text"
-cask "zoom"
+cask "google-chrome"
+cask "google-drive"
+cask "grammarly-desktop"
+cask "slack"
+cask "alfred"
+cask "dropbox"
+cask "kaleidoscope"
+cask "iterm2"
+cask "little-snitch"
+cask "notion"
+cask "setapp"
+cask "screens-connect"
+cask "tower"
+cask "whatsapp"
+cask "wechat"
+cask "via"
+cask "private-internet-access"
 mas "Compressor", id: 424390742
 mas "Day One", id: 1055511498
 mas "Final Cut Pro", id: 424389933
@@ -122,4 +137,3 @@ mas "PDF Expert", id: 1055273043
 mas "Reeder", id: 1529448980
 mas "Things", id: 904280696
 mas "Tweetbot", id: 1384080005
-mas "WeChat", id: 836500024
