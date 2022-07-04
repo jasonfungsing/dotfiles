@@ -30,8 +30,8 @@ defaults write com.apple.dock autohide -bool true
 # echo "Make Dock icons of hidden applications translucent"
 # defaults write com.apple.dock showhidden -bool true
 
-echo "Always show scrollbars"
-defaults write NSGlobalDomain AppleShowScrollBars -string "Auto"
+# echo "Always show scrollbars"
+# defaults write NSGlobalDomain AppleShowScrollBars -string "Auto"
 
 # echo "Allow quitting Finder via ⌘ + Q; doing so will also hide desktop icons"
 # defaults write com.apple.finder QuitMenuItem -bool true
@@ -43,10 +43,10 @@ echo "Use current directory as default search scope in Finder"
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
 echo "Show Path bar in Finder"
-defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowPathbar -bool false
 
 echo "Show Status bar in Finder"
-defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder ShowStatusBar -bool false
 
 # echo "Expand print panel by default"
 # defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true

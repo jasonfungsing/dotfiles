@@ -15,7 +15,9 @@ ln -s $PWD/alias_prompt.sh $HOME/.alias_prompt.sh
 
 if test ! "$( command -v brew )"; then
     echo "Installing homebrew"
-    ruby -e "$( curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh )"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/jasonfungsing/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
     # install brew dependencies from Brewfile
@@ -38,7 +40,7 @@ fi
         echo "default shell changed to $zsh_path"
     fi
 
-    source install/macos.sh
+    source macos.sh
 
     echo "creating vim directories"
     mkdir -p ~/.vim-tmp
