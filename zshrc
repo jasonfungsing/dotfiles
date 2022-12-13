@@ -59,7 +59,7 @@ ZSH_DISABLE_COMPFIX=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux brew npm macos aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode kubectl zsh-syntax-highlighting zsh-autosuggestions autojump)
+plugins=(git tmux brew npm macos aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode kubectl autojump)
 
 # User configuration
 
@@ -132,12 +132,6 @@ export PATH="/usr/local/bin:$PATH"
 
 export EDITOR='vim'
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/jasonfungsing/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
 # Auto complete for kubernetes
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
@@ -145,10 +139,7 @@ fi
 
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
-[ -s "/Users/jasonfungsing/.jabba/jabba.sh" ] && source "/Users/jasonfungsing/.jabba/jabba.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-complete -F __start_kubectl k
 
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
@@ -157,10 +148,6 @@ if type brew &>/dev/null; then
   compinit
 fi
 
-export GOPATH=/Users/jasonfungsing/go
-export PATH=$GOPATH/bin:$PATH
-
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(direnv hook zsh)"
 export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.1/bin:$PATH"
@@ -168,4 +155,3 @@ export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.1/bin:$PATH"
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-export PATH="/usr/local/opt/postgresql@12/bin:$PATH"
