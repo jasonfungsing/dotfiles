@@ -29,8 +29,9 @@ brew "go"
 brew "dep"
 brew "diff-so-fancy"
 brew "direnv"
-brew "docker", link: false
+brew "docker"
 brew "docker-completion", link: false
+brew "docker-compose"
 brew "entr"
 brew "exa"
 brew "fd"
