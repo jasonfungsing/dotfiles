@@ -104,7 +104,7 @@ alias dkc="osascript -l JavaScript -e 'Application(\"KeyCast\").enabled = false;
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
 alias update="brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; vim +PlugUpdate +qa"
 alias vu="vim +PlugUpdate +qa"
-alias n="npm"
+# alias n="npm"
 alias y="yarn"
 alias v="vim"
 alias i="idea"
@@ -121,6 +121,8 @@ prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
 }
 
+# export GOPATH="$HOME/go"
+# export PATH="$GOPATH/bin:$PATH"
 export PATH="/usr/local/opt/helm@2/bin:$PATH"
 export PATH="/usr/local/opt/texinfo/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
@@ -138,7 +140,9 @@ fi
 
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
