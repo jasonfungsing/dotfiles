@@ -118,14 +118,11 @@ cask "logi-options-plus"
 cask "notion"
 cask "raycast"
 cask "slack"
-cask "spotify"
 cask "sublime-merge"
 cask "sublime-text"
 cask "whatsapp"
-cask "yubico-yubikey-manager"
 mas "Day One", id: 1055511498
 mas "Final Cut Pro", id: 424389933
-mas "Pastebot", id: 1179623856
 mas "PDF Expert", id: 1055273043
 mas "Reeder", id: 1529448980
 mas "Things", id: 904280696
