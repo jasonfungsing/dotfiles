@@ -96,6 +96,7 @@ alias t='tmux'
 alias mux="tmuxinator"
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
 alias update="brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; vim +PlugUpdate +qa"
+alias u=update
 alias vu="vim +PlugUpdate +qa"
 # alias n="npm"
 alias y="yarn"
