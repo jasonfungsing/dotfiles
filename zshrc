@@ -54,7 +54,7 @@ ZSH_DISABLE_COMPFIX=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux brew npm macos aws github gitignore golang mvn python scala sublime xcode z tmuxinator vi-mode kubectl autojump dotenv)
+plugins=(git tmux brew npm macos aws github gitignore golang mvn python sublime xcode z tmuxinator vi-mode kubectl autojump dotenv)
 
 # User configuration
 
@@ -98,7 +98,6 @@ alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;
 alias update="brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; vim +PlugUpdate +qa"
 alias u=update
 alias vu="vim +PlugUpdate +qa"
-# alias n="npm"
 alias y="yarn"
 alias v="vim"
 alias i="idea"
@@ -111,14 +110,11 @@ alias k=kubectl
 alias python=python3
 alias mnk=minikube
 alias gc=gcloud
-alias awsdigiosandboxadmin='saml2aws login --skip-prompt --profile digio-sandbox-admin --role arn:aws:iam::864141050364:role/Okta-Administrator --session-duration 28800 --password $(security find-generic-password -D "application password" -s "okta-mantel-password" -a "${USER}" -w && export AWS_PROFILE=digio-sandbox-admin'
 
 prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
 }
 
-# export GOPATH="$HOME/go"
-# export PATH="$GOPATH/bin:$PATH"
 export PATH="/usr/local/opt/helm@2/bin:$PATH"
 export PATH="/usr/local/opt/texinfo/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
@@ -150,10 +146,6 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(direnv hook zsh)"
 export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.1/bin:$PATH"
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc' ]; then . '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'; fi
