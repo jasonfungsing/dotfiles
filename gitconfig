@@ -94,3 +94,5 @@
 [rebase]
     instructionFormat = "[%an - %ar] %s"
     autoStash = true
+[init]
+	defaultBranch = main
