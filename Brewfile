@@ -1,6 +1,5 @@
 tap "aws/tap"
 tap "github/gh"
-tap "graalvm/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask-drivers"
 tap "homebrew/cask-fonts"
@@ -107,12 +106,9 @@ cask "font-3270-nerd-font"
 cask "font-cascadia-mono"
 cask "font-fira-code"
 cask "font-jetbrains-mono"
-cask "google-drive"
-cask "graalvm-ce-java17"
 cask "grammarly-desktop"
 cask "iterm2"
 cask "kaleidoscope"
-cask "ksdiff"
 cask "little-snitch"
 cask "logi-options-plus"
 cask "notion"
@@ -120,9 +116,4 @@ cask "raycast"
 cask "slack"
 cask "sublime-merge"
 cask "sublime-text"
-cask "whatsapp"
-mas "Day One", id: 1055511498
-mas "Final Cut Pro", id: 424389933
 mas "PDF Expert", id: 1055273043
-mas "Reeder", id: 1529448980
-mas "Things", id: 904280696
