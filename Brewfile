@@ -118,6 +118,7 @@ cask "microsoft-word"
 cask "raycast"
 cask "slack"
 cask "tower"
+cask "sublime-text"
 mas "AdBlock", id: 1402042596
 mas "CARROT Weather", id: 993487541
 mas "Final Cut Pro", id: 424389933
