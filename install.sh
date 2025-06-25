@@ -20,13 +20,7 @@ if test ! "$( command -v brew )"; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-    # install brew dependencies from Brewfile
-    brew bundle
-
-    # After the install, setup fzf
-    echo -e "\\n\\nRunning fzf install script..."
-    echo "=============================="
-    /usr/local/opt/fzf/install --all --no-bash --no-fish
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
     # Change the default shell to zsh
     zsh_path="$( command -v zsh )"

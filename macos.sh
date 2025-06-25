@@ -160,19 +160,6 @@ defaults write com.apple.Safari ProxiesInBookmarksBar "()"
 # defaults write com.apple.loginwindow TALLogoutSavesState -bool false
 # defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool false
 
-# echo "Enable Dashboard dev mode (allows keeping widgets on the desktop)"
-# defaults write com.apple.dashboard devmode -bool true
-
-# echo "Reset Launchpad"
-#[ -e ~/Library/Application\ Support/Dock/*.db ] && rm ~/Library/Application\ Support/Dock/*.db
-
-# echo "Disable local Time Machine backups"
-# hash tmutil &> /dev/null && sudo tmutil disablelocal
-
-# echo "Remove Dropbox’s green checkmark icons in Finder"
-# file=/Applications/Dropbox.app/Contents/Resources/check.icns
-# [ -e "$file" ] && mv -f "$file" "$file.bak"
-# unset file
 
 echo "Kill affected applications"
 for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done

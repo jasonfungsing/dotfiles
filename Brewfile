@@ -1,7 +1,6 @@
 tap "aws/tap"
 tap "github/gh"
 tap "graalvm/tap"
-tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/services"
@@ -108,20 +107,15 @@ cask "font-3270-nerd-font"
 cask "font-cascadia-mono"
 cask "font-fira-code"
 cask "font-jetbrains-mono"
-cask "grammarly"
-cask "grammarly-desktop"
 cask "iterm2"
 cask "kaleidoscope"
 cask "little-snitch"
-cask "microsoft-auto-update"
-cask "microsoft-word"
 cask "raycast"
 cask "slack"
 cask "tower"
 cask "sublime-text"
 mas "AdBlock", id: 1402042596
 mas "CARROT Weather", id: 993487541
-mas "Final Cut Pro", id: 424389933
 mas "PDF Expert", id: 1055273043
 mas "Vimari", id: 1480933944
 mas "Xcode", id: 497799835
