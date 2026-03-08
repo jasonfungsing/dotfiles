@@ -6,7 +6,7 @@ command_exists() {
 
 echo "Installing dotfiles..."
 
-ln -s $PWD/shell/vimrc $HOME/.vimrc
+ln -s $PWD/editor/vimrc $HOME/.vimrc
 ln -s $PWD/shell/zshrc $HOME/.zshrc
 ln -s $PWD/terminal/tmux.conf $HOME/.tmux.conf
 ln -s $PWD/git/gitconfig $HOME/.gitconfig
