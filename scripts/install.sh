@@ -313,7 +313,7 @@ install_packages() {
     log "Installing Homebrew packages..."
     
     if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would run: brew bundle --file=$REPO_DIR/Brewfile"
+        log "[DRY RUN] Would run: brew bundle --file=$REPO_DIR/brew/Brewfile"
         return
     fi
     
@@ -321,11 +321,11 @@ install_packages() {
         error "Homebrew not installed. Cannot install packages."
     fi
     
-    if [ -f "$REPO_DIR/Brewfile" ]; then
-        brew bundle --file="$REPO_DIR/Brewfile"
+    if [ -f "$REPO_DIR/brew/Brewfile" ]; then
+        brew bundle --file="$REPO_DIR/brew/Brewfile"
         success "Packages installed"
     else
-        error "Brewfile not found at $REPO_DIR/Brewfile"
+        error "Brewfile not found at $REPO_DIR/brew/Brewfile"
     fi
 }
 

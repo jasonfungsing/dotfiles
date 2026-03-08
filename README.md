@@ -131,7 +131,7 @@ If you prefer to install manually:
 
 4. **Install packages:**
    ```bash
-   brew bundle --file=./Brewfile
+   brew bundle --file=./brew/Brewfile
    ```
 
 5. **Set Zsh as default shell:**
@@ -182,9 +182,11 @@ See [Brewfile Lock File Guide](docs/BREWFILE_LOCK.md) for detailed information.
 dotfiles/
 ├── README.md                 # This file
 ├── CHANGELOG.md              # Version history and changes
-├── Brewfile                  # Homebrew package definitions
-├── Brewfile.lock.json        # Locked package versions
-├── Brewfile.readme           # Brewfile format documentation
+│
+├── brew/                     # Homebrew configuration
+│   ├── Brewfile              # Homebrew package definitions
+│   ├── Brewfile.lock.json    # Locked package versions
+│   └── Brewfile.readme       # Brewfile format documentation
 │
 ├── shell/                    # Shell configuration
 │   ├── zshrc                 # Zsh shell configuration
