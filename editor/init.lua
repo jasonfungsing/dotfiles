@@ -12,9 +12,9 @@ vim.cmd.source(vim.env.HOME .. '/.vimrc')
 -- Enable true colour support
 vim.opt.termguicolors = true
 
--- Set colorscheme
-vim.cmd('colorscheme gruvbox')
-vim.opt.background = 'dark'
+-- Colorscheme is handled by vimrc to avoid loading before plugins are installed
+-- First run: use default colorscheme, then run :PlugInstall
+-- Subsequent runs: gruvbox will be available and applied by vimrc
 
 -- Neovim-specific performance improvements
 vim.opt.synmaxcol = 240         -- limit syntax highlighting to 240 columns
