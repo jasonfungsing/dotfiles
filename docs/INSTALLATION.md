@@ -136,7 +136,7 @@ ln -s ~/.dotfiles/system/hushlogin ~/.hushlogin
 
 Then add Homebrew to PATH:
 ```bash
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/jasonfungsing/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
