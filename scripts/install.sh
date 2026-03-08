@@ -125,7 +125,7 @@ EOF
 install_dotfiles() {
     log "Installing dotfiles..."
     
-    local dotfile_source="$REPO_DIR/shell/zshrc"
+    local dotfile_source="$REPO_DIR/zshrc"
     local dotfile_target="$HOME/.zshrc"
     
     if [ "$DRY_RUN" = true ]; then
@@ -139,8 +139,8 @@ install_dotfiles() {
         fi
     fi
     
-    for file in vimrc alias_prompt.sh; do
-        local source="$REPO_DIR/shell/$file"
+    for file in vimrc alias_prompt.sh gitconfig tmux.conf; do
+        local source="$REPO_DIR/$file"
         local target="$HOME/.$file"
         
         if [ ! -f "$source" ]; then
@@ -159,9 +159,9 @@ install_dotfiles() {
         fi
     done
     
-    local system_files=("karabiner.json" "com.googlecode.iterm2.plist" "hushlogin")
+    local system_files=("karabiner.json" "com.googlecode.iterm2.plist" "hushlogin" "cobalt2.zsh-theme")
     for file in "${system_files[@]}"; do
-        local source="$REPO_DIR/system/$file"
+        local source="$REPO_DIR/$file"
         local target="$HOME/.$file"
         
         if [ ! -f "$source" ]; then
