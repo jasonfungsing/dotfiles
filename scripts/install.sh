@@ -125,7 +125,7 @@ EOF
 install_dotfiles() {
     log "Installing dotfiles..."
     
-    local dotfile_source="$REPO_DIR/zshrc"
+    local dotfile_source="$REPO_DIR/shell/zshrc"
     local dotfile_target="$HOME/.zshrc"
     
     if [ "$DRY_RUN" = true ]; then
@@ -139,8 +139,9 @@ install_dotfiles() {
         fi
     fi
     
-    for file in vimrc alias_prompt.sh gitconfig tmux.conf; do
-        local source="$REPO_DIR/$file"
+    # Shell files
+    for file in alias_prompt.sh; do
+        local source="$REPO_DIR/shell/$file"
         local target="$HOME/.$file"
         
         if [ ! -f "$source" ]; then
@@ -159,10 +160,63 @@ install_dotfiles() {
         fi
     done
     
-    local system_files=("com.googlecode.iterm2.plist" "hushlogin" "cobalt2.zsh-theme")
+    # Editor files
+    local editor_file="$REPO_DIR/editor/vimrc"
+    local editor_target="$HOME/.vimrc"
+    
+    if [ -f "$editor_file" ]; then
+        if [ "$DRY_RUN" = true ]; then
+            log "[DRY RUN] Would symlink: $editor_file → $editor_target"
+        else
+            if [ -e "$editor_target" ] && [ ! -L "$editor_target" ]; then
+                log "Skipping $editor_target (already exists)"
+            else
+                ln -sf "$editor_file" "$editor_target"
+                success "Symlinked $editor_target"
+            fi
+        fi
+    fi
+    
+    # Terminal files
+    local terminal_file="$REPO_DIR/terminal/tmux.conf"
+    local terminal_target="$HOME/.tmux.conf"
+    
+    if [ -f "$terminal_file" ]; then
+        if [ "$DRY_RUN" = true ]; then
+            log "[DRY RUN] Would symlink: $terminal_file → $terminal_target"
+        else
+            if [ -e "$terminal_target" ] && [ ! -L "$terminal_target" ]; then
+                log "Skipping $terminal_target (already exists)"
+            else
+                ln -sf "$terminal_file" "$terminal_target"
+                success "Symlinked $terminal_target"
+            fi
+        fi
+    fi
+    
+    # Git files
+    local git_file="$REPO_DIR/git/gitconfig"
+    local git_target="$HOME/.gitconfig"
+    
+    if [ -f "$git_file" ]; then
+        if [ "$DRY_RUN" = true ]; then
+            log "[DRY RUN] Would symlink: $git_file → $git_target"
+        else
+            if [ -e "$git_target" ] && [ ! -L "$git_target" ]; then
+                log "Skipping $git_target (already exists)"
+            else
+                ln -sf "$git_file" "$git_target"
+                success "Symlinked $git_target"
+            fi
+        fi
+    fi
+    
+    # System files
+    local system_files=("system/com.googlecode.iterm2.plist" "system/hushlogin" "shell/cobalt2.zsh-theme")
     for file in "${system_files[@]}"; do
         local source="$REPO_DIR/$file"
-        local target="$HOME/.$file"
+        local target_name=$(basename "$file")
+        local target="$HOME/.$target_name"
         
         if [ ! -f "$source" ]; then
             continue

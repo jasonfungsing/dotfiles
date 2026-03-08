@@ -122,10 +122,10 @@ If you prefer to install manually:
 
 2. **Create symlinks:**
    ```bash
-   ln -s ~/.dotfiles/zshrc ~/.zshrc
-   ln -s ~/.dotfiles/vimrc ~/.vimrc
-   ln -s ~/.dotfiles/tmux.conf ~/.tmux.conf
-   ln -s ~/.dotfiles/gitconfig ~/.gitconfig
+   ln -s ~/.dotfiles/shell/zshrc ~/.zshrc
+   ln -s ~/.dotfiles/editor/vimrc ~/.vimrc
+   ln -s ~/.dotfiles/terminal/tmux.conf ~/.tmux.conf
+   ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
    ```
 
 3. **Install Homebrew:**
@@ -189,15 +189,25 @@ dotfiles/
 ├── Brewfile                  # Homebrew package definitions
 ├── Brewfile.lock.json        # Locked package versions
 ├── Brewfile.readme           # Brewfile format documentation
+├── install.sh                # Simple installation script
 │
-├── zshrc                     # Zsh shell configuration
-├── alias_prompt.sh           # Custom aliases and prompt
-├── cobalt2.zsh-theme         # Zsh theme
-├── vimrc                     # Vim editor configuration
-├── tmux.conf                 # tmux configuration
-├── gitconfig                 # Git configuration
-├── com.googlecode.iterm2.plist  # iTerm2 settings
-├── hushlogin                 # Suppress login message
+├── shell/                    # Shell configuration
+│   ├── zshrc                 # Zsh shell configuration
+│   ├── alias_prompt.sh       # Custom aliases and prompt
+│   └── cobalt2.zsh-theme     # Zsh theme
+│
+├── editor/                   # Editor configuration
+│   └── vimrc                 # Vim editor configuration
+│
+├── terminal/                 # Terminal configuration
+│   └── tmux.conf             # tmux configuration
+│
+├── git/                      # Git configuration
+│   └── gitconfig             # Git version control configuration
+│
+├── system/                   # System configuration
+│   ├── com.googlecode.iterm2.plist  # iTerm2 terminal settings
+│   └── hushlogin             # Suppress macOS login message
 │
 ├── scripts/                  # Installation and setup scripts
 │   ├── install.sh            # Main installation script
