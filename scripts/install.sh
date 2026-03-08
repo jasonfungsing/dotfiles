@@ -333,10 +333,10 @@ install_neovim_config() {
 }
 
 install_vim_plug() {
-    log "Installing vim-plug plugin manager and all plugins..."
+    log "Installing vim-plug plugin manager..."
     
     if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would install vim-plug and run PlugInstall"
+        log "[DRY RUN] Would install vim-plug"
         return
     fi
     
@@ -353,34 +353,12 @@ install_vim_plug() {
         if [ $? -ne 0 ]; then
             error "Failed to download vim-plug"
         fi
-        success "vim-plug downloaded"
+        success "vim-plug downloaded successfully"
     else
-        log "vim-plug already exists, skipping download"
+        success "vim-plug already installed"
     fi
     
-    log "Installing plugins (this may take a moment)..."
-    
-    # Create temporary VimScript to install plugins
-    local temp_init="$HOME/.config/nvim/install-plugins.vim"
-    cat > "$temp_init" << 'VIMSCRIPT'
-source ~/.vimrc
-PlugInstall
-CocInstall coc-tsserver coc-python coc-go coc-eslint coc-prettier
-qa
-VIMSCRIPT
-    
-    # Run Neovim in headless mode with the install script
-    nvim --headless -u "$temp_init" 2>&1 | tail -20 || true
-    
-    # Clean up temporary file
-    rm -f "$temp_init"
-    
-    # Verify plugins were installed
-    if [ -d "$HOME/.local/share/nvim/site/plugged/vim-plug" ] || [ -d "$HOME/.local/share/nvim/site/plugged/nerdtree" ]; then
-        success "All plugins and extensions installed successfully"
-    else
-        log "Plugin installation completed (verify with :PlugStatus in Neovim)"
-    fi
+    log "Note: Run 'nvim' then ':PlugInstall' to install plugins on first launch"
 }
 
 install_packages() {
