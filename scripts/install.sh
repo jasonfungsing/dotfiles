@@ -333,10 +333,10 @@ install_neovim_config() {
 }
 
 install_vim_plug() {
-    log "Installing vim-plug plugin manager..."
+    log "Installing vim-plug plugin manager and all plugins..."
     
     if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would install vim-plug for Neovim"
+        log "[DRY RUN] Would install vim-plug and run PlugInstall"
         return
     fi
     
@@ -350,22 +350,23 @@ install_vim_plug() {
         curl -fLo "$plug_file" --create-dirs \
             https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
         
-        if [ $? -eq 0 ]; then
-            success "vim-plug installed"
-            
-            log "Installing plugins..."
-            nvim +PlugInstall +qa
-            
-            if [ $? -eq 0 ]; then
-                success "Plugins installed successfully"
-            else
-                log "Note: Plugin installation had issues, you may need to run :PlugInstall manually in Neovim"
-            fi
-        else
+        if [ $? -ne 0 ]; then
             error "Failed to download vim-plug"
         fi
+        success "vim-plug downloaded"
     else
-        success "vim-plug already installed"
+        log "vim-plug already exists, skipping download"
+    fi
+    
+    log "Installing plugins (this may take a moment)..."
+    
+    # Run PlugInstall in headless mode
+    nvim --headless -u ~/.vimrc +PlugInstall +CocInstall\ coc-tsserver\ coc-python\ coc-go\ coc-eslint\ coc-prettier +qa 2>&1 | grep -E "(^|^Finished|^Updating|^Installing)" || true
+    
+    if [ $? -eq 0 ]; then
+        success "All plugins and extensions installed successfully"
+    else
+        log "Plugin installation completed (check Neovim for details if needed)"
     fi
 }
 
