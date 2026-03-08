@@ -111,21 +111,12 @@ cd ~/.dotfiles
 #### Step 2: Create Symlinks
 
 ```bash
-# Shell configuration
-ln -s ~/.dotfiles/shell/zshrc ~/.zshrc
-ln -s ~/.dotfiles/shell/alias_prompt.sh ~/.alias_prompt.sh
-
-# Editor configuration
-ln -s ~/.dotfiles/editor/vimrc ~/.vimrc
-
-# Terminal configuration
-ln -s ~/.dotfiles/terminal/tmux.conf ~/.tmux.conf
-
-# Git configuration
-ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
-
-# System configuration
-ln -s ~/.dotfiles/system/hushlogin ~/.hushlogin
+ln -s ~/.dotfiles/zshrc ~/.zshrc
+ln -s ~/.dotfiles/alias_prompt.sh ~/.alias_prompt.sh
+ln -s ~/.dotfiles/vimrc ~/.vimrc
+ln -s ~/.dotfiles/tmux.conf ~/.tmux.conf
+ln -s ~/.dotfiles/gitconfig ~/.gitconfig
+ln -s ~/.dotfiles/hushlogin ~/.hushlogin
 ```
 
 #### Step 3: Install Homebrew

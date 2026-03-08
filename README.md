@@ -37,7 +37,6 @@ exec zsh
 | `.tmux.conf` | Terminal multiplexer (tmux) configuration |
 | `.gitconfig` | Git version control configuration |
 | `.hushlogin` | Suppresses macOS login message |
-| `karabiner.json` | Keyboard remapping configuration |
 | `com.googlecode.iterm2.plist` | iTerm2 terminal settings |
 
 ### Homebrew Packages (100+)
@@ -197,7 +196,6 @@ dotfiles/
 ├── vimrc                     # Vim editor configuration
 ├── tmux.conf                 # tmux configuration
 ├── gitconfig                 # Git configuration
-├── karabiner.json            # Keyboard remapping
 ├── com.googlecode.iterm2.plist  # iTerm2 settings
 ├── hushlogin                 # Suppress login message
 │

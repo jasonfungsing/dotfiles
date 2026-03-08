@@ -159,7 +159,7 @@ install_dotfiles() {
         fi
     done
     
-    local system_files=("karabiner.json" "com.googlecode.iterm2.plist" "hushlogin" "cobalt2.zsh-theme")
+    local system_files=("com.googlecode.iterm2.plist" "hushlogin" "cobalt2.zsh-theme")
     for file in "${system_files[@]}"; do
         local source="$REPO_DIR/$file"
         local target="$HOME/.$file"
