@@ -360,13 +360,26 @@ install_vim_plug() {
     
     log "Installing plugins (this may take a moment)..."
     
-    # Run PlugInstall in headless mode
-    nvim --headless -u ~/.vimrc +PlugInstall +CocInstall\ coc-tsserver\ coc-python\ coc-go\ coc-eslint\ coc-prettier +qa 2>&1 | grep -E "(^|^Finished|^Updating|^Installing)" || true
+    # Create temporary VimScript to install plugins
+    local temp_init="$HOME/.config/nvim/install-plugins.vim"
+    cat > "$temp_init" << 'VIMSCRIPT'
+source ~/.vimrc
+PlugInstall
+CocInstall coc-tsserver coc-python coc-go coc-eslint coc-prettier
+qa
+VIMSCRIPT
     
-    if [ $? -eq 0 ]; then
+    # Run Neovim in headless mode with the install script
+    nvim --headless -u "$temp_init" 2>&1 | tail -20 || true
+    
+    # Clean up temporary file
+    rm -f "$temp_init"
+    
+    # Verify plugins were installed
+    if [ -d "$HOME/.local/share/nvim/site/plugged/vim-plug" ] || [ -d "$HOME/.local/share/nvim/site/plugged/nerdtree" ]; then
         success "All plugins and extensions installed successfully"
     else
-        log "Plugin installation completed (check Neovim for details if needed)"
+        log "Plugin installation completed (verify with :PlugStatus in Neovim)"
     fi
 }
 
