@@ -1,6 +1,6 @@
 [user]
 	name = Jason Feng
-	email = jason@foxlime.io
+	email = jasonfungsing@gmail.com
 [github]
     user = jasonfungsing
 [gitlab]
@@ -18,22 +18,24 @@
     ignorecase = false
 	editor = vim
 
-[mergetool "SublimeMerge"]
-    cmd = smerge mergetool \"$BASE\" \"$REMOTE\" \"$LOCAL\" -o \"$MERGED\"
-[mergetool]
-    keepBackup = false
-    prompt = false
-[merge]
-	tool = SublimeMerge
-	conflictstyle = diff3
-
-[difftool "SublimeMerge"]
-    cmd = smerge mergetool \"$REMOTE\"  \"$LOCAL\"
-[difftool]
-    prompt = false
 [diff]
-    tool = SublimeMerge
+    tool = vscode
     algorithm = patience
+
+[difftool]
+	prompt = false
+
+[difftool "vscode"]
+	cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
+
+[merge]
+	tool = vscode
+
+[mergetool]
+	prompt = false
+
+[mergetool "vscode"]
+	cmd = code --wait --merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
 
 [alias]
     dk=difftool
