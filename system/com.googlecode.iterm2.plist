@@ -948,7 +948,7 @@
 			<key>Idle Code</key>
 			<integer>0</integer>
 			<key>Initial Text</key>
-			<string>t</string>
+			<string></string>
 			<key>Jobs to Ignore</key>
 			<array>
 				<string>rlogin</string>
@@ -1294,7 +1294,7 @@
 			<key>Window Type</key>
 			<integer>9</integer>
 			<key>Working Directory</key>
-			<string>/Users/jasonfeng</string>
+			<string></string>
 		</dict>
 	</array>
 	<key>OnlyWhenMoreTabs</key>
