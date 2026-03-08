@@ -160,10 +160,10 @@ chsh -s "$(command -v zsh)"
 
 ```bash
 # Install all packages from Brewfile
-brew bundle --file=~/.dotfiles/Brewfile
+brew bundle --file=~/.dotfiles/brew/Brewfile
 
 # Or install only specific formulas/casks
-brew bundle --file=~/.dotfiles/Brewfile install
+brew bundle --file=~/.dotfiles/brew/Brewfile install
 ```
 
 #### Step 7: Apply macOS Settings
