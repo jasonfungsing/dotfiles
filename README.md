@@ -12,10 +12,6 @@ This repository contains my dotfiles and an automated setup script to quickly bo
 git clone https://github.com/jasonfungsing/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./scripts/install.sh
-```
-
-Then reload your terminal:
-```bash
 exec zsh
 ```
 
@@ -189,7 +185,6 @@ dotfiles/
 ├── Brewfile                  # Homebrew package definitions
 ├── Brewfile.lock.json        # Locked package versions
 ├── Brewfile.readme           # Brewfile format documentation
-├── install.sh                # Simple installation script
 │
 ├── shell/                    # Shell configuration
 │   ├── zshrc                 # Zsh shell configuration
