@@ -309,6 +309,29 @@ install_vim_directories() {
     success "Vim directories created"
 }
 
+install_neovim_config() {
+    log "Setting up Neovim configuration..."
+    
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would create ~/.config/nvim and symlink init.lua"
+        return
+    fi
+    
+    mkdir -p ~/.config/nvim
+    
+    local init_lua_source="$REPO_DIR/editor/init.lua"
+    local init_lua_target="$HOME/.config/nvim/init.lua"
+    
+    if [ -f "$init_lua_source" ]; then
+        if [ -e "$init_lua_target" ] && [ ! -L "$init_lua_target" ]; then
+            log "Skipping $init_lua_target (already exists)"
+        else
+            ln -sf "$init_lua_source" "$init_lua_target"
+            success "Symlinked Neovim init.lua"
+        fi
+    fi
+}
+
 install_packages() {
     log "Installing Homebrew packages..."
     
@@ -398,6 +421,7 @@ main() {
     if [ "$INSTALL_EDITOR" = true ]; then
         log "═ Editor Configuration ═"
         install_dotfiles
+        install_neovim_config
     fi
     
     if [ "$INSTALL_SYSTEM" = true ]; then

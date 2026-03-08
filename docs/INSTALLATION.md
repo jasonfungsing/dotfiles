@@ -213,6 +213,41 @@ brew --version
 kubectl version --client
 ```
 
+## Neovim Configuration
+
+After installation, Neovim will be set as your default editor. For detailed setup instructions, see [Neovim Setup Guide](NEOVIM_SETUP.md).
+
+### Quick Neovim Setup
+
+```bash
+# Create Neovim config directory
+mkdir -p ~/.config/nvim
+
+# The symlink is created automatically during installation
+# Just verify it exists:
+ls -la ~/.config/nvim/init.lua
+
+# Open Neovim and install plugins
+nvim
+:PlugInstall
+:CocInstall coc-tsserver coc-python coc-go coc-eslint coc-prettier
+```
+
+### Using Neovim as Default Editor
+
+Your shell is configured with:
+- **Default editor:** `nvim` (via `EDITOR` and `VISUAL` environment variables)
+- **Quick alias:** `v` launches Neovim
+- **Fallback:** `vim` launches traditional Vim
+
+```bash
+v myfile.js   # Launches Neovim
+vim myfile.js # Launches Vim
+nvim myfile.js # Explicit Neovim
+```
+
+For complete Neovim documentation, see [Neovim Setup Guide](NEOVIM_SETUP.md).
+
 ## Troubleshooting
 
 ### Installation Script Fails

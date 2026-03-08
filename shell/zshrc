@@ -76,7 +76,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
+#   export EDITOR='nvim'
 # else
 #   export EDITOR='mvim'
 # fi
@@ -107,7 +107,8 @@ alias update="brew update; brew upgrade; brew upgrade --cask --greedy; brew clea
 alias u=update
 alias vu="vim +PlugUpdate +qa"
 alias y="yarn"
-alias v="vim"
+alias v="nvim"
+alias vim="vim"
 alias i="idea"
 alias weather='f() { curl wttr.in/$1. };f'
 alias k=kubectl
@@ -129,7 +130,8 @@ export PATH="/usr/local/bin:$PATH"
 export PATH="/opt/homebrew/sbin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
 
-export EDITOR='vim'
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 # Auto complete for kubernetes
 if [ $commands[kubectl] ]; then
