@@ -136,13 +136,23 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " ------
 
 " Plug plugins https://github.com/junegunn/vim-plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+" Use Neovim-aware paths
+if has('nvim')
+  let plug_dir = stdpath('data') . '/site/plugged'
+  let autoload_dir = stdpath('config') . '/autoload'
+  if empty(glob(autoload_dir . '/plug.vim'))
+    silent execute '!curl -fLo ' . autoload_dir . '/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
+else
+  let plug_dir = '~/.vim/plugged'
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
 endif
 
-call plug#begin('~/.vim/plugged')
+call plug#begin(plug_dir)
 
 Plug 'scrooloose/nerdtree'
 Plug 'gavocanov/vim-js-indent', { 'for': 'javascript' }
@@ -160,14 +170,13 @@ Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'morhetz/gruvbox'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'scrooloose/syntastic'
-Plug 'majutsushi/tagbar'
+Plug 'dense-analysis/ale'
+Plug 'preservim/tagbar'
 Plug 'godlygeek/tabular'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go'
-Plug 'mdempsky/gocode'
 Plug 'benmills/vimux'
 Plug '/usr/local/opt/fzf'
 Plug 'tpope/vim-projectionist'
@@ -181,8 +190,29 @@ call plug#end()
 " Source Vim configuration file and updateplugins
 nnoremap <silent><leader>1 :source ~/.vimrc \| :PlugUpdate<CR>
 
-" Autocomplete extension for neoclide
-let g:coc_global_extensions = [ 'coc-tsserver', 'coc-python', 'coc-git', 'coc-java', 'coc-json' ]
+" ------ ALE (Asynchronous Lint Engine) ------
+let g:ale_linters_explicit = 1
+let g:ale_fix_on_save = 1
+let g:ale_sign_column_always = 1
+let g:ale_linters = {
+  \ 'javascript': ['eslint'],
+  \ 'python': ['pylint', 'flake8'],
+  \ 'go': ['golint', 'go vet'],
+  \ 'java': ['eclipselsp']
+  \ }
+" ------
+
+" Autocomplete extension for neoclide (coc.nvim)
+let g:coc_global_extensions = [
+  \ 'coc-tsserver',
+  \ 'coc-python',
+  \ 'coc-git',
+  \ 'coc-java',
+  \ 'coc-json',
+  \ 'coc-go',
+  \ 'coc-eslint',
+  \ 'coc-prettier'
+  \ ]
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " The Silver Searcher <http://robots.thoughtbot.com/faster-grepping-in-vim>
