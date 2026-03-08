@@ -16,7 +16,7 @@ ln -s $PWD/alias_prompt.sh $HOME/.alias_prompt.sh
 if test ! "$( command -v brew )"; then
     echo "Installing homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/jasonfungsing/.zprofile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 

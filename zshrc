@@ -156,16 +156,13 @@ if [ -f ~/.zshrc.private ]; then
   source ~/.zshrc.private
 fi
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/jasonfungsing/.docker/completions $fpath)
+fpath=($HOME/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 
 # Added by Antigravity
-export PATH="/Users/jasonfungsing/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity
-export PATH="/Users/jasonfungsing/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 
 # OpenClaw Completion
-source "/Users/jasonfungsing/.openclaw/completions/openclaw.zsh"
+source "$HOME/.openclaw/completions/openclaw.zsh"
