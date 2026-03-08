@@ -135,8 +135,6 @@ cask "openclaw"
 cask "oracle-jdk@25"
 cask "raycast"
 cask "slack"
-cask "sublime-merge"
-cask "sublime-text"
 cask "visual-studio-code"
 mas "AdBlock", id: 1402042596
 mas "Amphetamine", id: 937984704

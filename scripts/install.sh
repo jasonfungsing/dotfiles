@@ -291,22 +291,6 @@ apply_macos_settings() {
     fi
 }
 
-setup_sublime_text() {
-    log "Setting up Sublime Text..."
-    
-    if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would run: $SCRIPT_DIR/sublime.sh"
-        return
-    fi
-    
-    if [ -f "$SCRIPT_DIR/sublime.sh" ]; then
-        bash "$SCRIPT_DIR/sublime.sh"
-        success "Sublime Text configured"
-    else
-        error "sublime.sh not found"
-    fi
-}
-
 print_installation_plan() {
     echo ""
     echo "═══════════════════════════════════════════════════════════"
@@ -365,7 +349,6 @@ main() {
     if [ "$INSTALL_SYSTEM" = true ]; then
         log "═ System Preferences ═"
         apply_macos_settings
-        setup_sublime_text
     fi
     
     if [ "$INSTALL_BREW" = true ] || [ "$INSTALL_APPS" = true ]; then
