@@ -332,6 +332,43 @@ install_neovim_config() {
     fi
 }
 
+install_vim_plug() {
+    log "Installing vim-plug plugin manager..."
+    
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would install vim-plug for Neovim"
+        return
+    fi
+    
+    local autoload_dir="$HOME/.config/nvim/autoload"
+    local plug_file="$autoload_dir/plug.vim"
+    
+    mkdir -p "$autoload_dir"
+    
+    if [ ! -f "$plug_file" ]; then
+        log "Downloading vim-plug..."
+        curl -fLo "$plug_file" --create-dirs \
+            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        
+        if [ $? -eq 0 ]; then
+            success "vim-plug installed"
+            
+            log "Installing plugins..."
+            nvim +PlugInstall +qa
+            
+            if [ $? -eq 0 ]; then
+                success "Plugins installed successfully"
+            else
+                log "Note: Plugin installation had issues, you may need to run :PlugInstall manually in Neovim"
+            fi
+        else
+            error "Failed to download vim-plug"
+        fi
+    else
+        success "vim-plug already installed"
+    fi
+}
+
 install_packages() {
     log "Installing Homebrew packages..."
     
@@ -422,6 +459,7 @@ main() {
         log "═ Editor Configuration ═"
         install_dotfiles
         install_neovim_config
+        install_vim_plug
     fi
     
     if [ "$INSTALL_SYSTEM" = true ]; then
