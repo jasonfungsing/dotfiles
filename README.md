@@ -52,7 +52,7 @@ Organized by category:
 
 ### Applications (via Homebrew Cask & Mac App Store)
 - IDEs: Xcode, Visual Studio Code, IntelliJ IDEA
-- Editors: Sublime Text, Sublime Merge, Neovim
+- Editors: Neovim
 - Productivity: Raycast, Slack, Microsoft Office, WeChat, WhatsApp
 - Development: Docker Desktop, iTerm2
 - Security: Little Snitch, Grammarly
@@ -214,8 +214,7 @@ dotfiles/
 │   ├── install.sh            # Main installation script
 │   ├── install-interactive.sh # Interactive installer
 │   ├── validate-setup.sh     # Setup validation script
-│   ├── macos.sh              # macOS system preferences
-│   └── sublime.sh            # Sublime Text configuration
+│   └── macos.sh              # macOS system preferences
 │
 ├── raycast-scripts/          # Raycast command scripts
 │   ├── summarize-screen-ai.sh
@@ -226,7 +225,6 @@ dotfiles/
     ├── MACOS_SETTINGS.md     # macOS settings explanations
     ├── BREWFILE_EXPLAINED.md # Package list with rationale
     ├── BREWFILE_LOCK.md      # Lock file management
-    ├── SUBLIME_SETUP.md      # Sublime Text setup
     ├── RAYCAST_SCRIPTS.md    # Raycast scripts documentation
     └── SHELL_ALIASES.md      # Shell aliases reference
 ```
@@ -315,7 +313,6 @@ For detailed information, see:
 - [macOS Settings](docs/MACOS_SETTINGS.md)
 - [Brewfile Packages](docs/BREWFILE_EXPLAINED.md)
 - [Brewfile Lock File](docs/BREWFILE_LOCK.md)
-- [Sublime Text Setup](docs/SUBLIME_SETUP.md)
 - [Raycast Scripts](docs/RAYCAST_SCRIPTS.md)
 - [Shell Aliases](docs/SHELL_ALIASES.md)
 

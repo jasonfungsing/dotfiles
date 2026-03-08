@@ -43,11 +43,6 @@
     mk=mergetool
     mkc=mergetool --cached
 
-    ds=difftool --tool=SublimeMerge
-    dsc=difftool --tool=SublimeMerge --cached
-    ms=mergetool --tool=SublimeMerge
-    msc=mergetool --tool=SublimeMerge --cached
-
     dv = difftool --tool=vimdiff
     dvc = difftool --tool=vimdiff --cached
     mv = mergetool --tool=vimdiff

@@ -24,7 +24,6 @@ All notable changes to this dotfiles project are documented here.
 - [MACOS_SETTINGS.md](docs/MACOS_SETTINGS.md) - Explanations of all macOS preferences
 - [BREWFILE_EXPLAINED.md](docs/BREWFILE_EXPLAINED.md) - Complete package catalogue with rationale
 - [BREWFILE_LOCK.md](docs/BREWFILE_LOCK.md) - Brewfile lock file management
-- [SUBLIME_SETUP.md](docs/SUBLIME_SETUP.md) - Sublime Text configuration guide
 - [RAYCAST_SCRIPTS.md](docs/RAYCAST_SCRIPTS.md) - Raycast scripts documentation
 - [SHELL_ALIASES.md](docs/SHELL_ALIASES.md) - Complete alias reference
 
@@ -36,5 +35,4 @@ All notable changes to this dotfiles project are documented here.
 - Comprehensive Brewfile with 100+ packages
 - Zsh, Vim, tmux, Git configurations
 - macOS system preferences automation
-- Sublime Text integration
 - Raycast scripts

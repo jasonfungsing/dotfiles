@@ -15,8 +15,6 @@ Complete documentation of all shell aliases and custom commands available in you
 |-------|---------|---------|
 | `v` | `vim` | Open Vim editor |
 | `i` | `idea` | Open IntelliJ IDEA |
-| `s` | `subl` | Open Sublime Text |
-| `sm` | `smerge` | Open Sublime Merge |
 
 ## Version Control & Git
 

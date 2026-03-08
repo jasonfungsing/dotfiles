@@ -172,13 +172,7 @@ brew bundle --file=~/.dotfiles/Brewfile install
 sh ~/.dotfiles/scripts/macos.sh
 ```
 
-#### Step 8: Configure Sublime Text (Optional)
-
-```bash
-sh ~/.dotfiles/scripts/sublime.sh
-```
-
-#### Step 9: Reload Shell
+#### Step 8: Reload Shell
 
 ```bash
 exec zsh
