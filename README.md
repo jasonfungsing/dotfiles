@@ -123,10 +123,10 @@ If you prefer to install manually:
 
 2. **Create symlinks:**
    ```bash
-   ln -s ~/.dotfiles/shell/zshrc ~/.zshrc
-   ln -s ~/.dotfiles/editor/vimrc ~/.vimrc
-   ln -s ~/.dotfiles/terminal/tmux.conf ~/.tmux.conf
-   ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
+   ln -s ~/.dotfiles/zshrc ~/.zshrc
+   ln -s ~/.dotfiles/vimrc ~/.vimrc
+   ln -s ~/.dotfiles/tmux.conf ~/.tmux.conf
+   ln -s ~/.dotfiles/gitconfig ~/.gitconfig
    ```
 
 3. **Install Homebrew:**
@@ -148,7 +148,7 @@ If you prefer to install manually:
 
 ### Modifying Aliases
 
-Edit `shell/alias_prompt.sh` and `shell/zshrc` to add or modify aliases. See [Shell Aliases Documentation](docs/SHELL_ALIASES.md) for the complete list and explanations.
+Edit `alias_prompt.sh` and `zshrc` to add or modify aliases. See [Shell Aliases Documentation](docs/SHELL_ALIASES.md) for the complete list and explanations.
 
 ### Changing macOS Settings
 
@@ -191,30 +191,21 @@ dotfiles/
 ├── Brewfile.lock.json        # Locked package versions
 ├── Brewfile.readme           # Brewfile format documentation
 │
-├── shell/                    # Shell configuration
-│   ├── zshrc                 # Main Zsh configuration
-│   ├── alias_prompt.sh       # Custom aliases and prompt
-│   └── cobalt2.zsh-theme     # Zsh theme
-│
-├── editor/                   # Editor configuration
-│   └── vimrc                 # Vim configuration
-│
-├── terminal/                 # Terminal multiplexer
-│   └── tmux.conf             # tmux configuration
-│
-├── git/                      # Version control
-│   └── gitconfig             # Git configuration
-│
-├── system/                   # System configuration
-│   ├── karabiner.json        # Keyboard remapping
-│   ├── com.googlecode.iterm2.plist  # iTerm2 settings
-│   └── hushlogin             # Suppress login message
+├── zshrc                     # Zsh shell configuration
+├── alias_prompt.sh           # Custom aliases and prompt
+├── cobalt2.zsh-theme         # Zsh theme
+├── vimrc                     # Vim editor configuration
+├── tmux.conf                 # tmux configuration
+├── gitconfig                 # Git configuration
+├── karabiner.json            # Keyboard remapping
+├── com.googlecode.iterm2.plist  # iTerm2 settings
+├── hushlogin                 # Suppress login message
 │
 ├── scripts/                  # Installation and setup scripts
 │   ├── install.sh            # Main installation script
-│   ├── install-interactive.sh # Interactive installer
 │   ├── validate-setup.sh     # Setup validation script
-│   └── macos.sh              # macOS system preferences
+│   ├── macos.sh              # macOS system preferences
+│   └── install-interactive.sh # Interactive installer (planned)
 │
 ├── raycast-scripts/          # Raycast command scripts
 │   ├── summarize-screen-ai.sh
