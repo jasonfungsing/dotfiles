@@ -136,9 +136,17 @@ export NVM_DIR="$HOME/.nvm"
 
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
 
-  autoload -Uz compinit
+# Add Docker completions to fpath
+fpath=($HOME/.docker/completions $fpath)
+
+# Initialise completion system with caching
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR}/.zcompdump(#qNmh+24) ]]; then
   compinit
+else
+  compinit -C
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -151,15 +159,10 @@ if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zs
 # The next line enables shell command completion for gcloud.
 if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc' ]; then . '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'; fi
 
-  # Load private config files
+# Load private config files
 if [ -f ~/.zshrc.private ]; then
   source ~/.zshrc.private
 fi
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=($HOME/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
 
 # Added by Antigravity
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
