@@ -1,3 +1,8 @@
+# Suppress compinstall and compctl from system zsh initialization
+# Prevents interactive completion configuration wizard on startup
+SKIP_COMPFIX=true
+unsetopt promptcr
+
 # Load Alias Prompt
 source ~/.alias_prompt.sh
 
