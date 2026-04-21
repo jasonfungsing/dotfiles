@@ -421,6 +421,34 @@ install_raycast_scripts() {
     done
 }
 
+install_tmux_plugins() {
+    log "Setting up Tmux Plugin Manager and plugins..."
+    
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would install TPM and plugins"
+        return
+    fi
+    
+    if ! command_exists tmux; then
+        log "Tmux not found. Skipping TPM installation."
+        return
+    fi
+    
+    local tpm_path="$HOME/.tmux/plugins/tpm"
+    
+    if [ ! -d "$tpm_path" ]; then
+        log "Cloning Tmux Plugin Manager..."
+        git clone https://github.com/tmux-plugins/tpm "$tpm_path"
+        success "TPM cloned successfully"
+    else
+        success "TPM already installed"
+    fi
+    
+    log "Installing Tmux plugins..."
+    "$tpm_path/bin/install_plugins" > /dev/null 2>&1
+    success "Tmux plugins installed"
+}
+
 install_packages() {
     log "Installing Homebrew packages..."
     
@@ -507,6 +535,7 @@ main() {
     if [ "$INSTALL_TERMINAL" = true ]; then
         log "═ Terminal Configuration ═"
         install_dotfiles
+        install_tmux_plugins
     fi
     
     if [ "$INSTALL_EDITOR" = true ]; then
