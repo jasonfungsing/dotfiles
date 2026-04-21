@@ -212,7 +212,7 @@ install_dotfiles() {
     fi
     
     # System files
-    local system_files=("system/com.googlecode.iterm2.plist" "system/hushlogin" "shell/cobalt2.zsh-theme")
+    local system_files=("system/com.googlecode.iterm2.plist" "system/hushlogin")
     for file in "${system_files[@]}"; do
         local source="$REPO_DIR/$file"
         local target_name=$(basename "$file")
@@ -361,6 +361,66 @@ install_vim_plug() {
     log "Note: Run 'nvim' then ':PlugInstall' to install plugins on first launch"
 }
 
+install_zsh_theme() {
+    log "Installing Zsh theme (cobalt2)..."
+    
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would symlink cobalt2.zsh-theme to ~/.oh-my-zsh/custom/themes/"
+        return
+    fi
+    
+    if [ ! -d "$HOME/.oh-my-zsh/custom/themes" ]; then
+        log "Oh-My-Zsh custom themes directory not found. Skipping theme installation."
+        return
+    fi
+    
+    local theme_source="$REPO_DIR/shell/cobalt2.zsh-theme"
+    local theme_target="$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme"
+    
+    if [ -f "$theme_source" ]; then
+        if [ -e "$theme_target" ] && [ ! -L "$theme_target" ]; then
+            log "Skipping $theme_target (already exists)"
+        else
+            ln -sf "$theme_source" "$theme_target"
+            success "Symlinked cobalt2.zsh-theme"
+        fi
+    fi
+}
+
+install_raycast_scripts() {
+    log "Installing Raycast scripts..."
+    
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would symlink Raycast scripts"
+        return
+    fi
+    
+    if [ ! -d "$HOME/Library/Application Support/Raycast" ]; then
+        log "Raycast not found. Skipping Raycast scripts installation."
+        return
+    fi
+    
+    mkdir -p "$HOME/Library/Application Support/Raycast/Extensions/scripts"
+    
+    local raycast_scripts=("summarize-screen.sh" "summarize-screen-ai.sh")
+    for script in "${raycast_scripts[@]}"; do
+        local source="$REPO_DIR/raycast-scripts/$script"
+        local target="$HOME/Library/Application Support/Raycast/Extensions/scripts/$script"
+        
+        if [ ! -f "$source" ]; then
+            continue
+        fi
+        
+        if [ -e "$target" ] && [ ! -L "$target" ]; then
+            log "Skipping $target (already exists)"
+        else
+            ln -sf "$source" "$target"
+            chmod +x "$target"
+            success "Symlinked $script"
+        fi
+    done
+}
+
 install_packages() {
     log "Installing Homebrew packages..."
     
@@ -430,11 +490,13 @@ main() {
     
     if [ "$INSTALL_SHELL" = true ]; then
         log "═ Shell Configuration ═"
-        install_dotfiles
         install_homebrew
         install_oh_my_zsh
         configure_zsh
+        install_dotfiles
         install_vim_directories
+        install_zsh_theme
+        install_raycast_scripts
     fi
     
     if [ "$INSTALL_GIT" = true ]; then
