@@ -1,0 +1,748 @@
+{
+  "keyboard_shortcuts": {
+    "com.apple.symbolichotkeys": {
+      "AppleSymbolicHotKeys": {
+        "61": {
+          "value": {
+            "type": "standard",
+            "parameters": [
+              32,
+              49,
+              786432
+            ]
+          },
+          "enabled": false
+        },
+        "54": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              113,
+              8388608
+            ]
+          }
+        },
+        "120": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              20,
+              262144
+            ]
+          }
+        },
+        "162": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              96,
+              9961472
+            ]
+          }
+        },
+        "55": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              107,
+              8912896
+            ]
+          }
+        },
+        "163": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              65535,
+              0
+            ]
+          }
+        },
+        "56": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              113,
+              8912896
+            ]
+          }
+        },
+        "64": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              49,
+              1048576
+            ]
+          }
+        },
+        "57": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              100,
+              8650752
+            ]
+          }
+        },
+        "164": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              65535,
+              0
+            ]
+          }
+        },
+        "65": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              49,
+              1572864
+            ]
+          }
+        },
+        "80": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              123,
+              8781824
+            ]
+          }
+        },
+        "59": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              96,
+              9437184
+            ]
+          }
+        },
+        "81": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              124,
+              8650752
+            ]
+          }
+        },
+        "82": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              124,
+              8781824
+            ]
+          }
+        },
+        "7": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              120,
+              8650752
+            ]
+          }
+        },
+        "118": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              18,
+              262144
+            ]
+          }
+        },
+        "10": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              96,
+              8650752
+            ]
+          }
+        },
+        "8": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              99,
+              8650752
+            ]
+          }
+        },
+        "9": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              118,
+              8650752
+            ]
+          }
+        },
+        "11": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              97,
+              8650752
+            ]
+          }
+        },
+        "175": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              65535,
+              0
+            ]
+          }
+        },
+        "79": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              123,
+              8650752
+            ]
+          }
+        },
+        "119": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              19,
+              262144
+            ]
+          }
+        },
+        "12": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              122,
+              8650752
+            ]
+          }
+        },
+        "13": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              98,
+              8650752
+            ]
+          }
+        },
+        "190": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              113,
+              12,
+              8388608
+            ]
+          }
+        },
+        "20": {
+          "enabled": false
+        },
+        "176": {
+          "enabled": false,
+          "value": {
+            "type": "SAE1.0"
+          }
+        },
+        "21": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              56,
+              28,
+              1835008
+            ]
+          }
+        },
+        "22": {
+          "enabled": false
+        },
+        "15": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              56,
+              28,
+              1572864
+            ]
+          }
+        },
+        "184": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              53,
+              23,
+              1179648
+            ]
+          }
+        },
+        "30": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              52,
+              21,
+              1179648
+            ]
+          }
+        },
+        "23": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              92,
+              42,
+              1572864
+            ]
+          }
+        },
+        "16": {
+          "enabled": false
+        },
+        "98": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              47,
+              44,
+              1179648
+            ]
+          }
+        },
+        "31": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              52,
+              21,
+              1441792
+            ]
+          }
+        },
+        "24": {
+          "enabled": false
+        },
+        "17": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              61,
+              24,
+              1572864
+            ]
+          }
+        },
+        "32": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              126,
+              8650752
+            ]
+          }
+        },
+        "25": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              46,
+              47,
+              1835008
+            ]
+          }
+        },
+        "18": {
+          "enabled": false
+        },
+        "179": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              65535,
+              0
+            ]
+          }
+        },
+        "33": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              125,
+              8650752
+            ]
+          }
+        },
+        "26": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              44,
+              43,
+              1835008
+            ]
+          }
+        },
+        "19": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              45,
+              27,
+              1572864
+            ]
+          }
+        },
+        "34": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              126,
+              8781824
+            ]
+          }
+        },
+        "27": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              96,
+              50,
+              1048576
+            ]
+          }
+        },
+        "35": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              125,
+              8781824
+            ]
+          }
+        },
+        "28": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              51,
+              20,
+              1179648
+            ]
+          }
+        },
+        "36": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              103,
+              8388608
+            ]
+          }
+        },
+        "29": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              51,
+              20,
+              1441792
+            ]
+          }
+        },
+        "160": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              65535,
+              0
+            ]
+          }
+        },
+        "37": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              103,
+              8519680
+            ]
+          }
+        },
+        "52": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              100,
+              2,
+              1572864
+            ]
+          }
+        },
+        "60": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              46,
+              47,
+              1048576
+            ]
+          }
+        },
+        "53": {
+          "enabled": true,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              65535,
+              107,
+              8388608
+            ]
+          }
+        }
+      }
+    },
+    "com.apple.Safari": {
+      "IIO_LaunchInfo": 0.5878371000289917,
+      "kAOSUIProfilePictureCropRect": "{{0, 617}, {1358, 1358}}",
+      "IncludeInternalDebugMenu": true,
+      "ProxiesInBookmarksBar": [],
+      "NSUserKeyEquivalents": {
+        "New Jason Feng Window": "@$0",
+        "New GI Window": "@$2",
+        "New DigIO Window": "@$1"
+      }
+    },
+    "com.google.Chrome": {},
+    "com.microsoft.VSCode": {},
+    "com.apple.finder": {},
+    ".GlobalPreferences_m": {},
+    "MobileMeAccounts": {},
+    "ScopedBookmarkAgent": {},
+    "TokenBucketRateLimiter": {},
+    "com.airwatch.mac.agent": {},
+    "com.apple.Accessibility": {},
+    "com.apple.AccessibilityHearingNearby": {},
+    "com.apple.ActivityMonitor": {},
+    "com.apple.AdPlatforms": {},
+    "com.apple.AppStore": {},
+    "com.apple.AuthKit": {},
+    "com.apple.CallHistorySyncHelper": {},
+    "com.apple.Chess": {},
+    "com.apple.CloudSubscriptionFeatures.cache": {},
+    "com.apple.DuetExpertCenter.AppPredictionExpert": {},
+    "com.apple.EmojiPreferences": {},
+    "com.apple.EscrowSecurityAlert": {},
+    "com.apple.FinalCut": {},
+    "com.apple.FontBook": {},
+    "com.apple.HIToolbox": {},
+    "com.apple.MCX": {},
+    "com.apple.Maps": {},
+    "com.apple.Music": {},
+    "com.apple.PhotoBooth": {},
+    "com.apple.Photos": {},
+    "com.apple.PhotosUIPrivate.PhotosPosterProvider": {},
+    "com.apple.QuickTimePlayerX": {},
+    "com.apple.Safari.WebApp": {},
+    "com.apple.ScreenTimeAgent": {},
+    "com.apple.ServicesMenu.Services": {},
+    "com.apple.Siri": {},
+    "com.apple.SoftwareUpdate": {},
+    "com.apple.SpeakSelection": {},
+    "com.apple.Spotlight": {},
+    "com.apple.TelephonyUtilities": {},
+    "com.apple.Terminal": {},
+    "com.apple.Wallet": {},
+    "com.apple.WatchListKit": {},
+    "com.apple.airport.airportutility": {},
+    "com.apple.appleaccountd": {},
+    "com.apple.assistant": {},
+    "com.apple.assistant.support": {},
+    "com.apple.businessservicesd": {},
+    "com.apple.calculator": {},
+    "com.apple.cloud.quota": {},
+    "com.apple.cmfsyncagent": {},
+    "com.apple.controlcenter": {},
+    "com.apple.coreservices.useractivityd.dynamicuseractivites": {},
+    "com.apple.corespotlightui": {},
+    "com.apple.dataaccess.dataaccessd": {},
+    "com.apple.dt.Xcode": {},
+    "com.apple.fileproviderd": {},
+    "com.apple.findmy.fmfcore.notbackedup": {},
+    "com.apple.findmy.fmipcore.notbackedup": {},
+    "com.apple.gamed": {},
+    "com.apple.iBooksX": {},
+    "com.apple.iCal": {},
+    "com.apple.identityservicesd": {},
+    "com.apple.ids": {},
+    "com.apple.imagent": {},
+    "com.apple.inputmethod.Kotoeri": {},
+    "com.apple.iphonesimulator": {},
+    "com.apple.itunescloud": {},
+    "com.apple.itunescloud.daemon": {},
+    "com.apple.journal": {},
+    "com.apple.liveactivitiesd": {},
+    "com.apple.mediaanalysisd": {},
+    "com.apple.messages.nicknames": {},
+    "com.apple.mmcs": {},
+    "com.apple.ncprefs": {},
+    "com.apple.news.tag": {},
+    "com.apple.news.widget": {},
+    "com.apple.news.widgetintents": {},
+    "com.apple.newsd": {},
+    "com.apple.passd": {},
+    "com.apple.photolibraryd": {},
+    "com.apple.photos.shareddefaults": {},
+    "com.apple.podcasts": {},
+    "com.apple.preferences.softwareupdate": {},
+    "com.apple.print.custompresets": {},
+    "com.apple.print.custompresets.forprinter.Brother_HL_L2350DW_series": {},
+    "com.apple.print.custompresets.forprinter.Brother_HL_L2350DW_series_2": {},
+    "com.apple.print.custompresets.forprinter.Brother_MFC_L3750CDW_series": {},
+    "com.apple.print.custompresets.forprinter.Munbyn_ITPP941P": {},
+    "com.apple.quicklook.QuickLookUIService": {},
+    "com.apple.routined": {},
+    "com.apple.security.cloudkeychainproxy3.keysToRegister": {},
+    "com.apple.security.ctkd-db": {},
+    "com.apple.seserviced": {},
+    "com.apple.sharingd": {},
+    "com.apple.shortcuts": {},
+    "com.apple.siri.VoiceShortcuts": {},
+    "com.apple.siri.shortcuts": {},
+    "com.apple.spotlight.mdwrite": {},
+    "com.apple.spotlightknowledge": {},
+    "com.apple.spotlightknowledged.pipeline": {},
+    "com.apple.stockholm": {},
+    "com.apple.sync.NanoHome": {},
+    "com.apple.talagent": {},
+    "com.apple.textInput.keyboardServices.textReplacement": {},
+    "com.apple.tipsd": {},
+    "com.apple.universalaccess": {},
+    "com.apple.weather": {},
+    "com.apple.wpc.energyservices.utilityservices": {},
+    "com.apple.xpc.activity2": {},
+    "com.betafish.adblock-mac": {},
+    "com.betafish.adblock-mac.SafariContentBlocker": {},
+    "com.bjango.istatmenus-setapp.menubar.7": {},
+    "com.bjango.istatmenus6.extras": {},
+    "com.googlecode.iterm2": {},
+    "com.grammarly.ProjectLlama": {},
+    "com.logitech.presenter": {},
+    "com.luckymarmot.Paw-setapp": {},
+    "com.macpaw.CleanMyMac-setapp": {},
+    "com.macpaw.CleanMyMac-setapp.HealthMonitor": {},
+    "com.macpaw.CleanMyMac-setapp.Menu": {},
+    "com.microsoft.Excel": {},
+    "com.microsoft.OneDrive.FileProvider": {},
+    "com.microsoft.OneDriveUpdater": {},
+    "com.microsoft.SharePoint-mac": {},
+    "com.microsoft.Word": {},
+    "com.microsoft.autoupdate.fba": {},
+    "com.microsoft.autoupdate2": {},
+    "com.microsoft.office": {},
+    "com.microsoft.teams2": {},
+    "com.microsoft.teams2.helper": {},
+    "com.okta.mobile": {},
+    "com.okta.mobile.auth-service-extension": {},
+    "com.raycast.macos": {},
+    "com.setapp.DesktopClient": {},
+    "net.whatsapp.WhatsApp": {},
+    "pbs": {},
+    "systemgroup.com.apple.icloud.searchpartyd.sharedsettings": {}
+  }
+}

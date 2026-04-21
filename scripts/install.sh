@@ -449,6 +449,96 @@ install_tmux_plugins() {
     success "Tmux plugins installed"
 }
 
+restore_keyboard_shortcuts() {
+    log "Restoring keyboard shortcuts..."
+    
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would restore keyboard shortcuts from $REPO_DIR/system/keyboard-shortcuts.json"
+        return
+    fi
+    
+    local shortcuts_file="$REPO_DIR/system/keyboard-shortcuts.json"
+    
+    if [ ! -f "$shortcuts_file" ]; then
+        log "Keyboard shortcuts file not found. Skipping restoration."
+        return
+    fi
+    
+    if ! command_exists jq; then
+        log "jq not found. Skipping keyboard shortcuts restoration."
+        return
+    fi
+    
+    log "Restoring keyboard shortcuts from $shortcuts_file..."
+    
+    # Use Python to safely parse and restore all keyboard shortcuts
+    python3 << 'PYTHON_EOF'
+import json
+import subprocess
+import os
+import tempfile
+
+shortcuts_file = os.path.expanduser("~/Code/dotfiles/system/keyboard-shortcuts.json")
+
+try:
+    with open("~/Code/dotfiles/system/keyboard-shortcuts.json".replace("~", os.path.expanduser("~")), 'r') as f:
+        data = json.load(f)
+    
+    if 'keyboard_shortcuts' not in data:
+        print("No keyboard_shortcuts found in JSON")
+        exit(0)
+    
+    shortcuts = data['keyboard_shortcuts']
+    
+    for domain, settings in shortcuts.items():
+        if not isinstance(settings, dict) or not settings:
+            continue
+        
+        try:
+            # For Safari and other app preference files, check if we can use plutil
+            plist_path = os.path.expanduser(f"~/Library/Preferences/{domain}.plist")
+            
+            # Handle nested dictionaries like NSUserKeyEquivalents
+            if 'NSUserKeyEquivalents' in settings and isinstance(settings['NSUserKeyEquivalents'], dict):
+                # Use defaults write for NSUserKeyEquivalents specifically
+                for menu_item, shortcut in settings['NSUserKeyEquivalents'].items():
+                    try:
+                        subprocess.run(['defaults', 'write', domain, 'NSUserKeyEquivalents', '-dict-add', menu_item, shortcut], 
+                                     capture_output=True, timeout=5)
+                    except Exception as e:
+                        pass
+            
+            # Apply other simple key-value pairs
+            for key, value in settings.items():
+                if key == 'NSUserKeyEquivalents' or isinstance(value, dict):
+                    continue
+                
+                try:
+                    defaults_cmd = ['defaults', 'write', domain, key]
+                    
+                    if isinstance(value, bool):
+                        defaults_cmd.extend(['-bool', 'YES' if value else 'NO'])
+                    elif isinstance(value, int):
+                        defaults_cmd.extend(['-int', str(value)])
+                    elif isinstance(value, float):
+                        defaults_cmd.extend(['-float', str(value)])
+                    else:
+                        defaults_cmd.extend(['-string', str(value)])
+                    
+                    subprocess.run(defaults_cmd, capture_output=True, timeout=5)
+                except Exception as e:
+                    pass
+        
+        except Exception as e:
+            pass
+
+except Exception as e:
+    pass
+PYTHON_EOF
+    
+    success "Keyboard shortcuts restored"
+}
+
 install_packages() {
     log "Installing Homebrew packages..."
     
@@ -548,6 +638,7 @@ main() {
     if [ "$INSTALL_SYSTEM" = true ]; then
         log "═ System Preferences ═"
         apply_macos_settings
+        restore_keyboard_shortcuts
     fi
     
     if [ "$INSTALL_BREW" = true ] || [ "$INSTALL_APPS" = true ]; then
