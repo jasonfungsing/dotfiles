@@ -1,4 +1,4 @@
--- Neovim configuration (init.lua)
+-- Neovim configuration (init.lua) - Pure Lua with lazy.nvim
 
 -- ============================================================================
 -- Core Settings
@@ -41,6 +41,33 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.wb = false
 vim.opt.hidden = true
+
+-- ============================================================================
+-- Neovim-specific Settings
+-- ============================================================================
+
+-- Enable true colour support
+vim.opt.termguicolors = true
+
+-- Performance improvements
+vim.opt.synmaxcol = 240         -- limit syntax highlighting to 240 columns
+vim.opt.updatetime = 300        -- faster completion, CursorHold trigger
+vim.opt.redrawtime = 10000      -- allow more time for redrawing
+
+-- Enable mouse support
+vim.opt.mouse = "a"
+
+-- Persistent undo
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
+
+-- Enable proper wildmenu completion
+vim.opt.wildmenu = true
+vim.opt.wildmode = "list:longest"
+vim.opt.completeopt = { "menuone", "noselect" }
+
+-- Neovim-specific terminal settings
+vim.opt.inccommand = "nosplit"
 
 -- ============================================================================
 -- Auto Commands
@@ -94,65 +121,83 @@ keymap("n", "<S-Enter>", "O<ESC>", opts)
 keymap("n", "<space>", "i<space><esc>", opts)
 
 -- ============================================================================
--- Key Mappings - Reload Config
+-- Bootstrap lazy.nvim
 -- ============================================================================
 
-keymap("n", "<leader>1", ":source $HOME/.config/nvim/init.lua<CR>:PlugUpdate<CR>", opts)
-
--- ============================================================================
--- Key Mappings - Terminal Mode
--- ============================================================================
-
-keymap("t", "<C-\\><C-n>", "<ESC>", opts)
-
--- ============================================================================
--- Plugin Configuration - vim-plug Setup
--- ============================================================================
-
-local vim_plug_path = vim.fn.stdpath("data") .. "/site/autoload/plug.vim"
-local plug_dir = vim.fn.stdpath("data") .. "/site/plugged"
-
-if vim.fn.empty(vim.fn.glob(vim_plug_path)) == 1 then
-  local install_cmd = "curl -fLo " .. vim_plug_path .. " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-  vim.fn.system(install_cmd)
-  vim.cmd("PlugInstall --sync")
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
-vim.call("plug#begin", plug_dir)
+-- ============================================================================
+-- Plugin Specifications with lazy.nvim
+-- ============================================================================
 
--- Plugin specifications
-vim.cmd [[
-  Plug 'scrooloose/nerdtree'
-  Plug 'gavocanov/vim-js-indent', {'for': 'javascript'}
-  Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-markdown'
-  Plug 'jeffkreeftmeijer/vim-numbertoggle'
-  Plug 'Xuyuanp/nerdtree-git-plugin'
-  Plug 'rizzatti/dash.vim'
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-  Plug 'scrooloose/nerdcommenter'
-  Plug 'tpope/vim-fugitive'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'ctrlpvim/ctrlp.vim'
-  Plug 'morhetz/gruvbox'
-  Plug 'christoomey/vim-tmux-navigator'
-  Plug 'dense-analysis/ale'
-  Plug 'preservim/tagbar'
-  Plug 'godlygeek/tabular'
-  Plug 'easymotion/vim-easymotion'
-  Plug 'fatih/vim-go'
-  Plug 'benmills/vimux'
-  Plug '/usr/local/opt/fzf'
-  Plug 'tpope/vim-projectionist'
-  Plug 'frazrepo/vim-rainbow'
-  Plug 'yuttie/comfortable-motion.vim'
-  Plug 'kristijanhusak/vim-carbon-now-sh'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-]]
-
-vim.call("plug#end")
+require("lazy").setup({
+  -- File navigation
+  "scrooloose/nerdtree",
+  "Xuyuanp/nerdtree-git-plugin",
+  
+  -- Language-specific plugins
+  { "gavocanov/vim-js-indent", ft = "javascript" },
+  { "pangloss/vim-javascript", ft = "javascript" },
+  { "fatih/vim-go", ft = "go" },
+  
+  -- Text manipulation
+  "tpope/vim-surround",
+  "tpope/vim-markdown",
+  "godlygeek/tabular",
+  
+  -- UI enhancements
+  "vim-airline/vim-airline",
+  "vim-airline/vim-airline-themes",
+  "morhetz/gruvbox",
+  "frazrepo/vim-rainbow",
+  "jeffkreeftmeijer/vim-numbertoggle",
+  
+  -- Commenting
+  "scrooloose/nerdcommenter",
+  
+  -- Git integration
+  "tpope/vim-fugitive",
+  "airblade/vim-gitgutter",
+  "tpope/vim-projectionist",
+  
+  -- Navigation and search
+  "ctrlpvim/ctrlp.vim",
+  "christoomey/vim-tmux-navigator",
+  "easymotion/vim-easymotion",
+  
+  -- Linting and formatting
+  { "dense-analysis/ale", event = "VeryLazy" },
+  
+  -- Code completion and LSP
+  { "neoclide/coc.nvim", branch = "release" },
+  
+  -- Tags and navigation
+  "preservim/tagbar",
+  
+  -- Development utilities
+  "rizzatti/dash.vim",
+  "benmills/vimux",
+  "yuttie/comfortable-motion.vim",
+  "kristijanhusak/vim-carbon-now-sh",
+  
+  -- FZF support
+  { dir = "/usr/local/opt/fzf", enabled = vim.fn.isdirectory("/usr/local/opt/fzf") == 1 },
+}, {
+  defaults = { lazy = true },
+  install = { colorscheme = { "gruvbox" } },
+  checker = { enabled = true },
+})
 
 -- ============================================================================
 -- Plugin Configuration - NERDTree
@@ -260,33 +305,6 @@ vim.g.rainbow_ctermfgs = { "green", "yellow", "cyan", "magenta", "red" }
 -- ============================================================================
 
 keymap("n", "<leader>t", ":TagbarToggle<CR>", opts)
-
--- ============================================================================
--- Neovim-specific Settings
--- ============================================================================
-
--- Enable true colour support
-vim.opt.termguicolors = true
-
--- Performance improvements
-vim.opt.synmaxcol = 240         -- limit syntax highlighting to 240 columns
-vim.opt.updatetime = 300        -- faster completion, CursorHold trigger
-vim.opt.redrawtime = 10000      -- allow more time for redrawing
-
--- Enable mouse support
-vim.opt.mouse = "a"
-
--- Persistent undo
-vim.opt.undofile = true
-vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
-
--- Enable proper wildmenu completion
-vim.opt.wildmenu = true
-vim.opt.wildmode = "list:longest"
-vim.opt.completeopt = { "menuone", "noselect" }
-
--- Neovim-specific terminal settings
-vim.opt.inccommand = "nosplit"
 
 -- ============================================================================
 -- Colour Scheme and Visual Settings
