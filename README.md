@@ -294,13 +294,12 @@ This checks:
 To keep your environment up to date:
 
 ```bash
-alias u="brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; vim +PlugUpdate +qa"
-u
+u  # Update all packages, casks, Oh-My-Zsh, and Neovim plugins
 ```
 
-Or use the automated update alias:
+Or use the full command:
 ```bash
-update  # or just 'u'
+update  # Alias for: brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; nvim +Lazy sync +qa
 ```
 
 ## Documentation

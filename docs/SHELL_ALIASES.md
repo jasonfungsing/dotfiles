@@ -13,7 +13,7 @@ Complete documentation of all shell aliases and custom commands available in you
 
 | Alias | Command | Purpose |
 |-------|---------|---------|
-| `v` | `vim` | Open Vim editor |
+| `v` | `nvim` | Open Neovim editor |
 | `i` | `idea` | Open IntelliJ IDEA |
 
 ## Version Control & Git
@@ -30,9 +30,9 @@ Complete documentation of all shell aliases and custom commands available in you
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `y` | `yarn` | Yarn package manager |
-| `update` | `brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; vim +PlugUpdate +qa` | Update all packages, casks, Oh-My-Zsh, and Vim plugins |
+| `update` | `brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; nvim +Lazy sync +qa` | Update all packages, casks, Oh-My-Zsh, and Neovim plugins |
 | `u` | `update` | Shorthand for update |
-| `vu` | `vim +PlugUpdate +qa` | Update Vim plugins only |
+| `vu` | `nvim +Lazy sync +qa` | Update Neovim plugins only |
 
 ## System & Utilities
 
@@ -130,7 +130,8 @@ Key environment variables configured:
 
 | Variable | Value | Purpose |
 |----------|-------|---------|
-| `EDITOR` | `vim` | Default text editor |
+| `EDITOR` | `nvim` | Default text editor (Neovim) |
+| `VISUAL` | `nvim` | Default visual editor (Neovim) |
 | `NVM_DIR` | `~/.nvm` | Node Version Manager directory |
 | `PATH` | Various | Search paths for executables |
 
