@@ -184,8 +184,8 @@ brew install golangci-lint
 **Solution:**
 ```bash
 nvim
-:PlugInstall
-:PlugUpdate
+:Lazy sync      # Sync all plugins via lazy.nvim
+:Lazy update    # Check and update plugin versions
 ```
 
 ### coc.nvim Not Working
