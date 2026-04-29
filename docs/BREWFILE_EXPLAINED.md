@@ -8,7 +8,7 @@ The `Brewfile` contains a curated collection of 100+ packages optimised for deve
 - Cloud & DevOps (Docker, Kubernetes, AWS)
 - Backend Development (Go, Python, Node.js, Java, Ruby)
 - Infrastructure as Code (Helm, Terraform)
-- Development Tools (Git, tmux, Vim, VS Code)
+- Development Tools (Git, tmux, Neovim, VS Code)
 
 ## Brewfile Structure
 
@@ -141,8 +141,7 @@ tap "versent/taps"               # Versent utilities
 ### Development & Productivity
 | Tool | Purpose |
 |------|---------|
-| `vim` | Text editor |
-| `neovim` | Modern vim fork |
+| `neovim` | Modern extensible terminal editor with Lua configuration |
 | `git` | Version control system |
 | `git-lfs` | Git Large File Storage |
 | `hub` | GitHub command-line helper |
