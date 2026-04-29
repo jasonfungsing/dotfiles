@@ -6,7 +6,6 @@ Automated scripts for setting up dotfiles, validating installation, and system c
 
 - **`install.sh`** - Main installation script
 - **`validate-setup.sh`** - Validates dotfiles setup
-- **`export-shortcuts.sh`** - Export keyboard shortcuts
 
 ## Quick Start
 
@@ -87,26 +86,6 @@ bash scripts/validate-setup.sh
 ✓ Neovim is installed
 ✓ Docker is installed
 ```
-
----
-
----
-
-### export-shortcuts.sh
-**Purpose:** Export keyboard shortcuts from system configuration
-
-**What it exports:**
-- Custom keyboard shortcuts
-- Application shortcuts
-- System shortcuts
-
-**Usage:**
-```bash
-bash scripts/export-shortcuts.sh
-```
-
-**Output location:**
-- Exported to system configuration file
 
 ## Installation Workflow
 

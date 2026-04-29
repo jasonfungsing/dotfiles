@@ -5,6 +5,7 @@ macOS system settings, preferences, and configuration files.
 ## File Structure
 
 - **`macos.sh`** - macOS system configuration script
+- **`export-shortcuts.sh`** - Export keyboard shortcuts from system
 - **`com.googlecode.iterm2.plist`** - iTerm2 terminal emulator settings
 - **`keyboard-shortcuts.json`** - Custom keyboard shortcuts
 - **`hushlogin`** - Terminal startup message control
@@ -133,6 +134,40 @@ killall Dock
 - Some settings require system restart
 - May need to authenticate with sudo
 - Test in safe environment first
+
+---
+
+### export-shortcuts.sh
+**Purpose:** Export keyboard shortcuts from system configuration
+
+**What it does:**
+1. Reads current system keyboard shortcuts
+2. Exports to JSON format
+3. Stores configuration for backup/sharing
+
+**Usage:**
+```bash
+# Export current keyboard shortcuts
+bash system/export-shortcuts.sh
+
+# Output: keyboard-shortcuts.json
+```
+
+**Output:**
+- Exports to `keyboard-shortcuts.json`
+- JSON format for easy sharing
+- Can be imported into other systems
+
+**Use cases:**
+- Backup current shortcuts
+- Share configuration with team
+- Migrate shortcuts to new Mac
+- Version control shortcuts in dotfiles
+
+**Important Notes:**
+- Run after customising keyboard shortcuts
+- Updates existing `keyboard-shortcuts.json`
+- Can be run periodically to capture changes
 
 ## System Settings Configuration
 
