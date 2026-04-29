@@ -215,9 +215,6 @@ require("lazy").setup({
   "benmills/vimux",
   "yuttie/comfortable-motion.vim",
   "kristijanhusak/vim-carbon-now-sh",
-  
-  -- FZF support
-  { dir = "/usr/local/opt/fzf", enabled = vim.fn.isdirectory("/usr/local/opt/fzf") == 1 },
 }, {
   defaults = { lazy = true },
   install = { colorscheme = { "gruvbox" } },
