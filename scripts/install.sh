@@ -160,23 +160,6 @@ install_dotfiles() {
         fi
     done
     
-    # Editor files
-    local editor_file="$REPO_DIR/editor/vimrc"
-    local editor_target="$HOME/.vimrc"
-    
-    if [ -f "$editor_file" ]; then
-        if [ "$DRY_RUN" = true ]; then
-            log "[DRY RUN] Would symlink: $editor_file → $editor_target"
-        else
-            if [ -e "$editor_target" ] && [ ! -L "$editor_target" ]; then
-                log "Skipping $editor_target (already exists)"
-            else
-                ln -sf "$editor_file" "$editor_target"
-                success "Symlinked $editor_target"
-            fi
-        fi
-    fi
-    
     # Terminal files
     local terminal_file="$REPO_DIR/terminal/tmux.conf"
     local terminal_target="$HOME/.tmux.conf"

@@ -23,7 +23,7 @@ section() {
 section "Shell Configuration"
 
 [ -L "$HOME/.zshrc" ] && check "zshrc symlink exists"
-[ -L "$HOME/.vimrc" ] && check "vimrc symlink exists"
+[ -L "$HOME/.config/nvim/init.lua" ] && check "Neovim init.lua symlink exists"
 [ -L "$HOME/.tmux.conf" ] && check "tmux.conf symlink exists"
 [ -L "$HOME/.gitconfig" ] && check "gitconfig symlink exists"
 

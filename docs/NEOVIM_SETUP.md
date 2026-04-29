@@ -310,8 +310,7 @@ gem install neovim
 
 ```bash
 nvim
-:PlugUpdate
-:PlugUpgrade  # Update vim-plug itself
+:Lazy sync   # Update all plugins via lazy.nvim
 ```
 
 ### Update Neovim
