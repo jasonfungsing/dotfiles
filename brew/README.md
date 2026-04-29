@@ -2,6 +2,9 @@
 
 Quick reference for managing packages, applications, and extensions via Homebrew.
 
+`brew bundle dump` will generated all the installed apps including cask
+`brew bundle` will install everything from the Brewfile
+
 ## File Structure
 
 - **`Brewfile`** - Complete package definitions (100+ packages)
