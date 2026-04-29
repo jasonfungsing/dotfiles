@@ -142,12 +142,19 @@ vim.opt.rtp:prepend(lazypath)
 -- ============================================================================
 
 require("lazy").setup({
+  -- Icons for file types (must load before nvim-tree)
+  {
+    "nvim-tree/nvim-web-devicons",
+    lazy = false,
+    config = function()
+      require("nvim-web-devicons").setup()
+    end,
+  },
+
   -- File navigation
   {
     "nvim-tree/nvim-tree.lua",
-    dependencies = {
-      { "nvim-tree/nvim-web-devicons", lazy = false },
-    },
+    lazy = false,
     config = function()
       require("nvim-tree").setup({
         view = {
