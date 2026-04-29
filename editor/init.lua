@@ -145,7 +145,9 @@ require("lazy").setup({
   -- File navigation
   {
     "nvim-tree/nvim-tree.lua",
-    dependencies = "nvim-tree/nvim-web-devicons",
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons", lazy = false },
+    },
     config = function()
       require("nvim-tree").setup({
         view = {
