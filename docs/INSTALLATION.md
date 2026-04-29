@@ -52,7 +52,7 @@ For selective installation with a menu interface:
 
 Choose which components to install:
 - ✓ Shell configuration (Zsh, aliases, Oh-My-Zsh, theme)
-- ✓ Editor configuration (Vim settings)
+- ✓ Editor configuration (Neovim with pure Lua configuration)
 - ✓ Terminal configuration (tmux, iTerm2)
 - ✓ Git configuration
 - ✓ macOS system preferences
@@ -115,8 +115,9 @@ cd ~/.dotfiles
 ln -s ~/.dotfiles/shell/zshrc ~/.zshrc
 ln -s ~/.dotfiles/shell/alias_prompt.sh ~/.alias_prompt.sh
 
-# Editor configuration
-ln -s ~/.dotfiles/editor/vimrc ~/.vimrc
+# Editor configuration (Neovim)
+mkdir -p ~/.config/nvim
+ln -s ~/.dotfiles/editor/init.lua ~/.config/nvim/init.lua
 
 # Terminal configuration
 ln -s ~/.dotfiles/terminal/tmux.conf ~/.tmux.conf
@@ -402,11 +403,11 @@ To remove dotfiles configuration:
 ```bash
 # Remove symlinks
 rm ~/.zshrc
-rm ~/.vimrc
 rm ~/.tmux.conf
 rm ~/.gitconfig
 rm ~/.alias_prompt.sh
 rm ~/.hushlogin
+rm ~/.config/nvim/init.lua
 
 # Set bash back as default shell
 chsh -s /bin/bash

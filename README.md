@@ -29,7 +29,7 @@ exec zsh
 |------|---------|
 | `.zshrc` | Zsh shell configuration with aliases, plugins, and integrations |
 | `.alias_prompt.sh` | Custom aliases and prompt configuration |
-| `.vimrc` | Vim editor configuration |
+| `.config/nvim/init.lua` | Neovim editor configuration (pure Lua) |
 | `.tmux.conf` | Terminal multiplexer (tmux) configuration |
 | `.gitconfig` | Git version control configuration |
 | `.hushlogin` | Suppresses macOS login message |
@@ -119,7 +119,8 @@ If you prefer to install manually:
 2. **Create symlinks:**
    ```bash
    ln -s ~/.dotfiles/shell/zshrc ~/.zshrc
-   ln -s ~/.dotfiles/editor/vimrc ~/.vimrc
+   mkdir -p ~/.config/nvim
+   ln -s ~/.dotfiles/editor/init.lua ~/.config/nvim/init.lua
    ln -s ~/.dotfiles/terminal/tmux.conf ~/.tmux.conf
    ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
    ```
@@ -194,7 +195,7 @@ dotfiles/
 │   └── cobalt2.zsh-theme     # Zsh theme
 │
 ├── editor/                   # Editor configuration
-│   └── vimrc                 # Vim editor configuration
+│   └── init.lua              # Neovim configuration (pure Lua)
 │
 ├── terminal/                 # Terminal configuration
 │   └── tmux.conf             # tmux configuration

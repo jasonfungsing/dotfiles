@@ -297,17 +297,6 @@ configure_zsh() {
     fi
 }
 
-install_vim_directories() {
-    log "Creating Vim directories..."
-    
-    if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would create ~/.vim-tmp"
-        return
-    fi
-    
-    mkdir -p ~/.vim-tmp
-    success "Vim directories created"
-}
 
 install_neovim_config() {
     log "Setting up Neovim configuration..."
@@ -582,7 +571,7 @@ print_installation_plan() {
     echo "═══════════════════════════════════════════════════════════"
     
     [ "$INSTALL_SHELL" = true ] && echo "✓ Shell configuration (Zsh, aliases, Oh-My-Zsh)"
-    [ "$INSTALL_EDITOR" = true ] && echo "✓ Editor configuration (Vim)"
+    [ "$INSTALL_EDITOR" = true ] && echo "✓ Editor configuration (Neovim)"
     [ "$INSTALL_GIT" = true ] && echo "✓ Git configuration"
     [ "$INSTALL_TERMINAL" = true ] && echo "✓ Terminal configuration (tmux, iTerm2)"
     [ "$INSTALL_SYSTEM" = true ] && echo "✓ macOS system preferences"
@@ -612,7 +601,6 @@ main() {
         install_oh_my_zsh
         configure_zsh
         install_dotfiles
-        install_vim_directories
         install_zsh_theme
         install_raycast_scripts
     fi

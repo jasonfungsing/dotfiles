@@ -1,133 +1,75 @@
 # Neovim Setup Guide
 
-This guide explains how to use your optimised dotfiles configuration with Neovim.
+This guide explains how to use your Neovim configuration with pure Lua setup from your dotfiles.
 
 ## Overview
 
-Your dotfiles now include full Neovim support with:
-- ✅ Optimised `vimrc` with Neovim-aware paths
-- ✅ Modern `init.lua` configuration
-- ✅ ALE (Asynchronous Lint Engine) for async linting
-- ✅ coc.nvim with extended language support (Go, Python, TypeScript, etc.)
-- ✅ All your existing Vim plugins and settings
-- ✅ Backward compatibility with Vim
+Your dotfiles now include a Neovim-only setup with:
+- ✅ Pure Lua configuration (`init.lua`)
+- ✅ Modern plugin management
+- ✅ Language server protocol (LSP) support
+- ✅ Asynchronous linting and formatting
+- ✅ Optimised for development workflows
 
 ## Installation
 
 ### Prerequisites
 
 ```bash
-# Install Neovim (via Homebrew on macOS)
+# Install Neovim via Homebrew on macOS
 brew install neovim
 
-# Or if you prefer the latest development version
+# Or install the latest development version
 brew install --HEAD neovim
 ```
 
 ### Setup Steps
 
-#### Option 1: Symlink (Recommended)
+The installation script handles this automatically, but here's what happens:
 
-Create a symlink from your dotfiles to Neovim config directory:
+1. **Create Neovim config directory:**
+   ```bash
+   mkdir -p ~/.config/nvim
+   ```
 
-```bash
-# Create Neovim config directory if it doesn't exist
-mkdir -p ~/.config/nvim
+2. **Symlink init.lua:**
+   ```bash
+   ln -s ~/.dotfiles/editor/init.lua ~/.config/nvim/init.lua
+   ```
 
-# Symlink the init.lua
-ln -s ~/Code/dotfiles/editor/init.lua ~/.config/nvim/init.lua
-
-# Symlink the vimrc (init.lua will source this)
-ln -s ~/Code/dotfiles/editor/vimrc ~/.vimrc
-```
-
-#### Option 2: Copy Files
-
-Copy files directly to Neovim config:
-
-```bash
-mkdir -p ~/.config/nvim
-cp ~/Code/dotfiles/editor/init.lua ~/.config/nvim/init.lua
-cp ~/Code/dotfiles/editor/vimrc ~/.vimrc
-```
+3. **Install vim-plug (plugin manager):**
+   The script automatically downloads vim-plug if needed.
 
 ### First Launch
 
 On first launch, Neovim will:
 1. Load `init.lua` from `~/.config/nvim/`
-2. Source your `~/.vimrc` for all Vim settings and plugins
-3. Automatically install vim-plug if missing
-4. Install all plugins from your `Plug` declarations
+2. Install vim-plug automatically if missing
+3. Be ready for plugin installation
 
 ```bash
+# Open Neovim
 nvim
-# Inside Neovim, run:
+
+# Inside Neovim, install plugins
 :PlugInstall
 
-# Then install coc extensions
+# Install language server extensions
 :CocInstall coc-tsserver coc-python coc-go coc-eslint coc-prettier
 ```
 
-## Configuration Changes
+## Configuration Structure
 
-### What's New in This Setup
-
-#### 1. **Updated Plugin Manager Paths**
-
-The vimrc now detects Neovim and uses appropriate paths:
-
-```vim
-if has('nvim')
-  let plug_dir = stdpath('data') . '/site/plugged'
-  let autoload_dir = stdpath('config') . '/autoload'
-else
-  let plug_dir = '~/.vim/plugged'
-endif
-```
-
-**Implications:**
-- Vim: Plugins install to `~/.vim/plugged`
-- Neovim: Plugins install to `~/.local/share/nvim/site/plugged` (macOS/Linux)
-
-#### 2. **Plugin Changes**
-
-| Old Plugin | New Plugin | Reason |
-|-----------|-----------|--------|
-| `syntastic` | `dense-analysis/ale` | ALE is async, faster, and Neovim-native |
-| `mdempsky/gocode` | Removed | Deprecated; use `coc-go` instead |
-| `majutsushi/tagbar` | `preservim/tagbar` | Updated to actively maintained fork |
-
-#### 3. **New coc.nvim Extensions**
-
-Added extensions for better language support:
-- `coc-go` - Go language support
-- `coc-eslint` - JavaScript/TypeScript linting
-- `coc-prettier` - Code formatting
-
-#### 4. **Lua Configuration**
-
-The new `init.lua` adds Neovim-specific enhancements:
-- True colour support (`termguicolors`)
-- Performance optimisations
-- Persistent undo
-- Terminal mode mappings
-- Custom `:ReloadConfig` command
+Your `init.lua` is the main entry point with:
+- Plugin declarations
+- Key mappings
+- Editor settings
+- LSP configuration
+- Autocommands
 
 ## Usage
 
-### Switching Between Vim and Neovim
-
-Since your setup is backward compatible, you can use both:
-
-```bash
-# Use Vim (uses ~/.vimrc)
-vim filename.js
-
-# Use Neovim (uses ~/.config/nvim/init.lua which sources ~/.vimrc)
-nvim filename.js
-```
-
-### Common Commands
+### Basic Commands
 
 ```bash
 # Start Neovim
@@ -139,64 +81,124 @@ nvim myfile.py
 # Open multiple files in tabs
 nvim file1.js file2.js
 
-# Open in split
+# Open in splits
 nvim -O file1.txt file2.txt
 ```
 
-### Useful Keybindings
+### Key Bindings
 
-These work in both Vim and Neovim:
+Common keybindings from your configuration:
 
 | Key | Action |
 |-----|--------|
 | `,ne` | Toggle NERDTree |
 | `,n` | Find current file in NERDTree |
 | `,t` | Toggle Tagbar |
-| `,1` | Source vimrc and update plugins |
+| `,1` | Source config and update plugins |
 | `Ctrl+J` | Next buffer |
 | `Ctrl+K` | Previous buffer |
 | `Ctrl+T` | New empty buffer |
 | `Ctrl+Q` | Close buffer |
-| `\` | Silver Searcher (ag) grep |
+| `\` | Search with Silver Searcher (ag) |
 | `K` | Grep word under cursor |
+
+### Shell Aliases
+
+Quick access to Neovim:
+
+```bash
+v myfile.js   # Opens file in Neovim (alias)
+nvim myfile   # Explicit Neovim command
+```
+
+## Language Support
+
+### Setup Language Servers
+
+Language servers are configured via coc.nvim extensions:
+
+**TypeScript/JavaScript:**
+```bash
+:CocInstall coc-tsserver coc-eslint coc-prettier
+```
+
+**Python:**
+```bash
+:CocInstall coc-python
+pip3 install pylint flake8
+```
+
+**Go:**
+```bash
+:CocInstall coc-go
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+```
+
+**JSON:**
+```bash
+:CocInstall coc-json
+```
+
+**Git:**
+```bash
+:CocInstall coc-git
+```
+
+### Linting Configuration
+
+ALE (Asynchronous Lint Engine) is configured with:
+
+**JavaScript/TypeScript:**
+```bash
+npm install -g eslint
+```
+
+**Python:**
+```bash
+pip3 install pylint flake8
+```
+
+**Go:**
+```bash
+brew install golangci-lint
+```
+
+**Java:**
+- Configured via coc-java and Eclipse LSP
 
 ## Troubleshooting
 
-### Issue: Plugins not installing
+### Plugins Not Installing
 
 **Solution:**
-
 ```bash
-# Ensure you're in Neovim
 nvim
-
-# Inside Neovim:
 :PlugInstall
 :PlugUpdate
 ```
 
-### Issue: coc.nvim not working
+### coc.nvim Not Working
 
 **Solution:**
-
 ```bash
-# Check coc status
+# Check status
 :CocStatus
 
 # Reinstall extensions
 :CocInstall coc-tsserver coc-python coc-go coc-eslint coc-prettier
 
 # Restart Neovim
+:qa
+nvim
 ```
 
-### Issue: ALE linters not running
+### Linters Not Running
 
 **Solution:**
-
-Ensure linters are installed globally:
+Ensure linters are installed:
 
 ```bash
-# JavaScript/TypeScript
+# JavaScript
 npm install -g eslint
 
 # Python
@@ -204,103 +206,142 @@ pip3 install pylint flake8
 
 # Go
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-
-# Java
-# Usually handled by Eclipse LSP or coc-java
 ```
 
-### Issue: Colours look wrong
+### Colours Look Wrong
 
 **Solution:**
-
-Make sure your terminal supports true colours and set `TERM` correctly:
+Ensure your terminal supports true colours:
 
 ```bash
-# In your shell config (~/.zshrc, ~/.bashrc)
+# Set in your shell config (~/.zshrc)
 export TERM=xterm-256color
 
-# Then restart your terminal and Neovim
+# Restart terminal and Neovim
 ```
 
-### Issue: Performance is slow
+### Performance Issues
 
 **Solution:**
-
-Check what's slowing things down:
+Profile startup time:
 
 ```bash
-# Inside Neovim, profile startup
 nvim --startuptime startup.log
 cat startup.log | sort -rn -k 2 | head -20
 ```
 
-Common culprits:
+Common causes:
 - Too many plugins
-- Large files with complex syntax highlighting
-- Missing compiled plugins (`:UpdateRemotePlugins`)
+- Large files with complex syntax
+- Missing plugin compilation
 
-## Advanced Setup
+## Customisation
 
-### Using pynvim for Python Support
+### Adding Custom Keybindings
 
-```bash
-pip3 install pynvim
-```
-
-### Using Node.js Support (for coc.nvim)
-
-```bash
-# Ensure Node.js is installed
-node --version
-
-# coc.nvim will use the system Node.js automatically
-```
-
-### Custom init.lua Extensions
-
-You can add custom Lua configurations to `~/.config/nvim/init.lua` after sourcing vimrc:
+Edit `~/.config/nvim/init.lua` to add custom mappings:
 
 ```lua
 -- Example: Custom mapping
 vim.keymap.set('n', '<leader>w', ':w<CR>', { noremap = true, silent = true })
 
--- Example: Custom autocommand
-vim.api.nvim_create_autocmd('BufWritePost', {
-  pattern = '*.py',
+-- Example: File-type specific mapping
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'python',
   callback = function()
-    vim.cmd(':Black')
+    vim.keymap.set('n', '<leader>r', ':!python %<CR>')
   end
 })
 ```
 
-## Performance Comparison
+### Installing Additional Plugins
 
-| Aspect | Vim | Neovim |
-|--------|-----|--------|
-| Startup time | ~100ms | ~80ms |
-| Async operations | Limited | Native |
-| Plugin ecosystem | Mature | Growing faster |
-| Configuration | VimScript only | VimScript + Lua |
-| Maintainability | Good | Excellent |
+Add to the `Plug` section in your configuration:
+
+```lua
+-- After existing plugins
+Plug 'your-github-org/plugin-name'
+```
+
+Then:
+```bash
+nvim
+:PlugInstall
+```
+
+## Advanced Setup
+
+### Python Support
+
+```bash
+pip3 install pynvim
+```
+
+### Node.js Support
+
+coc.nvim requires Node.js:
+```bash
+# Verify installation
+node --version
+
+# Should be 12.12 or newer
+```
+
+### Ruby Support
+
+```bash
+gem install neovim
+```
+
+## Performance Tips
+
+1. **Lazy load plugins** - Only load when needed
+2. **Profile startup** - Use `--startuptime` flag
+3. **Disable unused plugins** - Comment out unneeded ones
+4. **Use async linting** - ALE is already configured
+5. **Limit file sizes** - Complex files slow syntax highlighting
+
+## Updates and Maintenance
+
+### Update Plugins
+
+```bash
+nvim
+:PlugUpdate
+:PlugUpgrade  # Update vim-plug itself
+```
+
+### Update Neovim
+
+```bash
+brew upgrade neovim
+```
+
+### Update Extensions
+
+```bash
+nvim
+:CocUpdate
+```
 
 ## Further Reading
 
 - [Neovim Documentation](https://neovim.io/doc/user/)
 - [vim-plug Guide](https://github.com/junegunn/vim-plug)
 - [coc.nvim Documentation](https://github.com/neoclide/coc.nvim/wiki)
-- [ALE Documentation](https://github.com/dense-analysis/ale/blob/master/README.md)
+- [ALE Documentation](https://github.com/dense-analysis/ale)
 
 ## Support
 
 If you encounter issues:
 
-1. Check `:CheckHealth` in Neovim (built-in diagnostics)
-2. Review error messages with `:messages`
+1. Check health in Neovim: `:CheckHealth`
+2. Review error messages: `:messages`
 3. Check plugin documentation on GitHub
 4. Consider filing an issue in the dotfiles repository
 
 ---
 
-**Last Updated:** March 2026
+**Last Updated:** April 2026
 **Neovim Version:** 0.9+ recommended
-**Configuration Format:** init.lua sourcing vimrc (hybrid approach)
+**Configuration:** Pure Lua (`init.lua`)
