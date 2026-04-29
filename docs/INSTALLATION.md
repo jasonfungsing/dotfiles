@@ -221,30 +221,38 @@ After installation, Neovim will be set as your default editor. For detailed setu
 ### Quick Neovim Setup
 
 ```bash
-# Create Neovim config directory
+# Create Neovim config directory (done automatically by install.sh)
 mkdir -p ~/.config/nvim
 
-# The symlink is created automatically during installation
-# Just verify it exists:
-ls -la ~/.config/nvim/init.lua
+# Symlink init.lua (done automatically by install.sh)
+ln -s ~/.dotfiles/editor/init.lua ~/.config/nvim/init.lua
 
-# Open Neovim and install plugins
+# On first launch, lazy.nvim automatically bootstraps and installs all plugins
 nvim
-:PlugInstall
+
+# Inside Neovim on first launch:
+# 1. lazy.nvim will automatically download and install itself
+# 2. All plugins specified in init.lua will be installed automatically
+# 3. The lazy.nvim dashboard will show progress
+# 4. Press 'q' to close the dashboard and start editing
+
+# Install language server extensions (coc.nvim)
 :CocInstall coc-tsserver coc-python coc-go coc-eslint coc-prettier
 ```
+
+**Important:** Plugins are installed automatically on first Neovim launch - no manual `:PlugInstall` needed!
 
 ### Using Neovim as Default Editor
 
 Your shell is configured with:
 - **Default editor:** `nvim` (via `EDITOR` and `VISUAL` environment variables)
 - **Quick alias:** `v` launches Neovim
-- **Fallback:** `vim` launches traditional Vim
+- **Editor command:** `nvim` launches Neovim explicitly
 
 ```bash
-v myfile.js   # Launches Neovim
-vim myfile.js # Launches Vim
-nvim myfile.js # Explicit Neovim
+v myfile.js       # Launches Neovim (alias)
+nvim myfile.js    # Explicit Neovim command
+EDITOR=nvim nano  # Uses Neovim as editor
 ```
 
 For complete Neovim documentation, see [Neovim Setup Guide](NEOVIM_SETUP.md).

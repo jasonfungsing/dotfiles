@@ -40,26 +40,34 @@ The installation script handles this automatically, but here's what happens:
 3. **Bootstrap lazy.nvim (plugin manager):**
    The configuration automatically bootstraps lazy.nvim on first launch.
 
-### First Launch
+### First Launch - Automatic Plugin Installation
+
+**Important:** Plugins install automatically on first launch - no manual steps needed!
 
 On first launch, Neovim will:
 1. Load `init.lua` from `~/.config/nvim/`
-2. Automatically bootstrap lazy.nvim plugin manager
-3. Install all plugins specified in the configuration
+2. Automatically download and bootstrap lazy.nvim plugin manager
+3. Automatically install all plugins specified in the configuration
+4. Show lazy.nvim dashboard with installation progress
 
 ```bash
-# Open Neovim (lazy.nvim will auto-install plugins)
+# Simply open Neovim - plugins install automatically
 nvim
 
-# Inside Neovim, lazy.nvim dashboard will show plugin installation progress
-# Press 'q' to close the dashboard and start editing
+# You'll see:
+# 1. lazy.nvim downloading itself
+# 2. All plugins installing automatically
+# 3. lazy.nvim dashboard showing progress
+# 4. Press 'q' to close dashboard and start editing
 
-# Install language server extensions
+# After plugins are installed, set up language servers
 :CocInstall coc-tsserver coc-python coc-go coc-eslint coc-prettier
 
-# View plugin status
+# View plugin status anytime
 :Lazy
 ```
+
+**No `:PlugInstall` or plugin manager setup needed** - lazy.nvim handles everything automatically!
 
 ## Configuration Structure
 
