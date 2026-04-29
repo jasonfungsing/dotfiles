@@ -9,6 +9,7 @@ vim.g.mapleader = ","
 
 -- Basic options
 vim.opt.number = true
+vim.opt.relativenumber = true  -- Hybrid line numbers (absolute current, relative others)
 vim.opt.compatible = false
 vim.opt.laststatus = 2
 vim.opt.cursorline = true
