@@ -143,8 +143,31 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   -- File navigation
-  "scrooloose/nerdtree",
-  "Xuyuanp/nerdtree-git-plugin",
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = "nvim-tree/nvim-web-devicons",
+    config = function()
+      require("nvim-tree").setup({
+        view = {
+          width = 30,
+          side = "left",
+        },
+        git = {
+          enable = true,
+        },
+        renderer = {
+          icons = {
+            show = {
+              file = true,
+              folder = true,
+              folder_arrow = true,
+              git = true,
+            },
+          },
+        },
+      })
+    end,
+  },
   
   -- Language-specific plugins
   { "gavocanov/vim-js-indent", ft = "javascript" },
@@ -200,20 +223,14 @@ require("lazy").setup({
 })
 
 -- ============================================================================
--- Plugin Configuration - NERDTree
+-- Plugin Configuration - nvim-tree
 -- ============================================================================
 
-vim.g.NERDTreeWinSize = 30
-vim.g.NERDTreeMinimalUI = 1
-vim.g.NERDTreeDirArrows = 1
-vim.g.NERDTreeChDirMode = 2
-vim.g.NERDTreeShowLineNumbers = 1
+-- Key mappings for nvim-tree
+keymap("n", "<leader>ne", ":NvimTreeToggle<CR>", opts)
+keymap("n", "<leader>n", ":NvimTreeFindFile<CR>", opts)
 
--- Key mappings for NERDTree
-keymap("n", "<leader>ne", ":NERDTreeToggle<CR>", opts)
-keymap("n", "<leader>n", ":NERDTreeFind<CR>", opts)
-
--- Open NERDTree automatically when vim starts up if no files were specified
+-- Open nvim-tree automatically when Neovim starts up if no files were specified
 vim.api.nvim_create_autocmd("StdinReadPre", {
   callback = function()
     vim.g.std_in = 1
@@ -223,7 +240,7 @@ vim.api.nvim_create_autocmd("StdinReadPre", {
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     if vim.fn.argc() == 0 and vim.g.std_in ~= 1 then
-      vim.cmd("NERDTree")
+      require("nvim-tree.api").tree.open()
     end
   end,
 })
