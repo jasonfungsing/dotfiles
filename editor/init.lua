@@ -161,15 +161,7 @@ require("lazy").setup({
               file = false,
               folder = false,
               folder_arrow = true,
-              git = true,
-            },
-            glyphs = {
-              git = {
-                untracked = "✓",
-                unstaged = "✗",
-                staged = "✔",
-                dirty = "✗",
-              },
+              git = false,
             },
           },
         },
