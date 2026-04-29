@@ -42,7 +42,7 @@ section "Key Packages"
 
 command -v git &> /dev/null && check "Git is installed"
 command -v tmux &> /dev/null && check "tmux is installed"
-command -v vim &> /dev/null && check "Vim is installed"
+command -v nvim &> /dev/null && check "Neovim is installed"
 command -v kubectl &> /dev/null && check "kubectl is installed"
 command -v docker &> /dev/null && check "Docker is installed"
 

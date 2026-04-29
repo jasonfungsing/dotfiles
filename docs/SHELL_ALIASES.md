@@ -155,7 +155,7 @@ source ~/.zshrc
 Find the alias in `~/.alias_prompt.sh`:
 ```bash
 # Original
-alias v="vim"
+alias v="nvim"
 
 # Modified
 alias v="nvim"  # Use Neovim instead
