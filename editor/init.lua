@@ -158,8 +158,8 @@ require("lazy").setup({
         renderer = {
           icons = {
             show = {
-              file = false,
-              folder = false,
+              file = true,
+              folder = true,
               folder_arrow = false,
               git = false,
             },
