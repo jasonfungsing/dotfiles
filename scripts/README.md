@@ -6,7 +6,6 @@ Automated scripts for setting up dotfiles, validating installation, and system c
 
 - **`install.sh`** - Main installation script
 - **`validate-setup.sh`** - Validates dotfiles setup
-- **`macos.sh`** - macOS system settings
 - **`export-shortcuts.sh`** - Export keyboard shortcuts
 
 ## Quick Start
@@ -22,8 +21,8 @@ bash scripts/validate-setup.sh
 
 ### Apply System Settings
 ```bash
-# Configure macOS settings
-bash scripts/macos.sh
+# Configure macOS settings (moved to system directory)
+bash system/macos.sh
 ```
 
 ## Script Details
@@ -91,26 +90,6 @@ bash scripts/validate-setup.sh
 
 ---
 
-### macos.sh
-**Purpose:** Configure macOS system settings for optimal development
-
-**What it configures:**
-- System preferences
-- Keyboard settings
-- Finder options
-- Dock configuration
-- Security settings
-- User interface preferences
-
-**Usage:**
-```bash
-bash scripts/macos.sh
-
-# May require authentication
-```
-
-**Warning:** Some settings require sudo or restart
-
 ---
 
 ### export-shortcuts.sh
@@ -144,7 +123,7 @@ bash scripts/install.sh
 
 ### 3. Configure macOS (Optional)
 ```bash
-bash scripts/macos.sh
+bash system/macos.sh
 ```
 
 ### 4. Validate Setup

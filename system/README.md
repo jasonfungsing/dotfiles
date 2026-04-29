@@ -4,6 +4,7 @@ macOS system settings, preferences, and configuration files.
 
 ## File Structure
 
+- **`macos.sh`** - macOS system configuration script
 - **`com.googlecode.iterm2.plist`** - iTerm2 terminal emulator settings
 - **`keyboard-shortcuts.json`** - Custom keyboard shortcuts
 - **`hushlogin`** - Terminal startup message control
@@ -13,7 +14,7 @@ macOS system settings, preferences, and configuration files.
 ### Apply System Settings
 ```bash
 # Run macOS configuration script
-bash scripts/macos.sh
+bash system/macos.sh
 
 # Restore iTerm2 settings
 # Preferences → General → Preferences
@@ -89,12 +90,56 @@ System Preferences → Keyboard → Shortcuts
 ls -la ~/.hushlogin
 ```
 
+---
+
+### macos.sh
+**Purpose:** Automated macOS system configuration
+
+**What it does:**
+1. Configures system preferences
+2. Sets keyboard repeat rates
+3. Customises Finder behaviour
+4. Adjusts Dock settings
+5. Enables/disables system features
+6. Applies security settings
+
+**Usage:**
+```bash
+# Run configuration script
+bash system/macos.sh
+
+# May require sudo authentication
+# Some settings require restart
+```
+
+**Configuration includes:**
+- Keyboard repeat rate and delay
+- Dock auto-hide and appearance
+- Finder hidden files visibility
+- Spotlight indexing settings
+- Security and privacy preferences
+- User interface customisations
+
+**Customisation:**
+Edit `macos.sh` to add or modify:
+```bash
+# Example: Change dock auto-hide
+defaults write com.apple.dock autohide -bool true
+killall Dock
+```
+
+**Important Notes:**
+- Backup system settings before running
+- Some settings require system restart
+- May need to authenticate with sudo
+- Test in safe environment first
+
 ## System Settings Configuration
 
 ### Set via Script
 ```bash
 # Apply all macOS settings
-bash scripts/macos.sh
+bash system/macos.sh
 ```
 
 ### Manual Configuration
