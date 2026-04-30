@@ -511,12 +511,15 @@ apply_macos_settings() {
         return
     fi
     
-    if [ -f "$SCRIPT_DIR/macos.sh" ]; then
-        bash "$SCRIPT_DIR/macos.sh"
-        success "macOS settings applied"
-    else
-        error "macos.sh not found"
+    if [ ! -f "$SCRIPT_DIR/macos.sh" ]; then
+        error "macos.sh not found at $SCRIPT_DIR/macos.sh"
     fi
+    
+    if ! bash "$SCRIPT_DIR/macos.sh"; then
+        error "Failed to apply macOS settings"
+    fi
+    
+    success "macOS settings applied"
 }
 
 print_installation_plan() {

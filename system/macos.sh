@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo -e "\\n\\nSetting MacOS settings"
 echo "=============================="
 
@@ -162,4 +164,6 @@ defaults write com.apple.Safari ProxiesInBookmarksBar "()"
 
 
 echo "Kill affected applications"
-for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done
+for app in Safari Finder Dock Mail SystemUIServer; do 
+    pkill -f "$app" >/dev/null 2>&1 || true
+done
