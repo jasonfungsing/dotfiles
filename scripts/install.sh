@@ -418,8 +418,11 @@ restore_keyboard_shortcuts() {
     # Restore symbolic hotkeys (system-level keyboard shortcuts)
     restore_symbolic_hotkeys "$shortcuts_file"
     
-    # Restore application-specific shortcuts
-    restore_app_shortcuts "$shortcuts_file"
+    # Restore Safari NSUserKeyEquivalents
+    restore_safari_shortcuts "$shortcuts_file"
+    
+    # Restore all other app preferences (Chrome, VSCode, iTerm2, etc.)
+    restore_all_app_preferences "$shortcuts_file"
     
     success "Keyboard shortcuts restored"
 }
@@ -443,16 +446,47 @@ restore_symbolic_hotkeys() {
     done
 }
 
-restore_app_shortcuts() {
+restore_safari_shortcuts() {
     local shortcuts_file="$1"
     
-    # Extract applications with NSUserKeyEquivalents
-    jq -r '.keyboard_shortcuts | to_entries[] | 
-        select(.value | type == "object" and has("NSUserKeyEquivalents")) | 
-        "\(.key)|\(.value.NSUserKeyEquivalents | to_entries[] | "\(.key)|\(.value)")"' \
-        "$shortcuts_file" | while IFS='|' read -r domain menuitem shortcut; do
-        if [ -n "$domain" ] && [ -n "$menuitem" ] && [ -n "$shortcut" ]; then
-            defaults write "$domain" NSUserKeyEquivalents -dict-add "$menuitem" "$shortcut" 2>/dev/null || true
+    # Extract Safari NSUserKeyEquivalents
+    jq -r '.keyboard_shortcuts["com.apple.Safari"].NSUserKeyEquivalents // empty | 
+        to_entries[] | "\(.key)|\(.value)"' "$shortcuts_file" | while IFS='|' read -r menuitem shortcut; do
+        if [ -n "$menuitem" ] && [ -n "$shortcut" ]; then
+            defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "$menuitem" "$shortcut" 2>/dev/null || true
+        fi
+    done
+}
+
+restore_all_app_preferences() {
+    local shortcuts_file="$1"
+    
+    # Get all domains in keyboard_shortcuts
+    jq -r '.keyboard_shortcuts | keys[]' "$shortcuts_file" | while read -r domain; do
+        # Skip already-handled domains
+        if [[ "$domain" == "com.apple.symbolichotkeys" ]] || [[ "$domain" == "com.apple.Safari" ]]; then
+            continue
+        fi
+        
+        # Skip empty domain names
+        if [ -z "$domain" ]; then
+            continue
+        fi
+        
+        log "Restoring preferences for: $domain"
+        
+        local plist_path="$HOME/Library/Preferences/${domain}.plist"
+        local domain_json=$(jq ".keyboard_shortcuts[\"$domain\"]" "$shortcuts_file" 2>/dev/null || echo '{}')
+        
+        # Only proceed if we have valid JSON data
+        if [ "$domain_json" != "{}" ] && [ -n "$domain_json" ]; then
+            # Write preferences using defaults write for each key-value pair
+            jq -r 'to_entries[] | "\(.key)|\(.value | @json)"' <<< "$domain_json" | while IFS='|' read -r key value; do
+                if [ -n "$key" ] && [ -n "$value" ]; then
+                    # Try to write the preference (handles various types)
+                    defaults write "$domain" "$key" -json "$value" 2>/dev/null || true
+                fi
+            done
         fi
     done
 }
