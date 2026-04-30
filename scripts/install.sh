@@ -415,72 +415,46 @@ restore_keyboard_shortcuts() {
     
     log "Restoring keyboard shortcuts from $shortcuts_file..."
     
-    # Use Python to safely parse and restore all keyboard shortcuts
-    python3 << 'PYTHON_EOF'
-import json
-import subprocess
-import os
-import tempfile
-
-shortcuts_file = os.path.expanduser("~/Code/dotfiles/system/keyboard-shortcuts.json")
-
-try:
-    with open("~/Code/dotfiles/system/keyboard-shortcuts.json".replace("~", os.path.expanduser("~")), 'r') as f:
-        data = json.load(f)
+    # Restore symbolic hotkeys (system-level keyboard shortcuts)
+    restore_symbolic_hotkeys "$shortcuts_file"
     
-    if 'keyboard_shortcuts' not in data:
-        print("No keyboard_shortcuts found in JSON")
-        exit(0)
-    
-    shortcuts = data['keyboard_shortcuts']
-    
-    for domain, settings in shortcuts.items():
-        if not isinstance(settings, dict) or not settings:
-            continue
-        
-        try:
-            # For Safari and other app preference files, check if we can use plutil
-            plist_path = os.path.expanduser(f"~/Library/Preferences/{domain}.plist")
-            
-            # Handle nested dictionaries like NSUserKeyEquivalents
-            if 'NSUserKeyEquivalents' in settings and isinstance(settings['NSUserKeyEquivalents'], dict):
-                # Use defaults write for NSUserKeyEquivalents specifically
-                for menu_item, shortcut in settings['NSUserKeyEquivalents'].items():
-                    try:
-                        subprocess.run(['defaults', 'write', domain, 'NSUserKeyEquivalents', '-dict-add', menu_item, shortcut], 
-                                     capture_output=True, timeout=5)
-                    except Exception as e:
-                        pass
-            
-            # Apply other simple key-value pairs
-            for key, value in settings.items():
-                if key == 'NSUserKeyEquivalents' or isinstance(value, dict):
-                    continue
-                
-                try:
-                    defaults_cmd = ['defaults', 'write', domain, key]
-                    
-                    if isinstance(value, bool):
-                        defaults_cmd.extend(['-bool', 'YES' if value else 'NO'])
-                    elif isinstance(value, int):
-                        defaults_cmd.extend(['-int', str(value)])
-                    elif isinstance(value, float):
-                        defaults_cmd.extend(['-float', str(value)])
-                    else:
-                        defaults_cmd.extend(['-string', str(value)])
-                    
-                    subprocess.run(defaults_cmd, capture_output=True, timeout=5)
-                except Exception as e:
-                    pass
-        
-        except Exception as e:
-            pass
-
-except Exception as e:
-    pass
-PYTHON_EOF
+    # Restore application-specific shortcuts
+    restore_app_shortcuts "$shortcuts_file"
     
     success "Keyboard shortcuts restored"
+}
+
+restore_symbolic_hotkeys() {
+    local shortcuts_file="$1"
+    local plist_file="$HOME/Library/Preferences/com.apple.symbolichotkeys.plist"
+    
+    # Ensure plist file exists
+    if [ ! -f "$plist_file" ]; then
+        log "Creating symbolic hotkeys plist..."
+        defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict
+    fi
+    
+    # Extract and apply each symbolic hotkey
+    jq -r '.keyboard_shortcuts["com.apple.symbolichotkeys"].AppleSymbolicHotKeys // empty | 
+        to_entries[] | "\(.key)|\(.value | @json)"' "$shortcuts_file" | while IFS='|' read -r key value; do
+        if [ -n "$key" ] && [ -n "$value" ]; then
+            plutil -insert "AppleSymbolicHotKeys.$key" -json "$value" "$plist_file" 2>/dev/null || true
+        fi
+    done
+}
+
+restore_app_shortcuts() {
+    local shortcuts_file="$1"
+    
+    # Extract applications with NSUserKeyEquivalents
+    jq -r '.keyboard_shortcuts | to_entries[] | 
+        select(.value | type == "object" and has("NSUserKeyEquivalents")) | 
+        "\(.key)|\(.value.NSUserKeyEquivalents | to_entries[] | "\(.key)|\(.value)")"' \
+        "$shortcuts_file" | while IFS='|' read -r domain menuitem shortcut; do
+        if [ -n "$domain" ] && [ -n "$menuitem" ] && [ -n "$shortcut" ]; then
+            defaults write "$domain" NSUserKeyEquivalents -dict-add "$menuitem" "$shortcut" 2>/dev/null || true
+        fi
+    done
 }
 
 install_packages() {
