@@ -507,15 +507,15 @@ apply_macos_settings() {
     log "Applying macOS system settings..."
     
     if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would run: $SCRIPT_DIR/macos.sh"
+        log "[DRY RUN] Would run: $REPO_DIR/system/macos.sh"
         return
     fi
     
-    if [ ! -f "$SCRIPT_DIR/macos.sh" ]; then
-        error "macos.sh not found at $SCRIPT_DIR/macos.sh"
+    if [ ! -f "$REPO_DIR/system/macos.sh" ]; then
+        error "macos.sh not found at $REPO_DIR/system/macos.sh"
     fi
     
-    if ! bash "$SCRIPT_DIR/macos.sh"; then
+    if ! bash "$REPO_DIR/system/macos.sh"; then
         error "Failed to apply macOS settings"
     fi
     
