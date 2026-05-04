@@ -282,27 +282,38 @@ configure_zsh() {
 
 
 install_neovim_config() {
-    log "Setting up Neovim configuration..."
-    
-    if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would create ~/.config/nvim and symlink init.lua"
-        return
-    fi
-    
-    mkdir -p ~/.config/nvim
-    
-    local init_lua_source="$REPO_DIR/editor/init.lua"
-    local init_lua_target="$HOME/.config/nvim/init.lua"
-    
-    if [ -f "$init_lua_source" ]; then
-        if [ -e "$init_lua_target" ] && [ ! -L "$init_lua_target" ]; then
-            log "Skipping $init_lua_target (already exists)"
-        else
-            ln -sf "$init_lua_source" "$init_lua_target"
-            success "Symlinked Neovim init.lua"
-        fi
-    fi
-}
+     log "Setting up Neovim configuration..."
+     
+     if [ "$DRY_RUN" = true ]; then
+         log "[DRY RUN] Would create ~/.config/nvim and symlink all editor files"
+         return
+     fi
+     
+     mkdir -p ~/.config/nvim
+     
+     local editor_dir="$REPO_DIR/editor"
+     
+     # Programmatically symlink all files and directories from editor/
+     # Skip the README.md file and symlink everything else
+     find "$editor_dir" -maxdepth 1 \( -type f -o -type d \) ! -name "README.md" ! -name ".git*" | while read -r item; do
+         local item_name=$(basename "$item")
+         local target="$HOME/.config/nvim/$item_name"
+         
+         # Skip the editor directory itself
+         [ "$item" = "$editor_dir" ] && continue
+         
+         if [ "$DRY_RUN" = true ]; then
+             log "[DRY RUN] Would symlink: $item → $target"
+         else
+             if [ -e "$target" ] && [ ! -L "$target" ]; then
+                 log "Skipping $target (already exists)"
+             else
+                 ln -sf "$item" "$target"
+                 success "Symlinked $(basename "$item")"
+             fi
+         fi
+     done
+ }
 
 
 install_zsh_theme() {
