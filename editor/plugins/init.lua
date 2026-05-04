@@ -30,6 +30,7 @@ require("lazy").setup({
   {
     "nvim-tree/nvim-tree.lua",
     lazy = false,
+    version = "*",
     config = function()
       require("plugins.nvim-tree")
     end,
@@ -73,6 +74,18 @@ require("lazy").setup({
   "christoomey/vim-tmux-navigator",
   "easymotion/vim-easymotion",
 
+  -- Fuzzy finder for files, buffers, and keybindings
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+    },
+    config = function()
+      require("plugins.telescope")
+    end,
+  },
+
   -- Linting and formatting
   {
     "dense-analysis/ale",
@@ -96,6 +109,16 @@ require("lazy").setup({
     "preservim/tagbar",
     config = function()
       require("plugins.tagbar")
+    end,
+  },
+
+  -- Keybinding helper and discoverer
+  {
+    "folke/which-key.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("plugins.which-key")
     end,
   },
 

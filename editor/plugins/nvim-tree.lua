@@ -5,18 +5,35 @@ require("nvim-tree").setup({
   view = {
     width = 30,
     side = "left",
-  },
-  git = {
-    enable = true,
+    preserve_window_proportions = true,
   },
   renderer = {
     icons = {
-      show = {
-        file = false,
-        folder = false,
-        folder_arrow = false,
-        git = false,
+      glyphs = {
+        folder = {
+          arrow_closed = "▶",
+          arrow_open = "▼",
+        },
       },
+      show = {
+        file = true,
+        git = true,
+      },
+    },
+    indent_width = 2,
+  },
+  sync_root_with_cwd = true,
+  git = {
+    enable = true,
+    ignore = false,
+  },
+  filters = {
+    dotfiles = false,
+    custom = { "^.git$" },
+  },
+  actions = {
+    open_file = {
+      quit_on_open = false,
     },
   },
 })
@@ -26,7 +43,7 @@ local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 keymap("n", "<leader>ne", ":NvimTreeToggle<CR>", opts)
-keymap("n", "<leader>n", ":NvimTreeFindFile<CR>", opts)
+keymap("n", "<leader>n ", ":NvimTreeFindFile<CR>", opts)
 
 -- Open nvim-tree automatically when Neovim starts up if no files were specified
 vim.api.nvim_create_autocmd("StdinReadPre", {
