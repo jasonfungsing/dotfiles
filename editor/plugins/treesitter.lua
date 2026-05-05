@@ -4,7 +4,8 @@
 -- Check if treesitter is available before configuring
 local status_ok, configs = pcall(require, "nvim-treesitter.configs")
 if not status_ok then
-  vim.notify("nvim-treesitter not found!", vim.log.levels.ERROR)
+  -- Silently return if treesitter is not installed yet
+  -- This prevents error messages during initial setup
   return
 end
 

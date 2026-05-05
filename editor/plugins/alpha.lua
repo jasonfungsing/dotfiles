@@ -3,7 +3,7 @@
 
 local status_ok, alpha = pcall(require, "alpha")
 if not status_ok then
-  vim.notify("alpha-nvim not found!", vim.log.levels.ERROR)
+  -- Silently return if alpha is not installed yet
   return
 end
 
