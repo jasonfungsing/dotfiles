@@ -257,6 +257,42 @@ require("lazy").setup({
     end,
   },
 
+  -- Startup dashboard
+  {
+    "goolord/alpha-nvim",
+    event = "VimEnter",
+    config = function()
+      require("plugins.alpha")
+    end,
+  },
+
+  -- Better notifications
+  {
+    "rcarriga/nvim-notify",
+    keys = {
+      { "<leader>nh", desc = "Notification History" },
+      { "<leader>nd", desc = "Dismiss Notifications" },
+    },
+    config = function()
+      require("plugins.nvim-notify")
+    end,
+  },
+
+  -- Project-wide search and replace
+  {
+    "nvim-pack/nvim-spectre",
+    build = false,
+    cmd = "Spectre",
+    keys = {
+      { "<leader>S", desc = "Replace in files (Spectre)" },
+      { "<leader>sw", desc = "Search current word" },
+      { "<leader>sp", desc = "Search in current file" },
+    },
+    config = function()
+      require("plugins.nvim-spectre")
+    end,
+  },
+
   -- Language-specific plugins
   { "gavocanov/vim-js-indent", ft = "javascript" },
   { "pangloss/vim-javascript", ft = "javascript" },
