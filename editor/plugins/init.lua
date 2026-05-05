@@ -429,6 +429,8 @@ require("lazy").setup({
     event = "VeryLazy",
     config = function()
       require("plugins.which-key")
+      -- Load ultimate help system
+      require("plugins.help-system")
     end,
   },
 
