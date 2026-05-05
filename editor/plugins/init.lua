@@ -293,6 +293,79 @@ require("lazy").setup({
     end,
   },
 
+  -- Debug Adapter Protocol
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+    },
+    keys = {
+      { "<leader>db", desc = "Toggle Breakpoint" },
+      { "<leader>dc", desc = "Continue" },
+      { "<leader>di", desc = "Step Into" },
+      { "<leader>do", desc = "Step Over" },
+      { "<leader>du", desc = "Toggle DAP UI" },
+    },
+    config = function()
+      require("plugins.nvim-dap")
+    end,
+  },
+
+  -- Lightning-fast file navigation
+  {
+    "ThePrimeagen/harpoon",
+    keys = {
+      { "<leader>ha", desc = "Harpoon Add File" },
+      { "<leader>hm", desc = "Harpoon Menu" },
+      { "<leader>h1", desc = "Harpoon File 1" },
+      { "<leader>h2", desc = "Harpoon File 2" },
+      { "<leader>h3", desc = "Harpoon File 3" },
+      { "<leader>h4", desc = "Harpoon File 4" },
+    },
+    config = function()
+      require("plugins.harpoon")
+    end,
+  },
+
+  -- Modern colorscheme
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    config = function()
+      require("plugins.catppuccin")
+    end,
+  },
+
+  -- Color visualization
+  {
+    "norcalli/nvim-colorizer.lua",
+    ft = { "css", "scss", "html", "javascript", "typescript", "lua" },
+    keys = {
+      { "<leader>ct", desc = "Toggle Colorizer" },
+      { "<leader>cr", desc = "Reload Colorizer" },
+    },
+    config = function()
+      require("plugins.colorizer")
+    end,
+  },
+
+  -- Advanced git workflow
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
+    keys = {
+      { "<leader>gd", desc = "Git Diff View" },
+      { "<leader>gh", desc = "Git File History" },
+      { "<leader>gc", desc = "Close Git Diff" },
+      { "<leader>gf", desc = "Git File History (current)" },
+    },
+    config = function()
+      require("plugins.diffview")
+    end,
+  },
+
   -- Language-specific plugins
   { "gavocanov/vim-js-indent", ft = "javascript" },
   { "pangloss/vim-javascript", ft = "javascript" },

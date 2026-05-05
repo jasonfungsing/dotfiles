@@ -73,3 +73,7 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 -- Update time for better user experience
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
+
+-- Suppress deprecation warnings from plugins (temporary fix)
+-- This addresses vim.tbl_flatten deprecation warnings from some plugins
+vim.deprecate = function() end
