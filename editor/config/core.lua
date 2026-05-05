@@ -46,3 +46,30 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.wb = false
 vim.opt.hidden = true
+
+-- Undo persistence
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undo"
+
+-- Search settings
+vim.opt.hlsearch = true
+vim.opt.incsearch = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+-- Clipboard integration
+vim.opt.clipboard = "unnamedplus"
+
+-- Mouse support
+vim.opt.mouse = "a"
+
+-- Scrolling behavior
+vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 8
+
+-- Better completion
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
+
+-- Update time for better user experience
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300

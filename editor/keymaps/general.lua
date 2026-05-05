@@ -18,5 +18,5 @@ keymap("n", "<Down>", ":echoe 'Use j'<CR>", opts)
 keymap("n", "<Enter>", "o<ESC>", opts)
 keymap("n", "<S-Enter>", "O<ESC>", opts)
 
--- Map key to insert empty space without entering insert mode
-keymap("n", "<space>", "i<space><esc>", opts)
+-- Removed problematic space mapping that conflicts with leader key usage
+-- Use 's' for inserting space if needed: keymap("n", "s", "i<space><esc>", opts)

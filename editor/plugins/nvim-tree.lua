@@ -8,19 +8,60 @@ require("nvim-tree").setup({
     preserve_window_proportions = true,
   },
   renderer = {
-    icons = {
-      glyphs = {
-        folder = {
-          arrow_closed = "▶",
-          arrow_open = "▼",
-        },
-      },
-      show = {
-        file = true,
-        git = true,
+    add_trailing = false,
+    group_empty = false,
+    highlight_git = false,
+    full_name = false,
+    highlight_opened_files = "none",
+    root_folder_label = ":~:s?$?/..?",
+    indent_width = 2,
+    indent_markers = {
+      enable = false,
+      inline_arrows = true,
+      icons = {
+        corner = "└",
+        edge = "│",
+        item = "│",
+        bottom = "─",
+        none = " ",
       },
     },
-    indent_width = 2,
+    icons = {
+      webdev_colors = true,
+      git_placement = "before",
+      padding = " ",
+      symlink_arrow = " ➛ ",
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = true,
+        git = true,
+      },
+        glyphs = {
+          default = "📄",
+          symlink = "🔗",
+          bookmark = "🔖",
+          folder = {
+            arrow_closed = "▶",
+            arrow_open = "▼",
+            default = "📁",
+            open = "📂",
+            empty = "📁",
+            empty_open = "📂",
+            symlink = "🔗",
+            symlink_open = "🔗",
+          },
+          git = {
+            unstaged = "✗",
+            staged = "✓",
+            unmerged = "⚠",
+            renamed = "➜",
+            untracked = "★",
+            deleted = "✖",
+            ignored = "◌",
+          },
+        },
+    },
   },
   sync_root_with_cwd = true,
   git = {
