@@ -195,13 +195,74 @@ require("lazy").setup({
     end,
   },
 
+  -- Auto-pairs for brackets, quotes, etc.
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function()
+      require("plugins.autopairs")
+    end,
+  },
+
+  -- Better diagnostics and error navigation
+  {
+    "folke/trouble.nvim",
+    cmd = { "TroubleToggle", "Trouble" },
+    keys = {
+      { "<leader>xx", "<cmd>TroubleToggle<cr>", desc = "Toggle Trouble" },
+      { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics" },
+      { "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics" },
+      { "gR", "<cmd>TroubleToggle lsp_references<cr>", desc = "LSP References" },
+    },
+    config = function()
+      require("plugins.trouble")
+    end,
+  },
+
+  -- Better buffer management
+  {
+    "akinsho/bufferline.nvim",
+    event = "VeryLazy",
+    keys = {
+      { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
+      { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
+    },
+    config = function()
+      require("plugins.bufferline")
+    end,
+  },
+
+  -- Modern surround operations
+  {
+    "kylechui/nvim-surround",
+    version = "*",
+    event = "VeryLazy",
+    config = function()
+      require("plugins.nvim-surround")
+    end,
+  },
+
+  -- Integrated terminal management
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    keys = {
+      { "<C-\\>", desc = "Toggle terminal" },
+      { "<leader>tf", desc = "Float terminal" },
+      { "<leader>tv", desc = "Vertical terminal" },
+      { "<leader>ts", desc = "Horizontal terminal" },
+    },
+    config = function()
+      require("plugins.toggleterm")
+    end,
+  },
+
   -- Language-specific plugins
   { "gavocanov/vim-js-indent", ft = "javascript" },
   { "pangloss/vim-javascript", ft = "javascript" },
   { "fatih/vim-go", ft = "go" },
 
   -- Text manipulation
-  "tpope/vim-surround",
   "tpope/vim-markdown",
   "godlygeek/tabular",
 

@@ -3,11 +3,11 @@
 
 require("mason-lspconfig").setup({
   -- Ensure these servers are installed
+  -- Note: gopls is installed via Homebrew system-wide
   ensure_installed = {
     "lua_ls",
     "pyright",
     "ts_ls",
-    "gopls",
     "rust_analyzer",
     "jsonls",
     "yamlls",
