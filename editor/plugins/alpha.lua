@@ -19,7 +19,7 @@ dashboard.section.header.val = {
   "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
   "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
   "                                                     ",
-  "    🚀 Ready for productive development! 🚀          ",
+  "      🚀 Ready for productive development! 🚀        ",
   "                                                     ",
 }
 
@@ -30,7 +30,7 @@ dashboard.section.buttons.val = {
   dashboard.button("r", "📚  Recent files", ":Telescope oldfiles <CR>"),
   dashboard.button("w", "🔤  Find word", ":Telescope live_grep <CR>"),
   dashboard.button("p", "📁  Find project", ":Telescope projects <CR>"),
-  dashboard.button("c", "⚙️   Configuration", ":e ~/.config/nvim/init.lua <CR>"),
+  dashboard.button("c", "⚙️  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
   dashboard.button("s", "💾  Restore session", ":lua require('persistence').load() <CR>"),
   dashboard.button("l", "🔌  Lazy", ":Lazy <CR>"),
   dashboard.button("m", "🔧  Mason", ":Mason <CR>"),
@@ -40,11 +40,10 @@ dashboard.section.buttons.val = {
 -- Set footer
 local function footer()
   local total_plugins = require("lazy").stats().count
-  local datetime = os.date(" %d-%m-%Y   %H:%M:%S")
   local version = vim.version()
   local nvim_version_info = "   v" .. version.major .. "." .. version.minor .. "." .. version.patch
 
-  return "⚡ " .. total_plugins .. " plugins" .. nvim_version_info .. datetime
+  return  nvim_version_info .. "    " .. total_plugins .. " plugins"
 end
 
 dashboard.section.footer.val = footer()
