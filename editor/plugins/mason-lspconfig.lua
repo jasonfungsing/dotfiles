@@ -6,7 +6,7 @@ require("mason-lspconfig").setup({
   ensure_installed = {
     "lua_ls",
     "pyright",
-    "tsserver",
+    "ts_ls",
     "gopls",
     "rust_analyzer",
     "jsonls",

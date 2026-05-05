@@ -1,7 +1,14 @@
 -- Treesitter Configuration
 -- Modern syntax highlighting and code understanding
 
-require("nvim-treesitter.configs").setup({
+-- Check if treesitter is available before configuring
+local status_ok, configs = pcall(require, "nvim-treesitter.configs")
+if not status_ok then
+  vim.notify("nvim-treesitter not found!", vim.log.levels.ERROR)
+  return
+end
+
+configs.setup({
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
   ensure_installed = {
     "c",
@@ -37,13 +44,8 @@ require("nvim-treesitter.configs").setup({
 
   highlight = {
     enable = true,
-
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
     -- list of language that will be disabled
     disable = {},
-
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -64,25 +66,11 @@ require("nvim-treesitter.configs").setup({
       node_decremental = "<M-space>",
     },
   },
-
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ["aa"] = "@parameter.outer",
-        ["ia"] = "@parameter.inner",
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@class.outer",
-        ["ic"] = "@class.inner",
-      },
-    },
-  },
 })
 
--- Enable folding based on treesitter
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldenable = false -- Disable folding at startup
+-- Enable folding based on treesitter (with fallback)
+pcall(function()
+  vim.opt.foldmethod = "expr"
+  vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+  vim.opt.foldenable = false -- Disable folding at startup
+end)

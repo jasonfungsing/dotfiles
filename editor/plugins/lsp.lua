@@ -1,7 +1,5 @@
 -- LSP Configuration
--- Native Neovim LSP setup with modern features
-
-local lspconfig = require("lspconfig")
+-- Modern Native Neovim LSP setup (0.11+)
 
 -- Setup LSP capabilities for nvim-cmp
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -65,9 +63,9 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
--- LSP server configurations
+-- Modern LSP server configurations using vim.lsp.config
 local servers = {
-  -- Lua
+  -- Lua Language Server
   lua_ls = {
     settings = {
       Lua = {
@@ -85,8 +83,8 @@ local servers = {
   -- Python
   pyright = {},
   
-  -- JavaScript/TypeScript
-  tsserver = {},
+  -- TypeScript/JavaScript (updated from deprecated tsserver)
+  ts_ls = {},
   
   -- Go
   gopls = {},
@@ -118,9 +116,14 @@ local servers = {
   bashls = {},
 }
 
--- Setup each LSP server
-for server, config in pairs(servers) do
-  config.capabilities = capabilities
-  config.on_attach = on_attach
-  lspconfig[server].setup(config)
+-- Setup each LSP server using modern vim.lsp.config API
+for server_name, config in pairs(servers) do
+  -- Merge default config with server-specific config
+  local server_config = vim.tbl_deep_extend("force", {
+    capabilities = capabilities,
+    on_attach = on_attach,
+  }, config)
+  
+  -- Use modern vim.lsp.config API (Neovim 0.11+)
+  vim.lsp.config(server_name, server_config)
 end
