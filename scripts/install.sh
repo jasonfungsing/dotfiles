@@ -305,11 +305,30 @@ install_neovim_config() {
          if [ "$DRY_RUN" = true ]; then
              log "[DRY RUN] Would symlink: $item → $target"
          else
-             if [ -e "$target" ] && [ ! -L "$target" ]; then
-                 log "Skipping $target (already exists)"
-             else
-                 ln -sf "$item" "$target"
+             # Check if target already exists
+             if [ -e "$target" ] || [ -L "$target" ]; then
+                 # If it's a symlink, check if it points to the correct location
+                 if [ -L "$target" ]; then
+                     local current_link=$(readlink "$target")
+                     if [ "$current_link" = "$item" ]; then
+                         log "Symlink $target already correct"
+                         continue
+                     else
+                         log "Updating incorrect symlink: $target"
+                         rm "$target"
+                     fi
+                 # If it's a regular file/directory, skip it
+                 elif [ ! -L "$target" ]; then
+                     log "Skipping $target (regular file/directory exists)"
+                     continue
+                 fi
+             fi
+             
+             # Create the symlink
+             if ln -sf "$item" "$target" 2>/dev/null; then
                  success "Symlinked $(basename "$item")"
+             else
+                 log "Failed to create symlink: $item → $target"
              fi
          fi
      done
