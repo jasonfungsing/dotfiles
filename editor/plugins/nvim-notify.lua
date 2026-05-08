@@ -20,7 +20,7 @@ notify.setup({
   -- Render function for notifications. See notify-render()
   render = "default", -- default, minimal, simple
   
-  -- Default timeout for notifications
+  -- Force 5-second timeout for ALL notifications
   timeout = 5000,
   
   -- Max number of columns for messages
@@ -45,8 +45,14 @@ notify.setup({
   },
 })
 
--- Replace vim.notify with nvim-notify
-vim.notify = notify
+-- Override vim.notify to FORCE 5-second timeout on ALL notifications
+-- This ensures no notification can override the timeout, regardless of source
+vim.notify = function(msg, level, opts)
+  opts = opts or {}
+  -- Force 5-second timeout for every notification
+  opts.timeout = 5000
+  return notify(msg, level, opts)
+end
 
 -- Keymaps for notification management
 local keymap = vim.keymap.set
@@ -63,9 +69,10 @@ keymap("n", "<leader>nd", function()
 end, opts)
 
 -- Example of using notify in your config
+-- Note: Even though this tries to set timeout = 3000, it will be forced to 5000ms
 vim.api.nvim_create_user_command("NotifyTest", function()
-  vim.notify("This is a test notification!", vim.log.levels.INFO, {
-    title = "Test Notification",
-    timeout = 3000,
+  vim.notify("This notification will auto-dismiss after 5 seconds!", vim.log.levels.INFO, {
+    title = "Test Notification (5s timeout enforced)",
+    timeout = 3000, -- This will be overridden to 5000ms
   })
 end, {})
