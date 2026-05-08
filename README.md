@@ -213,16 +213,11 @@ dotfiles/
 │   ├── macos.sh              # macOS system preferences
 │   └── install-interactive.sh # Interactive installer (planned)
 │
-├── raycast-scripts/          # Raycast command scripts
-│   ├── summarize-screen-ai.sh
-│   └── summarize-screen.sh
-│
 └── docs/                     # Documentation
     ├── INSTALLATION.md       # Detailed installation guide
     ├── MACOS_SETTINGS.md     # macOS settings explanations
     ├── BREWFILE_EXPLAINED.md # Package list with rationale
     ├── BREWFILE_LOCK.md      # Lock file management
-    ├── RAYCAST_SCRIPTS.md    # Raycast scripts documentation
     └── SHELL_ALIASES.md      # Shell aliases reference
 ```
 
@@ -309,7 +304,6 @@ For detailed information, see:
 - [macOS Settings](docs/MACOS_SETTINGS.md)
 - [Brewfile Packages](docs/BREWFILE_EXPLAINED.md)
 - [Brewfile Lock File](docs/BREWFILE_LOCK.md)
-- [Raycast Scripts](docs/RAYCAST_SCRIPTS.md)
 - [Shell Aliases](docs/SHELL_ALIASES.md)
 
 ## Technology Stack

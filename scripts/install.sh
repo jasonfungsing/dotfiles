@@ -361,39 +361,6 @@ install_zsh_theme() {
     fi
 }
 
-install_raycast_scripts() {
-    log "Installing Raycast scripts..."
-    
-    if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would symlink Raycast scripts"
-        return
-    fi
-    
-    if [ ! -d "$HOME/Library/Application Support/Raycast" ]; then
-        log "Raycast not found. Skipping Raycast scripts installation."
-        return
-    fi
-    
-    mkdir -p "$HOME/Library/Application Support/Raycast/Extensions/scripts"
-    
-    local raycast_scripts=("summarize-screen.sh" "summarize-screen-ai.sh")
-    for script in "${raycast_scripts[@]}"; do
-        local source="$REPO_DIR/raycast-scripts/$script"
-        local target="$HOME/Library/Application Support/Raycast/Extensions/scripts/$script"
-        
-        if [ ! -f "$source" ]; then
-            continue
-        fi
-        
-        if [ -e "$target" ] && [ ! -L "$target" ]; then
-            log "Skipping $target (already exists)"
-        else
-            ln -sf "$source" "$target"
-            chmod +x "$target"
-            success "Symlinked $script"
-        fi
-    done
-}
 
 install_tmux_plugins() {
     log "Setting up Tmux Plugin Manager and plugins..."
@@ -598,7 +565,6 @@ main() {
         configure_zsh
         install_dotfiles
         install_zsh_theme
-        install_raycast_scripts
     fi
     
     if [ "$INSTALL_GIT" = true ]; then
