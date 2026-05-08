@@ -8,7 +8,7 @@ end
 
 wk.setup({
   preset = "helix",
-  delay = 200,
+  delay = 999999,
   win = {
     border = "rounded",
     padding = { 2, 4 },
@@ -40,7 +40,7 @@ wk.setup({
 -- Comprehensive command registration with beautiful organization
 wk.add({
   -- Main help command
-  { "<leader>?", "<cmd>WhichKey<cr>", desc = "🆘 Show All Commands", mode = "n" },
+  { ",,", "<cmd>WhichKey<cr>", desc = "🆘 Show All Commands", mode = "n" },
   { "<F1>", "<cmd>WhichKey<cr>", desc = "🆘 Show All Commands", mode = "n" },
 
   -- File Operations

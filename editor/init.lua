@@ -16,6 +16,7 @@ require("config.autocmds")
 require("keymaps.general")
 require("keymaps.buffer")
 require("keymaps.lsp")
+require("keymaps.dashboard")
 
 -- Load and setup plugins
 require("plugins")
