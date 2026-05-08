@@ -11,7 +11,7 @@ This repository contains my dotfiles and an automated setup script to quickly bo
 ```bash
 git clone https://github.com/jasonfungsing/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./scripts/install.sh
+./install.sh
 exec zsh
 ```
 
@@ -64,7 +64,7 @@ Development extensions including Python, Go, Java, Docker, Kubernetes, GitHub in
 The `install.sh` script automates the entire setup process:
 
 ```bash
-./scripts/install.sh
+./install.sh
 ```
 
 **What it does:**
@@ -97,13 +97,13 @@ Choose which components to install:
 Install only specific components:
 
 ```bash
-./scripts/install.sh --shell-only        # Only shell config
-./scripts/install.sh --editor-only       # Only editor config
-./scripts/install.sh --git-only          # Only Git config
-./scripts/install.sh --system-only       # Only macOS settings
-./scripts/install.sh --no-brew           # Skip Homebrew packages
-./scripts/install.sh --no-apps           # Skip applications
-./scripts/install.sh --dry-run           # Show what would be done
+./install.sh --shell-only        # Only shell config
+./install.sh --editor-only       # Only editor config
+./install.sh --git-only          # Only Git config
+./install.sh --system-only       # Only macOS settings
+./install.sh --no-brew           # Skip Homebrew packages
+./install.sh --no-apps           # Skip applications
+./install.sh --dry-run           # Show what would be done
 ```
 
 ### Manual Installation
@@ -183,6 +183,7 @@ See [Brewfile Lock File Guide](docs/BREWFILE_LOCK.md) for detailed information.
 dotfiles/
 ├── README.md                 # This file
 ├── CHANGELOG.md              # Version history and changes
+├── install.sh                # Main installation script
 │
 ├── brew/                     # Homebrew configuration
 │   ├── Brewfile              # Homebrew package definitions
@@ -207,8 +208,7 @@ dotfiles/
 │   ├── com.googlecode.iterm2.plist  # iTerm2 terminal settings
 │   └── hushlogin             # Suppress macOS login message
 │
-├── scripts/                  # Installation and setup scripts
-│   ├── install.sh            # Main installation script
+├── scripts/                  # Setup and validation scripts
 │   ├── validate-setup.sh     # Setup validation script
 │   ├── macos.sh              # macOS system preferences
 │   └── install-interactive.sh # Interactive installer (planned)
@@ -227,14 +227,14 @@ dotfiles/
 
 Run with appropriate permissions:
 ```bash
-sudo ./scripts/install.sh
+sudo ./install.sh
 ```
 
 ### Symlinks already exist
 
 The installer will skip existing symlinks by default. To overwrite:
 ```bash
-rm ~/.zshrc && ./scripts/install.sh
+rm ~/.zshrc && ./install.sh
 ```
 
 ### Zsh not recognized as default shell

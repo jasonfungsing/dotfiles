@@ -17,7 +17,7 @@ For the fastest setup with all default options:
 ```bash
 git clone https://github.com/jasonfungsing/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./scripts/install.sh
+./install.sh
 exec zsh
 ```
 
@@ -35,7 +35,7 @@ The script will automatically:
 ### 1. Automatic Installation (Default)
 
 ```bash
-./scripts/install.sh
+./install.sh
 ```
 
 Installs everything with default configuration.
@@ -68,31 +68,31 @@ Install only specific components:
 
 ```bash
 # Only shell configuration
-./scripts/install.sh --shell-only
+./install.sh --shell-only
 
 # Only editor configuration
-./scripts/install.sh --editor-only
+./install.sh --editor-only
 
 # Only Git configuration
-./scripts/install.sh --git-only
+./install.sh --git-only
 
 # Only terminal configuration
-./scripts/install.sh --terminal-only
+./install.sh --terminal-only
 
 # Only system preferences (no package installation)
-./scripts/install.sh --system-only
+./install.sh --system-only
 
 # Install everything except Homebrew packages
-./scripts/install.sh --no-brew
+./install.sh --no-brew
 
 # Install everything except applications
-./scripts/install.sh --no-apps
+./install.sh --no-apps
 
 # Show what would be done without making changes
-./scripts/install.sh --dry-run
+./install.sh --dry-run
 
 # Combine flags (e.g., no brew and no apps)
-./scripts/install.sh --no-brew --no-apps
+./install.sh --no-brew --no-apps
 ```
 
 **Time estimate:** 5-10 minutes (depending on selections)
@@ -263,13 +263,13 @@ For complete Neovim documentation, see [Neovim Setup Guide](NEOVIM_SETUP.md).
 
 **Problem:** Script exits with error
 ```bash
-./scripts/install.sh: line X: error...
+./install.sh: line X: error...
 ```
 
 **Solution:**
 1. Ensure you're in the dotfiles directory: `cd ~/.dotfiles`
-2. Make script executable: `chmod +x ./scripts/install.sh`
-3. Run with bash explicitly: `bash ./scripts/install.sh`
+2. Make script executable: `chmod +x ./install.sh`
+3. Run with bash explicitly: `bash ./install.sh`
 4. Check internet connection
 5. Review error message for specific issues
 
@@ -281,13 +281,13 @@ For complete Neovim documentation, see [Neovim Setup Guide](NEOVIM_SETUP.md).
 Option 1 - Back up existing files manually:
 ```bash
 mv ~/.zshrc ~/.zshrc.backup
-./scripts/install.sh
+./install.sh
 ```
 
 Option 2 - Remove and reinstall:
 ```bash
 rm ~/.zshrc
-./scripts/install.sh
+./install.sh
 ```
 
 ### Permission Denied
@@ -296,7 +296,7 @@ rm ~/.zshrc
 
 **Solution:**
 ```bash
-sudo ./scripts/install.sh
+sudo ./install.sh
 ```
 
 Or run individual commands with sudo:
@@ -445,7 +445,7 @@ If installation is slow:
 
 2. **Install without casks (faster):**
    ```bash
-   ./scripts/install.sh --no-apps
+   ./install.sh --no-apps
    ```
 
 3. **Check disk space:**

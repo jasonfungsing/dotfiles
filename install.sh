@@ -3,7 +3,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(dirname "$SCRIPT_DIR")"
+REPO_DIR="$SCRIPT_DIR"
 DRY_RUN=false
 INSTALL_SHELL=true
 INSTALL_EDITOR=true
@@ -101,7 +101,7 @@ parse_arguments() {
 
 show_help() {
     cat << 'EOF'
-Usage: ./scripts/install.sh [OPTIONS]
+Usage: ./install.sh [OPTIONS]
 
 OPTIONS:
   --shell-only      Install only shell configuration
@@ -115,10 +115,10 @@ OPTIONS:
   -h, --help        Show this help message
 
 EXAMPLES:
-  ./scripts/install.sh                # Install everything
-  ./scripts/install.sh --shell-only   # Install only shell config
-  ./scripts/install.sh --no-brew      # Install everything except packages
-  ./scripts/install.sh --dry-run      # Show what would be done
+  ./install.sh                # Install everything
+  ./install.sh --shell-only   # Install only shell config
+  ./install.sh --no-brew      # Install everything except packages
+  ./install.sh --dry-run      # Show what would be done
 EOF
 }
 
@@ -602,13 +602,13 @@ main() {
         echo ""
         echo "Next steps:"
         echo "1. Reload your terminal: exec zsh"
-        echo "2. Run validation: $SCRIPT_DIR/validate-setup.sh"
+        echo "2. Run validation: ./scripts/validate-setup.sh"
         echo "3. Review documentation: https://github.com/jasonfungsing/dotfiles"
     else
         log "Dry run complete. No changes were made."
         echo ""
         echo "To proceed with installation, run:"
-        echo "  ./scripts/install.sh"
+        echo "  ./install.sh"
     fi
     echo ""
 }
