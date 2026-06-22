@@ -103,7 +103,7 @@ eval "$(thefuck --alias)"
 alias t='tmux'
 alias mux="tmuxinator"
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
-alias update="brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; nvim +Lazy sync +qa"
+alias update="brew update; brew upgrade --yes; brew upgrade --cask --greedy --yes; brew cleanup; omz update; nvim +Lazy sync +qa"
 alias u=update
 alias vu="nvim +Lazy sync +qa"
 alias y="yarn"
@@ -114,6 +114,18 @@ alias k=kubectl
 alias python=python3
 alias mnk=minikube
 alias gc=gcloud
+alias nosleep="sudo pmset -a disablesleep 1 && echo '☕Sleep disabled'"
+alias yessleep="sudo pmset -a disablesleep 0 && echo '💤 Sleep enabled'"
+
+# Check MacBook lid sleep status
+sleepstatus() {
+  val=$(pmset -g | awk '/SleepDisabled/ {print $2}')
+  if [[ "$val" == "1" ]]; then
+    echo "☕ Sleep DISABLED — Mac stays awake when closed"
+  else
+    echo "💤 Sleep ENABLED — default behavior (sleeps on lid close)"
+  fi
+}
 
 prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
@@ -175,3 +187,6 @@ fi
 
 # Added by Antigravity
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+
+# Added by Antigravity IDE
+export PATH="$HOME/.antigravity-ide/antigravity-ide/bin:$PATH"
