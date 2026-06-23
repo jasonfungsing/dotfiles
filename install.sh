@@ -515,15 +515,17 @@ install_packages() {
     local bundle_exit=$?
     set -e
 
-    if [ $bundle_exit -ne 0 ]; then
-        error "brew bundle failed (exit $bundle_exit). See output above for details."
-    fi
-
     local check_output
     check_output=$(brew bundle check --file="$REPO_DIR/brew/Brewfile" --no-upgrade --verbose 2>&1)
-    if echo "$check_output" | grep -qiE "can't satisfy|missing|not installed"; then
+    local check_exit=$?
+
+    if [ $check_exit -ne 0 ]; then
         echo "$check_output" >&2
-        error "brew bundle check reports unmet dependencies after install. See output above."
+        error "brew bundle check reports unmet dependencies (bundle exit $bundle_exit, check exit $check_exit). See output above. Likely cause: a renamed/deleted formula or cask in the Brewfile — prune the failing entry and re-run."
+    fi
+
+    if [ $bundle_exit -ne 0 ]; then
+        log "⚠ brew bundle returned exit $bundle_exit but all required packages are present (likely a deprecated entry skipped). Continuing."
     fi
 
     success "Packages installed"
