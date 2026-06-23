@@ -490,18 +490,23 @@ restore_all_app_preferences() {
 
 install_packages() {
     log "Installing Homebrew packages..."
-    
+
+    local bundle_args=(--file="$REPO_DIR/brew/Brewfile")
+    if [ "$INSTALL_APPS" = false ]; then
+        bundle_args+=(--no-cask --no-mas --no-vscode)
+    fi
+
     if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would run: brew bundle --file=$REPO_DIR/brew/Brewfile"
+        log "[DRY RUN] Would run: brew bundle ${bundle_args[*]}"
         return
     fi
-    
+
     if ! command_exists brew; then
         error "Homebrew not installed. Cannot install packages."
     fi
-    
+
     if [ -f "$REPO_DIR/brew/Brewfile" ]; then
-        brew bundle --file="$REPO_DIR/brew/Brewfile"
+        brew bundle "${bundle_args[@]}"
         success "Packages installed"
     else
         error "Brewfile not found at $REPO_DIR/brew/Brewfile"
@@ -590,7 +595,7 @@ main() {
         restore_keyboard_shortcuts
     fi
     
-    if [ "$INSTALL_BREW" = true ] || [ "$INSTALL_APPS" = true ]; then
+    if [ "$INSTALL_BREW" = true ]; then
         log "═ Packages & Applications ═"
         install_homebrew
         install_packages
