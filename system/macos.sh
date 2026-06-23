@@ -29,6 +29,9 @@ defaults write NSGlobalDomain AppleFontSmoothing -int 2
 echo "Automatically hide and show the Dock"
 defaults write com.apple.dock autohide -bool true
 
+echo "Position the Dock on the right side of the screen"
+defaults write com.apple.dock orientation -string "right"
+
 # echo "Make Dock icons of hidden applications translucent"
 # defaults write com.apple.dock showhidden -bool true
 
