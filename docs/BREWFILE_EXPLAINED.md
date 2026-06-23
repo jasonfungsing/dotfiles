@@ -25,19 +25,17 @@ The Brewfile is organised into four sections:
 Additional Homebrew repositories providing extra packages:
 
 ```bash
-tap "antoniorodr/memo"           # Memo note-taking tool
 tap "aws/tap"                    # AWS CLI and tools
 tap "github/gh"                  # GitHub CLI enhancements
 tap "graalvm/tap"                # GraalVM Java distribution
-tap "homebrew/bundle"            # Homebrew bundle management
-tap "homebrew/services"          # Service management for Homebrew
-tap "jesseduffield/lazygit"       # Lazygit version control UI
+tap "jesseduffield/lazygit"      # Lazygit version control UI
 tap "microsoft/git"              # Microsoft Git enhancements
 tap "schniz/tap"                 # Developer tools
-tap "steipete/tap"               # Personal tool collection
 tap "teamookla/speedtest"        # Speedtest CLI
 tap "versent/taps"               # Versent utilities
 ```
+
+> Note: `homebrew/bundle` and `homebrew/services` are no longer needed — both have been merged into Homebrew core.
 
 ## Formulas (Command-Line Tools)
 
@@ -59,7 +57,7 @@ tap "versent/taps"               # Versent utilities
 | Tool | Purpose |
 |------|---------|
 | `autojump` | Fast directory navigation |
-| `exa` | Modern ls replacement with colors |
+| `eza` | Modern ls replacement with colours (maintained fork of exa) |
 | `nnn` | Terminal file browser |
 | `tree` | Directory tree display |
 | `rename` | Batch file renaming |

@@ -49,7 +49,7 @@ brew list --cask
 - **DevOps & Cloud** - Docker, Kubernetes, AWS tools
 - **Languages** - Go, Python, Node.js, Ruby, Java
 - **Build Tools** - Make, CMake, Gradle, Maven
-- **CLI Utilities** - ripgrep, bat, fd, exa, autojump
+- **CLI Utilities** - ripgrep, bat, fd, eza, autojump
 - **System Tools** - tmux, htop, coreutils, zsh
 - **Applications** - Neovim, VS Code, iTerm2
 - **Fonts** - Cascadia, Fira Code, Nerd fonts
