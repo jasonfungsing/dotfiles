@@ -491,7 +491,11 @@ restore_all_app_preferences() {
 install_packages() {
     log "Installing Homebrew packages..."
 
-    local bundle_args=(--file="$REPO_DIR/brew/Brewfile")
+    if [ ! -f "$REPO_DIR/brew/Brewfile" ]; then
+        error "Brewfile not found at $REPO_DIR/brew/Brewfile"
+    fi
+
+    local bundle_args=(install --file="$REPO_DIR/brew/Brewfile" --verbose)
     if [ "$INSTALL_APPS" = false ]; then
         bundle_args+=(--no-cask --no-mas --no-vscode)
     fi
@@ -505,12 +509,24 @@ install_packages() {
         error "Homebrew not installed. Cannot install packages."
     fi
 
-    if [ -f "$REPO_DIR/brew/Brewfile" ]; then
-        brew bundle "${bundle_args[@]}"
-        success "Packages installed"
-    else
-        error "Brewfile not found at $REPO_DIR/brew/Brewfile"
+    log "Running: brew bundle ${bundle_args[*]}"
+    set +e
+    brew bundle "${bundle_args[@]}"
+    local bundle_exit=$?
+    set -e
+
+    if [ $bundle_exit -ne 0 ]; then
+        error "brew bundle failed (exit $bundle_exit). See output above for details."
     fi
+
+    local check_output
+    check_output=$(brew bundle check --file="$REPO_DIR/brew/Brewfile" --no-upgrade --verbose 2>&1)
+    if echo "$check_output" | grep -qiE "can't satisfy|missing|not installed"; then
+        echo "$check_output" >&2
+        error "brew bundle check reports unmet dependencies after install. See output above."
+    fi
+
+    success "Packages installed"
 }
 
 apply_macos_settings() {
