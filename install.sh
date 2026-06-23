@@ -542,9 +542,10 @@ apply_macos_settings() {
     fi
     
     if ! bash "$REPO_DIR/system/macos.sh"; then
-        error "Failed to apply macOS settings"
+        log "⚠ Some macOS settings failed to apply (commonly TCC/Safari sandbox issues). Continuing."
+        return 0
     fi
-    
+
     success "macOS settings applied"
 }
 
@@ -605,16 +606,16 @@ main() {
         install_neovim_config
     fi
     
-    if [ "$INSTALL_SYSTEM" = true ]; then
-        log "═ System Preferences ═"
-        apply_macos_settings
-        restore_keyboard_shortcuts
-    fi
-    
     if [ "$INSTALL_BREW" = true ]; then
         log "═ Packages & Applications ═"
         install_homebrew
         install_packages
+    fi
+
+    if [ "$INSTALL_SYSTEM" = true ]; then
+        log "═ System Preferences ═"
+        apply_macos_settings
+        restore_keyboard_shortcuts
     fi
     
     echo ""

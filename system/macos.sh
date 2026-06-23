@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -e
+# Best-effort: a single failed `defaults write` (e.g. Safari TCC sandbox)
+# must not abort the whole installer. Errors are surfaced inline.
+set +e
 
 echo -e "\\n\\nSetting MacOS settings"
 echo "=============================="
@@ -142,13 +144,15 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 # defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
 
 echo "Enable Safari's debug menu"
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+defaults write com.apple.Safari IncludeInternalDebugMenu -bool true 2>/dev/null \
+    || echo "  ⚠ Safari preferences are TCC-protected. Grant Terminal/iTerm2 'Full Disk Access' in System Settings → Privacy & Security to apply Safari tweaks."
 
 # echo "Make Safari's search banners default to Contains instead of Starts With"
 # defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
 
 echo "Remove useless icons from Safari's bookmarks bar"
-defaults write com.apple.Safari ProxiesInBookmarksBar "()"
+defaults write com.apple.Safari ProxiesInBookmarksBar "()" 2>/dev/null \
+    || echo "  ⚠ Skipped (TCC). See above."
 
 # echo "Add a context menu item for showing the Web Inspector in web views"
 # defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
