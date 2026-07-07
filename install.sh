@@ -412,16 +412,42 @@ restore_keyboard_shortcuts() {
     
     log "Restoring keyboard shortcuts from $shortcuts_file..."
     
+    # Refresh preference daemon cache before editing plists to prevent dirty cache flush overwrites
+    log "Clearing cached system preferences..."
+    killall cfprefsd 2>/dev/null || true
+    sleep 1
+    
     # Restore symbolic hotkeys (system-level keyboard shortcuts)
     restore_symbolic_hotkeys "$shortcuts_file"
     
-    # Restore Safari NSUserKeyEquivalents
-    restore_safari_shortcuts "$shortcuts_file"
+    # Restore app-specific shortcuts
+    restore_app_shortcuts "$shortcuts_file"
     
-    # Restore all other app preferences (Chrome, VSCode, iTerm2, etc.)
-    restore_all_app_preferences "$shortcuts_file"
+    # CRITICAL: Force kill preference daemon with SIGKILL to discard stale caches in memory and sync from disk
+    log "Refreshing cached system preferences..."
+    killall -9 cfprefsd 2>/dev/null || true
+    sleep 1
     
     success "Keyboard shortcuts restored"
+}
+
+get_plist_path() {
+    local domain="$1"
+    if [ "$domain" = "NSGlobalDomain" ] || [ "$domain" = "Apple Global Domain" ] || [ "$domain" = ".GlobalPreferences" ]; then
+        echo "$HOME/Library/Preferences/.GlobalPreferences.plist"
+        return
+    fi
+    
+    local paths=(
+        "$HOME/Library/Preferences/${domain}.plist"
+        "$HOME/Library/Containers/${domain}/Data/Library/Preferences/${domain}.plist"
+    )
+    for p in "${paths[@]}"; do
+        if [ -f "$p" ]; then
+            echo "$p"
+            return
+        fi
+    done
 }
 
 restore_symbolic_hotkeys() {
@@ -434,57 +460,64 @@ restore_symbolic_hotkeys() {
         defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict
     fi
     
-    # Extract and apply each symbolic hotkey
+    # Ensure AppleSymbolicHotKeys parent dictionary key exists in the target plist
+    if ! plutil -extract AppleSymbolicHotKeys xml1 "$plist_file" -o - &>/dev/null; then
+        plutil -replace AppleSymbolicHotKeys -json '{}' "$plist_file" 2>/dev/null || true
+    fi
+    
+    # Extract and apply each symbolic hotkey using insert-or-replace
     jq -r '.keyboard_shortcuts["com.apple.symbolichotkeys"].AppleSymbolicHotKeys // empty | 
         to_entries[] | "\(.key)|\(.value | @json)"' "$shortcuts_file" | while IFS='|' read -r key value; do
         if [ -n "$key" ] && [ -n "$value" ]; then
-            plutil -insert "AppleSymbolicHotKeys.$key" -json "$value" "$plist_file" 2>/dev/null || true
+            plutil -insert "AppleSymbolicHotKeys.$key" -json "$value" "$plist_file" 2>/dev/null || \
+            plutil -replace "AppleSymbolicHotKeys.$key" -json "$value" "$plist_file" 2>/dev/null || true
         fi
     done
 }
 
-restore_safari_shortcuts() {
-    local shortcuts_file="$1"
-    
-    # Extract Safari NSUserKeyEquivalents
-    jq -r '.keyboard_shortcuts["com.apple.Safari"].NSUserKeyEquivalents // empty | 
-        to_entries[] | "\(.key)|\(.value)"' "$shortcuts_file" | while IFS='|' read -r menuitem shortcut; do
-        if [ -n "$menuitem" ] && [ -n "$shortcut" ]; then
-            defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "$menuitem" "$shortcut" 2>/dev/null || true
-        fi
-    done
-}
-
-restore_all_app_preferences() {
+restore_app_shortcuts() {
     local shortcuts_file="$1"
     
     # Get all domains in keyboard_shortcuts
     jq -r '.keyboard_shortcuts | keys[]' "$shortcuts_file" | while read -r domain; do
-        # Skip already-handled domains
-        if [[ "$domain" == "com.apple.symbolichotkeys" ]] || [[ "$domain" == "com.apple.Safari" ]]; then
+        if [ "$domain" = "com.apple.symbolichotkeys" ]; then
             continue
         fi
         
-        # Skip empty domain names
+        # Skip empty domains
         if [ -z "$domain" ]; then
             continue
         fi
         
-        log "Restoring preferences for: $domain"
+        local plist_path
+        plist_path=$(get_plist_path "$domain")
         
-        local plist_path="$HOME/Library/Preferences/${domain}.plist"
-        local domain_json=$(jq ".keyboard_shortcuts[\"$domain\"]" "$shortcuts_file" 2>/dev/null || echo '{}')
-        
-        # Only proceed if we have valid JSON data
-        if [ "$domain_json" != "{}" ] && [ -n "$domain_json" ]; then
-            # Write preferences using defaults write for each key-value pair
-            jq -r 'to_entries[] | "\(.key)|\(.value | @json)"' <<< "$domain_json" | while IFS='|' read -r key value; do
-                if [ -n "$key" ] && [ -n "$value" ]; then
-                    # Try to write the preference (handles various types)
-                    defaults write "$domain" "$key" -json "$value" 2>/dev/null || true
-                fi
-            done
+        # If the plist file does not exist, initialize it using defaults write
+        if [ -z "$plist_path" ] || [ ! -f "$plist_path" ]; then
+            log "Initializing preferences file for domain: $domain"
+            defaults write "$domain" -dict 2>/dev/null || true
+            plist_path=$(get_plist_path "$domain")
         fi
+        
+        if [ -z "$plist_path" ] || [ ! -f "$plist_path" ]; then
+            log "  ⚠ Could not create or find plist path for domain: $domain. Skipping."
+            continue
+        fi
+        
+        log "Restoring application shortcuts for: $domain"
+        
+        # Ensure NSUserKeyEquivalents parent dictionary key exists in the target plist
+        if ! plutil -extract NSUserKeyEquivalents xml1 "$plist_path" -o - &>/dev/null; then
+            plutil -replace NSUserKeyEquivalents -json '{}' "$plist_path" 2>/dev/null || true
+        fi
+        
+        # Extract and apply each shortcut using insert-or-replace
+        jq -r ".keyboard_shortcuts[\"$domain\"].NSUserKeyEquivalents // empty | to_entries[] | \"\(.key)|\(.value | @json)\"" "$shortcuts_file" | while IFS='|' read -r key value; do
+            if [ -n "$key" ] && [ -n "$value" ]; then
+                plutil -insert "NSUserKeyEquivalents.$key" -json "$value" "$plist_path" 2>/dev/null || \
+                plutil -replace "NSUserKeyEquivalents.$key" -json "$value" "$plist_path" 2>/dev/null || true
+            fi
+        done
     done
 }
 
