@@ -195,7 +195,10 @@ install_dotfiles() {
     fi
     
     # System files
-    local system_files=("system/com.googlecode.iterm2.plist" "system/hushlogin")
+    # Note: iTerm2 config (app/iterm2/) is not symlinked — iTerm2 only loads
+    # preferences via Settings → General → Preferences → "Load preferences from
+    # a custom folder", which must be set manually in the UI.
+    local system_files=("system/hushlogin")
     for file in "${system_files[@]}"; do
         local source="$REPO_DIR/$file"
         local target_name=$(basename "$file")

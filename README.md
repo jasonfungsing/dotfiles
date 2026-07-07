@@ -33,7 +33,6 @@ exec zsh
 | `.tmux.conf` | Terminal multiplexer (tmux) configuration |
 | `.gitconfig` | Git version control configuration |
 | `.hushlogin` | Suppresses macOS login message |
-| `com.googlecode.iterm2.plist` | iTerm2 terminal settings |
 
 ### Homebrew Packages (100+)
 Organized by category:
@@ -204,8 +203,11 @@ dotfiles/
 ├── git/                      # Git configuration
 │   └── gitconfig             # Git version control configuration
 │
+├── app/                      # Application configuration
+│   └── iterm2/
+│       └── com.googlecode.iterm2.plist  # iTerm2 terminal settings
+│
 ├── system/                   # System configuration
-│   ├── com.googlecode.iterm2.plist  # iTerm2 terminal settings
 │   └── hushlogin             # Suppress macOS login message
 │
 ├── scripts/                  # Setup and validation scripts

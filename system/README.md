@@ -6,9 +6,10 @@ macOS system settings, preferences, and configuration files.
 
 - **`macos.sh`** - macOS system configuration script
 - **`export-shortcuts.sh`** - Export keyboard shortcuts from system
-- **`com.googlecode.iterm2.plist`** - iTerm2 terminal emulator settings
 - **`keyboard-shortcuts.json`** - Custom keyboard shortcuts
 - **`hushlogin`** - Terminal startup message control
+
+> iTerm2 settings have moved to [app/iterm2/](../app/iterm2/)
 
 ## Quick Start
 
@@ -16,45 +17,9 @@ macOS system settings, preferences, and configuration files.
 ```bash
 # Run macOS configuration script
 bash system/macos.sh
-
-# Restore iTerm2 settings
-# Preferences → General → Preferences
-# Load preferences from folder: ~/.dotfiles/system/
-```
-
-### Manual Import
-```bash
-# Copy iTerm2 settings
-cp system/com.googlecode.iterm2.plist ~/.config/iTerm2/
-
-# Reload terminal
 ```
 
 ## Configuration Files Explained
-
-### com.googlecode.iterm2.plist
-**Purpose:** iTerm2 terminal emulator configuration
-
-**Contains:**
-- Terminal colour schemes
-- Font settings
-- Window arrangements
-- Keyboard shortcuts
-- Session profiles
-- Advanced settings
-
-**How to use:**
-1. Open iTerm2
-2. Go to: Preferences → General
-3. Under "Preferences", select "Load preferences from a folder"
-4. Point to: `~/.dotfiles/system/`
-5. Restart iTerm2
-
-**Customisation:**
-- Edit plist file directly (advanced)
-- Or modify in iTerm2 UI and export
-
----
 
 ### keyboard-shortcuts.json
 **Purpose:** System-wide keyboard shortcuts
@@ -215,21 +180,6 @@ defaults write com.apple.spotlight orderedItems
 
 ## Troubleshooting
 
-### iTerm2 settings not loading
-```bash
-# Check plist file exists
-ls -la ~/.dotfiles/system/com.googlecode.iterm2.plist
-
-# Verify plist format
-plutil -lint system/com.googlecode.iterm2.plist
-
-# Restart iTerm2 completely
-killall iTerm
-
-# Open iTerm2 again
-open -a iTerm
-```
-
 ### Keyboard shortcuts not working
 ```bash
 # Check shortcuts file
@@ -256,18 +206,12 @@ ln -s ~/.dotfiles/system/hushlogin ~/.hushlogin
 
 ### Export Current Settings
 ```bash
-# Export iTerm2 settings
-defaults export com.googlecode.iterm2 - > iterm2-backup.plist
-
 # Export keyboard shortcuts
 defaults export com.apple.symbolichotkeys - > shortcuts-backup.plist
 ```
 
 ### Reset to Defaults
 ```bash
-# Reset iTerm2
-defaults delete com.googlecode.iterm2
-
 # Reset keyboard shortcuts
 defaults delete com.apple.symbolichotkeys
 
@@ -276,9 +220,6 @@ defaults delete com.apple.symbolichotkeys
 
 ### List All Settings
 ```bash
-# View all iTerm2 settings
-defaults read com.googlecode.iterm2
-
 # View all keyboard shortcuts
 defaults read com.apple.symbolichotkeys
 ```
@@ -292,5 +233,5 @@ For system settings details, see:
 ## See Also
 
 - [macOS defaults Commands](https://macos-defaults.com/)
-- [iTerm2 Documentation](https://iterm2.com/documentation.html)
+- [iTerm2 configuration](../app/iterm2/) (moved to app/iterm2)
 - [System Preferences](https://support.apple.com/en-au/guide/mac-help/mh15217/mac)
