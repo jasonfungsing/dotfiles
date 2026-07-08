@@ -253,7 +253,6 @@ summary, and these are the fixes:
 | App Store app not purchased on this Apple ID | Buy/accept it in the App Store once, re-run |
 | Cask adopt fails on an app you installed by hand (version mismatch) | Trash the old app copy, re-run (brew installs a fresh one) |
 | "Operation not permitted" modifying an app bundle, even with sudo | System Settings → Privacy & Security → App Management → enable your terminal, restart it, re-run |
-| Safari settings skipped (TCC) | Grant your terminal Full Disk Access, re-run |
 | Little Snitch / network filter blocks downloads | Approve the connections in the filter, re-run |
 | Corporate proxy breaks TLS downloads | Set `HTTPS_PROXY`/trust the proxy cert per IT instructions |
 | MDM-managed apps (CrowdStrike Falcon, Workspace ONE) | Deliberately not brew-managed — leave them to IT |

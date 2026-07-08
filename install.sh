@@ -830,7 +830,7 @@ apply_macos_settings() {
     fi
     
     if ! bash "$REPO_DIR/mac/macos.sh"; then
-        log "✗ macos.sh failed (beyond the usual TCC/Safari warnings)"
+        log "✗ macos.sh exited with an error"
         return 1
     fi
 

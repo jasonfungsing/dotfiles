@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Best-effort: a single failed `defaults write` (e.g. Safari TCC sandbox)
+# Best-effort: a single failed `defaults write` (e.g. a TCC-protected domain)
 # must not abort the whole installer. Errors are surfaced inline.
 set +e
 
@@ -143,16 +143,13 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 # echo "Disable Safari's thumbnail cache for History and Top Sites"
 # defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
 
-echo "Enable Safari's debug menu"
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true 2>/dev/null \
-    || echo "  ⚠ Safari preferences are TCC-protected. Grant Terminal/iTerm2 'Full Disk Access' in System Settings → Privacy & Security to apply Safari tweaks."
+# Safari tweaks removed: Safari preferences are TCC-protected and need the
+# terminal to have Full Disk Access — two cosmetic settings (internal debug
+# menu, bookmarks bar icons) are not worth that grant. Set them manually in
+# Safari's own settings if wanted.
 
 # echo "Make Safari's search banners default to Contains instead of Starts With"
 # defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
-
-echo "Remove useless icons from Safari's bookmarks bar"
-defaults write com.apple.Safari ProxiesInBookmarksBar "()" 2>/dev/null \
-    || echo "  ⚠ Skipped (TCC). See above."
 
 # echo "Add a context menu item for showing the Web Inspector in web views"
 # defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
@@ -171,6 +168,6 @@ defaults write com.apple.Safari ProxiesInBookmarksBar "()" 2>/dev/null \
 
 
 echo "Kill affected applications"
-for app in Safari Finder Dock Mail SystemUIServer; do 
+for app in Finder Dock Mail SystemUIServer; do 
     pkill -f "$app" >/dev/null 2>&1 || true
 done

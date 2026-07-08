@@ -19,7 +19,7 @@ macOS system settings, preferences, and configuration files.
 bash mac/macos.sh
 ```
 
-The script automatically restarts affected applications (Safari, Finder, Dock, Mail, System UI Server). Some settings only take effect after logging out and back in, or restarting.
+The script automatically restarts affected applications (Finder, Dock, Mail, System UI Server). Some settings only take effect after logging out and back in, or restarting.
 
 ## Configuration Files Explained
 
@@ -77,7 +77,7 @@ bash mac/macos.sh
 **Important Notes:**
 - Backup system settings before running
 - Test in safe environment first
-- Safari settings are TCC-protected on modern macOS; grant your terminal "Full Disk Access" in System Settings → Privacy & Security for them to apply
+- Safari tweaks are deliberately absent: Safari preferences are TCC-protected and would require granting the terminal Full Disk Access — set Safari options in Safari itself
 
 ---
 
@@ -196,20 +196,6 @@ defaults write com.apple.dock orientation -string "right"
 ```
 Positions the Dock on the right side of the screen.
 
-### Safari
-
-**Enable debug menu**
-```bash
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-```
-Enables Safari's hidden debug menu for development and troubleshooting.
-
-**Remove bookmarks bar icons**
-```bash
-defaults write com.apple.Safari ProxiesInBookmarksBar "()"
-```
-Removes default useless icons from Safari's bookmarks bar (like Top Sites, Reading List, etc.).
-
 ### Trackpad
 
 **Tap to click**
@@ -280,7 +266,6 @@ defaults delete NSGlobalDomain AppleKeyboardUIMode
 defaults delete NSGlobalDomain
 defaults delete com.apple.Finder
 defaults delete com.apple.dock
-defaults delete com.apple.Safari
 defaults delete com.apple.driver.AppleBluetoothMultitouch.trackpad
 ```
 
