@@ -14,6 +14,7 @@ INSTALL_TERMINAL=true
 INSTALL_SYSTEM=true
 INSTALL_BREW=true
 INSTALL_APPS=true
+PRUNE_BREW=true
 VALIDATE_ONLY=false
 
 log() {
@@ -167,6 +168,10 @@ parse_arguments() {
                 INSTALL_APPS=false
                 shift
                 ;;
+            --no-prune)
+                PRUNE_BREW=false
+                shift
+                ;;
             --validate)
                 VALIDATE_ONLY=true
                 shift
@@ -196,14 +201,20 @@ OPTIONS:
   --system-only     Install only macOS system preferences
   --no-brew         Skip Homebrew packages
   --no-apps         Skip applications
+  --no-prune        Keep brew packages that are not declared in the Brewfile
   --validate        Validate the current setup without installing anything
   --dry-run         Show what would be done without making changes
   -h, --help        Show this help message
+
+The Brewfile is the source of truth: by default, brew packages, casks, taps,
+and VS Code extensions NOT declared in it are uninstalled during a run.
+Pass --no-prune to keep undeclared extras.
 
 EXAMPLES:
   ./install.sh                # Install everything (validates at the end)
   ./install.sh --shell-only   # Install only shell config
   ./install.sh --no-brew      # Install everything except packages
+  ./install.sh --no-prune     # Install, but keep undeclared brew extras
   ./install.sh --validate     # Only run setup validation
   ./install.sh --dry-run      # Show what would be done
 EOF
@@ -579,6 +590,48 @@ install_packages() {
     success "Packages installed"
 }
 
+# Uninstalls every brew formula, cask, tap, and VS Code extension that is
+# not declared in the Brewfile (dependencies of declared packages are kept).
+# The Brewfile is the source of truth; --no-prune skips this step.
+prune_packages() {
+    log "Pruning brew packages not declared in the Brewfile..."
+
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would uninstall all brew packages, casks, taps, and VS Code extensions not declared in the Brewfile"
+        return
+    fi
+
+    if ! command_exists brew; then
+        log "✗ Homebrew not installed. Nothing to prune."
+        return 1
+    fi
+
+    local plan
+    plan=$(brew bundle cleanup --file="$REPO_DIR/brew/Brewfile" 2>/dev/null | grep -v "bundle cleanup --force")
+
+    if ! echo "$plan" | grep -q "Would"; then
+        success "Nothing to prune — machine matches the Brewfile"
+        return 0
+    fi
+
+    echo "$plan" | sed 's/^Would uninstall/Removing/; s/^Would untap/Untapping/'
+    log "Removing (App Store apps may prompt for your password)..."
+    brew bundle cleanup --force --file="$REPO_DIR/brew/Brewfile"
+
+    # brew bundle can report App Store uninstalls as done even when sudo was
+    # denied — verify convergence instead of trusting its exit status.
+    local remaining
+    remaining=$(brew bundle cleanup --file="$REPO_DIR/brew/Brewfile" 2>/dev/null | grep -v "bundle cleanup --force")
+    if echo "$remaining" | grep -q "Would"; then
+        echo "$remaining"
+        log "✗ Some undeclared items could not be removed (App Store apps need an admin password — remove them via Finder, or declare them in the Brewfile)"
+        return 1
+    fi
+
+    brew autoremove > /dev/null 2>&1 || true
+    success "Machine now matches the Brewfile"
+}
+
 apply_macos_settings() {
     log "Applying macOS system settings..."
     
@@ -836,6 +889,9 @@ main() {
     if [ "$INSTALL_BREW" = true ]; then
         log "═ Packages & Applications ═"
         run_step "Install Brewfile packages and applications" install_packages
+        if [ "$PRUNE_BREW" = true ]; then
+            run_step "Prune brew packages not in the Brewfile" prune_packages
+        fi
     fi
 
     if [ "$INSTALL_SHELL" = true ]; then

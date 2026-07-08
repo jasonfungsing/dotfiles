@@ -70,12 +70,13 @@ The `install.sh` script automates the entire setup process:
 
 **What it does (in order — apps install before their configs):**
 1. Installs Homebrew, then all Brewfile packages, applications, and VS Code extensions
-2. Installs Oh-My-Zsh and sets Zsh as the default shell
-3. Creates symlinks for all dotfiles to your home directory
-4. Installs tmux plugins and points iTerm2 at its config folder (app/iterm2/)
-5. Sets up the Neovim configuration
-6. Applies macOS system preferences and keyboard shortcuts
-7. Validates the finished setup
+2. Uninstalls brew packages, casks, taps, and VS Code extensions **not** declared in the Brewfile (the Brewfile is the source of truth — skip with `--no-prune`)
+3. Installs Oh-My-Zsh and sets Zsh as the default shell
+4. Creates symlinks for all dotfiles to your home directory
+5. Installs tmux plugins and points iTerm2 at its config folder (app/iterm2/)
+6. Sets up the Neovim configuration
+7. Applies macOS system preferences and keyboard shortcuts
+8. Validates the finished setup
 
 **Failure handling:** the installer only aborts up front for system-wide
 problems (not macOS, no network, incomplete repo clone). After that, a

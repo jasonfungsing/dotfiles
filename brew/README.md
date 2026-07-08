@@ -4,6 +4,8 @@ Quick reference for managing packages, applications, and extensions via Homebrew
 
 The `Brewfile` is a curated collection of packages optimised for cloud/DevOps work (Docker, Kubernetes), backend development (Go, Python, Node.js, Java, Ruby), and general terminal productivity. `brew bundle` installs everything from the Brewfile; `brew bundle dump` regenerates it from what is currently installed (including casks).
 
+The Brewfile is the **source of truth**: `../install.sh` both installs what it declares and uninstalls anything undeclared (`--no-prune` to skip the latter). To keep a package, declare it here — installing it by hand only lasts until the next install.sh run.
+
 ## File Structure
 
 - **`Brewfile`** - Complete package definitions (100+ packages)
