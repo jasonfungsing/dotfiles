@@ -50,7 +50,6 @@ Organized by category:
 - IDEs: Xcode, Visual Studio Code
 - Productivity: Raycast, Slack
 - Security: Little Snitch
-- Design: Final Cut Pro
 - Media: AdBlock for Safari
 
 ### VS Code Extensions

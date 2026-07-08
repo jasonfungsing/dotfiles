@@ -10,15 +10,14 @@ The `Brewfile` is a curated collection of packages optimised for cloud/DevOps wo
 
 ## Brewfile Structure
 
-The Brewfile is organised into five sections:
+The Brewfile is organised into four sections:
 
-1. **Taps** - Additional package repositories (currently just `github/gh`)
-2. **Formulas** - Command-line tools and libraries
-3. **Casks** - GUI applications
-4. **`mas`** - macOS App Store applications
-5. **VS Code Extensions** - Visual Studio Code extensions
+1. **Formulas** - Command-line tools and libraries
+2. **Casks** - GUI applications
+3. **`mas`** - macOS App Store applications
+4. **VS Code Extensions** - Visual Studio Code extensions
 
-> Note: `homebrew/bundle` and `homebrew/services` taps are no longer needed — both have been merged into Homebrew core.
+> Note: no taps are needed — `gh`, `homebrew/bundle`, and `homebrew/services` have all been merged into Homebrew core.
 
 ## Quick Commands
 
@@ -84,7 +83,7 @@ brew list --cask
 
 ### Mac App Store
 
-Installed via `mas`: AdBlock, Final Cut Pro, Xcode.
+Installed via `mas`: AdBlock, Xcode.
 
 ### VS Code extensions
 
