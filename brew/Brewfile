@@ -1,3 +1,7 @@
+# Adopt apps that are already installed on disk instead of erroring —
+# brew takes ownership of the existing copy when versions match.
+cask_args adopt: true
+
 brew "autojump"
 brew "python3"
 brew "bat"

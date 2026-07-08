@@ -646,7 +646,9 @@ install_unmet_entry() {
             if brew list --cask "$name" > /dev/null 2>&1; then
                 brew_item "cask $name (upgrade)" brew upgrade --cask "$name"
             else
-                brew_item "cask $name" brew install --cask "$name"
+                # --adopt takes ownership of an already-installed app
+                # instead of erroring; a plain install when absent.
+                brew_item "cask $name" brew install --cask --adopt "$name"
             fi
             ;;
         "App "*)

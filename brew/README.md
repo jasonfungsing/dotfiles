@@ -19,6 +19,11 @@ The Brewfile is organised into four sections:
 3. **`mas`** - macOS App Store applications
 4. **VS Code Extensions** - Visual Studio Code extensions
 
+`cask_args adopt: true` applies to every cask: an app that already exists on
+disk (installed manually) is adopted under brew management instead of
+failing the install — brew takes ownership of the existing copy when the
+version matches, rather than downloading a duplicate.
+
 > Note: no taps are needed — `gh`, `homebrew/bundle`, and `homebrew/services` have all been merged into Homebrew core.
 
 ## Quick Commands
