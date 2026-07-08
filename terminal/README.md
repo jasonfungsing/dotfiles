@@ -1,10 +1,239 @@
-# Terminal Multiplexer Configuration
+# Terminal Configuration
 
-tmux configuration for terminal multiplexing, window management, and productivity.
+Zsh shell configuration (aliases, theme, plugins) and tmux terminal multiplexer.
 
 ## File Structure
 
+- **`zshrc`** - Main Zsh configuration
+- **`alias_prompt.sh`** - Prompt helpers, including an alias reminder
+- **`cobalt2.zsh-theme`** - Custom Zsh theme (Cobalt2)
 - **`tmux.conf`** - tmux configuration and keybindings
+
+---
+
+# Shell (Zsh)
+
+## Quick Start
+
+### Installation
+```bash
+# Symlink zshrc
+ln -s ~/.dotfiles/terminal/zshrc ~/.zshrc
+
+# Reload shell
+source ~/.zshrc
+```
+
+### Check Configuration
+```bash
+echo $SHELL
+echo $ZSH_THEME
+alias
+```
+
+## Configuration Files Explained
+
+### zshrc
+Main shell configuration file that:
+- Sources Oh-My-Zsh framework
+- Defines custom aliases (see [Available Aliases](#available-aliases))
+- Sets up environment variables
+- Configures plugin behaviour
+- Initialises shell utilities (fnm, nvm, rbenv)
+
+### alias_prompt.sh
+Prompt helper sourced by `zshrc` — when you type a command that already has an alias, it reminds you to use the alias instead.
+
+### cobalt2.zsh-theme
+Custom Zsh theme providing:
+- Modern colour scheme
+- Git status indicators
+- Customised prompt display
+
+## Available Aliases
+
+All custom aliases are defined in `zshrc`.
+
+### Terminal & Multiplexing
+
+| Alias | Command | Purpose |
+|-------|---------|---------|
+| `t` | `tmux` | Start or attach to tmux |
+| `mux` | `tmuxinator` | Tmuxinator project manager |
+
+### Development Tools
+
+| Alias | Command | Purpose |
+|-------|---------|---------|
+| `v` | `nvim` | Open Neovim |
+| `i` | `idea` | Open IntelliJ IDEA |
+
+### Git, Cloud & Kubernetes
+
+| Alias | Command | Purpose |
+|-------|---------|---------|
+| `gpa` | `find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;` | Git pull every repository in the current folder |
+| `gc` | `gcloud` | Google Cloud CLI |
+| `k` | `kubectl` | Kubernetes CLI |
+| `mnk` | `minikube` | Minikube local Kubernetes |
+
+### Package Management & Updates
+
+| Alias | Command | Purpose |
+|-------|---------|---------|
+| `y` | `yarn` | Yarn package manager |
+| `update` | `brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; nvim +Lazy sync +qa` | Update all packages, casks, Oh-My-Zsh and Neovim plugins |
+| `u` | `update` | Shorthand for `update` |
+| `vu` | `nvim +Lazy sync +qa` | Update Neovim plugins only |
+
+### Utilities
+
+| Alias | Command | Purpose |
+|-------|---------|---------|
+| `weather` | `curl wttr.in/$1.` | Check weather for a location |
+| `python` | `python3` | Use Python 3 by default |
+
+### Usage
+```bash
+v file.js          # Open file in Neovim
+weather Sydney     # Check weather
+u                  # Update everything
+```
+
+## Managing Aliases
+
+### Temporary (current session only)
+```bash
+alias myalias="command"
+```
+
+### Permanent
+1. Edit `zshrc` (the aliases live near the bottom of the file)
+2. Add: `alias myalias="command"`
+3. Reload shell: `source ~/.zshrc`
+
+### Removing an alias
+```bash
+unalias myalias    # Current session only
+```
+To remove permanently, delete the line from `zshrc` and reload the shell.
+
+### Listing all aliases
+```bash
+alias
+```
+
+## Oh-My-Zsh Plugins
+
+Enabled plugins provide additional aliases:
+- **git** - Git shortcuts (`ga`, `gcmsg`, `gd`, `gco`, `gbr`, etc.)
+- **tmux** - Tmux helpers
+- **brew** - Homebrew commands
+- **npm** - Node package manager
+- **python** - Python utilities
+- **aws** - AWS CLI shortcuts
+- **kubectl** - Kubernetes commands
+
+### Explore plugins
+```bash
+# List all aliases
+alias
+
+# Search for specific aliases
+alias | grep "^g"
+
+# View plugin details
+cat ~/.oh-my-zsh/plugins/git/git.plugin.zsh
+```
+
+## Environment Variables
+
+### Editor
+```bash
+EDITOR=nvim        # Default text editor
+VISUAL=nvim        # Default visual editor
+```
+
+### Version Managers
+```bash
+NVM_DIR=~/.nvm     # Node Version Manager
+```
+
+### Custom Paths
+Various paths configured for tools and executables.
+
+## Customisation
+
+### Change theme
+Edit `zshrc`:
+```bash
+ZSH_THEME="robbyrussell"  # or any Oh-My-Zsh theme
+```
+
+### Add plugins
+Edit `zshrc` plugins array:
+```bash
+plugins=(git tmux brew npm python)
+```
+
+### Modify prompt
+Edit `alias_prompt.sh` or `cobalt2.zsh-theme`
+
+## Troubleshooting
+
+### Shell not loading
+```bash
+# Check zshrc syntax
+zsh -n ~/.zshrc
+
+# Source manually
+source ~/.zshrc
+```
+
+### Aliases not working
+```bash
+# Check alias exists
+alias myalias
+
+# Reload shell
+exec zsh
+
+# Check for conflicts
+which myalias
+type myalias
+```
+
+### Alias conflicts with a command
+If an alias shadows a command you want to run directly:
+```bash
+# Bypass the alias
+\mycommand
+
+# Or use the full path
+/usr/bin/mycommand
+```
+
+### Theme not displaying
+```bash
+# Verify theme file exists
+ls ~/.oh-my-zsh/themes/cobalt2.zsh-theme
+
+# Check theme is loaded
+echo $ZSH_THEME
+
+# Restart terminal
+```
+
+## Keyboard Shortcuts
+
+Shell prompt includes keyboard configuration for:
+- Fast keyboard repeat rate
+- Short key repeat delay
+- Optimised for development workflows
+
+---
+
+# Terminal Multiplexer (tmux)
 
 ## Quick Start
 
@@ -273,11 +502,14 @@ tmux capture-pane -t myproject -p > session-layout.txt
 
 ## Documentation
 
-For detailed tmux information, see:
-- **[INSTALLATION.md](../docs/INSTALLATION.md)** - Full dotfiles installation
+For full dotfiles installation, see the **[root README](../README.md)**.
+
 
 ## See Also
 
+- [Zsh Manual](http://zsh.sourceforge.net/)
+- [Oh-My-Zsh](https://ohmyz.sh/)
+- [Zsh Plugins](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins)
 - [tmux Manual](http://man.openbsd.org/tmux)
 - [tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
 - [Vim Tmux Navigator](https://github.com/christoomey/vim-tmux-navigator)

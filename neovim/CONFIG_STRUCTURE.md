@@ -5,7 +5,7 @@ This document describes the modular organisation of the Neovim configuration.
 ## Directory Layout
 
 ```
-editor/
+neovim/
 ├── init.lua                    # Entry point - orchestrates all modules
 ├── CONFIG_STRUCTURE.md         # This file
 ├── config/

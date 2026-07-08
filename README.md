@@ -21,6 +21,8 @@ exec zsh
 - **Command line tools** for Xcode (installed automatically by script)
 - **Git** (installed automatically if needed)
 - Administrator access (required for some macOS settings and Homebrew installation)
+- Internet connection (for downloading packages and tools)
+- Approximately 5-10 GB of free disk space (for all packages)
 
 ## What Gets Installed
 
@@ -45,16 +47,14 @@ Organized by category:
 - **Miscellaneous**: GraphQL, Pandoc, Tesseract OCR, Figlet
 
 ### Applications (via Homebrew Cask & Mac App Store)
-- IDEs: Xcode, Visual Studio Code, IntelliJ IDEA
-- Editors: Neovim
-- Productivity: Raycast, Slack, Microsoft Office, WeChat, WhatsApp
-- Development: Docker Desktop, iTerm2
-- Security: Little Snitch, Grammarly
-- Design: Final Cut Pro, PDF Expert, CARROTweather
+- IDEs: Xcode, Visual Studio Code
+- Productivity: Raycast, Slack
+- Security: Little Snitch
+- Design: Final Cut Pro
 - Media: AdBlock for Safari
 
 ### VS Code Extensions
-Development extensions including Python, Go, Java, Docker, Kubernetes, GitHub integration, and AI coding assistants (Copilot, Claude).
+Development extensions including Python, Go, Docker, GitHub integration, and Claude Code.
 
 ## Installation
 
@@ -75,21 +75,7 @@ The `install.sh` script automates the entire setup process:
 6. Installs all packages from Brewfile
 7. Configures VS Code extensions
 
-### Interactive Installation
-
-For selective installation of components:
-
-```bash
-./scripts/install-interactive.sh
-```
-
-Choose which components to install:
-- Shell configuration (zshrc, aliases, Oh-My-Zsh)
-- Editor configuration (Vim, VS Code)
-- Terminal configuration (tmux, iTerm2)
-- Git configuration
-- macOS system preferences
-- Homebrew packages and applications
+A full installation takes roughly 25-45 minutes, depending on internet and disk speed.
 
 ### Command-Line Flags
 
@@ -99,11 +85,14 @@ Install only specific components:
 ./install.sh --shell-only        # Only shell config
 ./install.sh --editor-only       # Only editor config
 ./install.sh --git-only          # Only Git config
+./install.sh --terminal-only     # Only terminal config
 ./install.sh --system-only       # Only macOS settings
 ./install.sh --no-brew           # Skip Homebrew packages
 ./install.sh --no-apps           # Skip applications
 ./install.sh --dry-run           # Show what would be done
 ```
+
+Flags can be combined, e.g. `./install.sh --no-brew --no-apps`.
 
 ### Manual Installation
 
@@ -117,64 +106,89 @@ If you prefer to install manually:
 
 2. **Create symlinks:**
    ```bash
-   ln -s ~/.dotfiles/shell/zshrc ~/.zshrc
+   ln -s ~/.dotfiles/terminal/zshrc ~/.zshrc
+   ln -s ~/.dotfiles/terminal/alias_prompt.sh ~/.alias_prompt.sh
    mkdir -p ~/.config/nvim
-   ln -s ~/.dotfiles/editor/init.lua ~/.config/nvim/init.lua
+   ln -s ~/.dotfiles/neovim/init.lua ~/.config/nvim/init.lua
    ln -s ~/.dotfiles/terminal/tmux.conf ~/.tmux.conf
    ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
+   ln -s ~/.dotfiles/mac/hushlogin ~/.hushlogin
    ```
 
-3. **Install Homebrew:**
+3. **Install Homebrew** and add it to your PATH:
    ```bash
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
+   eval "$(/opt/homebrew/bin/brew shellenv)"
    ```
 
-4. **Install packages:**
+4. **Install Oh-My-Zsh:**
+   ```bash
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+   ```
+
+5. **Install packages:**
    ```bash
    brew bundle --file=./brew/Brewfile
    ```
 
-5. **Set Zsh as default shell:**
+6. **Set Zsh as default shell:**
    ```bash
-   chsh -s $(which zsh)
+   grep "$(command -v zsh)" /etc/shells || echo "$(command -v zsh)" | sudo tee -a /etc/shells
+   chsh -s "$(command -v zsh)"
    ```
+
+7. **Apply macOS settings:**
+   ```bash
+   sh ~/.dotfiles/mac/macos.sh
+   ```
+
+8. **Reload your shell:**
+   ```bash
+   exec zsh
+   ```
+
+On first launch, Neovim bootstraps lazy.nvim and installs all plugins automatically — no manual steps needed. See the [Neovim documentation](neovim/README.md) for details.
 
 ## Customisation
 
 ### Modifying Aliases
 
-Edit `alias_prompt.sh` and `zshrc` to add or modify aliases. See [Shell Aliases Documentation](docs/SHELL_ALIASES.md) for the complete list and explanations.
+Edit `alias_prompt.sh` and `zshrc` to add or modify aliases. See the [terminal documentation](terminal/README.md) for the complete list and explanations.
+
+### Private Configuration
+
+Create `~/.zshrc.private` for machine-specific settings:
+
+```bash
+# ~/.zshrc.private
+export API_KEY="your-key"
+alias work="cd /path/to/work"
+```
+
+This file is sourced automatically and won't be tracked by git.
 
 ### Changing macOS Settings
 
-Edit `scripts/macos.sh` to modify system preferences. See [macOS Settings Documentation](docs/MACOS_SETTINGS.md) for detailed explanations of each setting.
+Edit `mac/macos.sh` to modify system preferences. See the [macOS documentation](mac/README.md) for detailed explanations of each setting.
 
 ### Adding Packages
 
 To add new Homebrew packages:
 
 1. Edit `Brewfile` and add your package
-2. Run `brew bundle` to install
-3. Update lock file: `brew bundle lock --update`
+2. Run `brew bundle install --file=brew/Brewfile` to install
 
-See [Brewfile Documentation](docs/BREWFILE_EXPLAINED.md) for the complete package list and rationale.
+See the [Homebrew documentation](brew/README.md) for the complete package list and rationale.
 
 ### Updating Dependencies
 
-To update all Homebrew packages and lock file:
+To update all Homebrew packages:
 
 ```bash
-brew bundle update
-brew bundle lock --update
+brew update
+brew upgrade
 ```
-
-To update Brewfile.lock.json:
-
-```bash
-brew bundle lock --update
-```
-
-See [Brewfile Lock File Guide](docs/BREWFILE_LOCK.md) for detailed information.
 
 ## Directory Structure
 
@@ -185,19 +199,20 @@ dotfiles/
 ├── install.sh                # Main installation script
 │
 ├── brew/                     # Homebrew configuration
-│   ├── Brewfile              # Homebrew package definitions
-│   ├── Brewfile.lock.json    # Locked package versions
-│   └── Brewfile.readme       # Brewfile format documentation
+│   └── Brewfile              # Homebrew package definitions
 │
-├── shell/                    # Shell configuration
+├── neovim/                   # Neovim editor configuration
+│   ├── init.lua              # Entry point (pure Lua)
+│   ├── config/               # Core settings and autocmds
+│   ├── keymaps/              # Key mappings
+│   ├── plugins/              # Plugin specs
+│   ├── theme/                # Colourscheme
+│   └── utils/                # Helper utilities
+│
+├── terminal/                 # Terminal configuration (zsh + tmux)
 │   ├── zshrc                 # Zsh shell configuration
 │   ├── alias_prompt.sh       # Custom aliases and prompt
-│   └── cobalt2.zsh-theme     # Zsh theme
-│
-├── editor/                   # Editor configuration
-│   └── init.lua              # Neovim configuration (pure Lua)
-│
-├── terminal/                 # Terminal configuration
+│   ├── cobalt2.zsh-theme     # Zsh theme
 │   └── tmux.conf             # tmux configuration
 │
 ├── git/                      # Git configuration
@@ -207,23 +222,22 @@ dotfiles/
 │   └── iterm2/
 │       └── com.googlecode.iterm2.plist  # iTerm2 terminal settings
 │
-├── system/                   # System configuration
-│   └── hushlogin             # Suppress macOS login message
-│
-├── scripts/                  # Setup and validation scripts
-│   ├── validate-setup.sh     # Setup validation script
-│   ├── macos.sh              # macOS system preferences
-│   └── install-interactive.sh # Interactive installer (planned)
-│
-└── docs/                     # Documentation
-    ├── INSTALLATION.md       # Detailed installation guide
-    ├── MACOS_SETTINGS.md     # macOS settings explanations
-    ├── BREWFILE_EXPLAINED.md # Package list with rationale
-    ├── BREWFILE_LOCK.md      # Lock file management
-    └── SHELL_ALIASES.md      # Shell aliases reference
+└── mac/                      # macOS system configuration
+    ├── macos.sh              # macOS system preferences script
+    ├── export-shortcuts.sh   # Export keyboard shortcuts to JSON
+    ├── keyboard-shortcuts.json  # Saved keyboard shortcuts
+    └── hushlogin             # Suppress macOS login message
 ```
 
 ## Troubleshooting
+
+### Installation script fails
+
+If the script exits with an error:
+1. Ensure you're in the dotfiles directory: `cd ~/.dotfiles`
+2. Make the script executable: `chmod +x ./install.sh`
+3. Run with bash explicitly: `bash ./install.sh`
+4. Check your internet connection and review the error message
 
 ### Installation fails with permission errors
 
@@ -234,20 +248,26 @@ sudo ./install.sh
 
 ### Symlinks already exist
 
-The installer will skip existing symlinks by default. To overwrite:
+No action needed — the installer is safe to re-run and always converges on
+this repo's state. Correct symlinks are left alone, wrong or dangling ones
+are re-pointed, and a pre-existing real file is backed up to
+`<name>.backup.<timestamp>` before being replaced, so nothing is lost.
+
+Or remove it outright:
 ```bash
 rm ~/.zshrc && ./install.sh
 ```
 
-### Zsh not recognized as default shell
+### Zsh not recognised as default shell
 
 Verify installation:
 ```bash
 echo $SHELL
 ```
 
-If not zsh, run:
+If not zsh, ensure it is listed in `/etc/shells` and set it as default:
 ```bash
+grep "$(command -v zsh)" /etc/shells || echo "$(command -v zsh)" | sudo tee -a /etc/shells
 chsh -s $(which zsh)
 ```
 
@@ -258,6 +278,8 @@ Ensure you have Command Line Tools installed:
 xcode-select --install
 ```
 
+Also check free disk space (`df -h`) and run `brew doctor`.
+
 ### Package installation fails
 
 Some packages may require additional dependencies. Check individual package documentation or run:
@@ -265,7 +287,14 @@ Some packages may require additional dependencies. Check individual package docu
 brew doctor
 ```
 
+If `brew bundle` fails on a specific package, verify it exists with `brew search <package-name>` and try installing it individually with `brew install <package-name>`.
+
 ### macOS settings not applied
+
+Re-run the settings script:
+```bash
+./mac/macos.sh
+```
 
 Some settings require a logout/login. To apply immediately:
 ```bash
@@ -274,17 +303,31 @@ killall Finder Dock Mail SystemUIServer
 
 ## Validation
 
-After installation, validate your setup:
+A full `./install.sh` run validates the setup automatically at the end. To
+validate on its own — after a partial install, or any time something feels
+off:
 
 ```bash
-./scripts/validate-setup.sh
+./install.sh --validate
 ```
 
 This checks:
-- Dotfile symlinks are correctly created
-- Required packages are installed
-- Shell configuration is active
-- macOS settings are applied
+- Every symlink exists, points at the right file in this repo, and resolves (dangling symlinks fail)
+- Configs actually load: zsh syntax + interactive startup, Neovim headless launch, tmux config parse, git user.name
+- Zsh is the default shell and Oh-My-Zsh is present
+- `brew bundle check` confirms the machine matches the Brewfile
+- Key tools (git, jq, node, python3, go) are on the PATH
+
+It exits 0 only when every check passes.
+
+You can also spot-check individual components manually:
+
+```bash
+echo $SHELL           # Should show /opt/homebrew/bin/zsh or /usr/bin/zsh
+alias | grep "^t="    # Should show tmux alias
+git config user.name  # Should show your name
+brew --version        # Should show Homebrew version
+```
 
 ## Updating
 
@@ -299,14 +342,33 @@ Or use the full command:
 update  # Alias for: brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; nvim +Lazy sync +qa
 ```
 
+## Uninstallation
+
+To remove the dotfiles configuration:
+
+```bash
+# Remove symlinks
+rm ~/.zshrc
+rm ~/.tmux.conf
+rm ~/.gitconfig
+rm ~/.alias_prompt.sh
+rm ~/.hushlogin
+rm ~/.config/nvim/init.lua
+
+# Set bash back as default shell
+chsh -s /bin/bash
+
+# Remove dotfiles directory (if desired)
+rm -rf ~/.dotfiles
+```
+
 ## Documentation
 
 For detailed information, see:
-- [Installation Guide](docs/INSTALLATION.md)
-- [macOS Settings](docs/MACOS_SETTINGS.md)
-- [Brewfile Packages](docs/BREWFILE_EXPLAINED.md)
-- [Brewfile Lock File](docs/BREWFILE_LOCK.md)
-- [Shell Aliases](docs/SHELL_ALIASES.md)
+- [macOS Settings](mac/README.md)
+- [Homebrew Packages & Lock File](brew/README.md)
+- [Shell Aliases & Terminal Setup](terminal/README.md)
+- [Neovim Setup](neovim/README.md)
 
 ## Technology Stack
 
@@ -328,8 +390,8 @@ Personal use only. Feel free to use as reference for your own dotfiles.
 
 For issues or questions:
 1. Check [Troubleshooting](#troubleshooting) section
-2. Review relevant [documentation files](docs/)
-3. Check macOS and Homebrew documentation
+2. Review the relevant folder's README ([brew](brew/README.md), [mac](mac/README.md), [terminal](terminal/README.md), [neovim](neovim/README.md))
+3. Check macOS and Homebrew documentation (`brew help`, `man zsh`, `man tmux`)
 
 ---
 

@@ -4,7 +4,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
-OUTPUT_FILE="$REPO_DIR/system/keyboard-shortcuts.json"
+OUTPUT_FILE="$REPO_DIR/mac/keyboard-shortcuts.json"
 
 log() {
     echo "→ $1"
@@ -126,7 +126,7 @@ main() {
     log "Next steps:"
     echo "1. Review the exported shortcuts: cat $OUTPUT_FILE"
     echo "2. Manually edit if needed"
-    echo "3. Commit to git: git add system/keyboard-shortcuts.json"
+    echo "3. Commit to git: git add mac/keyboard-shortcuts.json"
     echo "4. On new machines, run: ./install.sh"
     echo ""
     success "Export complete!"

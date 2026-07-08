@@ -12,6 +12,7 @@ INSTALL_TERMINAL=true
 INSTALL_SYSTEM=true
 INSTALL_BREW=true
 INSTALL_APPS=true
+VALIDATE_ONLY=false
 
 log() {
     echo "→ $1"
@@ -28,6 +29,40 @@ success() {
 
 command_exists() {
     type "$1" > /dev/null 2>&1
+}
+
+# link_file <source> <target>
+# Symlinks target → source, overriding whatever is there so re-runs always
+# converge on the repo's state: correct symlinks are left alone, wrong or
+# dangling ones are re-pointed, and a pre-existing real file or directory is
+# moved to <target>.backup.<timestamp> before linking so nothing is lost.
+link_file() {
+    local source="$1" target="$2"
+
+    if [ ! -e "$source" ]; then
+        log "Skipping $target (source $source missing)"
+        return
+    fi
+
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would symlink: $source → $target"
+        return
+    fi
+
+    if [ -L "$target" ]; then
+        if [ "$(readlink "$target")" = "$source" ]; then
+            success "Symlinked $target (already correct)"
+            return
+        fi
+    elif [ -e "$target" ]; then
+        local backup="$target.backup.$(date +%Y%m%d-%H%M%S)"
+        mv "$target" "$backup"
+        log "Backed up existing $target → $backup"
+    fi
+
+    mkdir -p "$(dirname "$target")"
+    ln -sfn "$source" "$target"
+    success "Symlinked $target"
 }
 
 parse_arguments() {
@@ -86,6 +121,10 @@ parse_arguments() {
                 INSTALL_APPS=false
                 shift
                 ;;
+            --validate)
+                VALIDATE_ONLY=true
+                shift
+                ;;
             --dry-run)
                 DRY_RUN=true
                 shift
@@ -111,114 +150,30 @@ OPTIONS:
   --system-only     Install only macOS system preferences
   --no-brew         Skip Homebrew packages
   --no-apps         Skip applications
+  --validate        Validate the current setup without installing anything
   --dry-run         Show what would be done without making changes
   -h, --help        Show this help message
 
 EXAMPLES:
-  ./install.sh                # Install everything
+  ./install.sh                # Install everything (validates at the end)
   ./install.sh --shell-only   # Install only shell config
   ./install.sh --no-brew      # Install everything except packages
+  ./install.sh --validate     # Only run setup validation
   ./install.sh --dry-run      # Show what would be done
 EOF
 }
 
 install_dotfiles() {
     log "Installing dotfiles..."
-    
-    local dotfile_source="$REPO_DIR/shell/zshrc"
-    local dotfile_target="$HOME/.zshrc"
-    
-    if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would symlink: $dotfile_source → $dotfile_target"
-    else
-        if [ -e "$dotfile_target" ] && [ ! -L "$dotfile_target" ]; then
-            log "Skipping $dotfile_target (already exists)"
-        else
-            ln -sf "$dotfile_source" "$dotfile_target"
-            success "Symlinked $dotfile_target"
-        fi
-    fi
-    
-    # Shell files
-    for file in alias_prompt.sh; do
-        local source="$REPO_DIR/shell/$file"
-        local target="$HOME/.$file"
-        
-        if [ ! -f "$source" ]; then
-            continue
-        fi
-        
-        if [ "$DRY_RUN" = true ]; then
-            log "[DRY RUN] Would symlink: $source → $target"
-        else
-            if [ -e "$target" ] && [ ! -L "$target" ]; then
-                log "Skipping $target (already exists)"
-            else
-                ln -sf "$source" "$target"
-                success "Symlinked $target"
-            fi
-        fi
-    done
-    
-    # Terminal files
-    local terminal_file="$REPO_DIR/terminal/tmux.conf"
-    local terminal_target="$HOME/.tmux.conf"
-    
-    if [ -f "$terminal_file" ]; then
-        if [ "$DRY_RUN" = true ]; then
-            log "[DRY RUN] Would symlink: $terminal_file → $terminal_target"
-        else
-            if [ -e "$terminal_target" ] && [ ! -L "$terminal_target" ]; then
-                log "Skipping $terminal_target (already exists)"
-            else
-                ln -sf "$terminal_file" "$terminal_target"
-                success "Symlinked $terminal_target"
-            fi
-        fi
-    fi
-    
-    # Git files
-    local git_file="$REPO_DIR/git/gitconfig"
-    local git_target="$HOME/.gitconfig"
-    
-    if [ -f "$git_file" ]; then
-        if [ "$DRY_RUN" = true ]; then
-            log "[DRY RUN] Would symlink: $git_file → $git_target"
-        else
-            if [ -e "$git_target" ] && [ ! -L "$git_target" ]; then
-                log "Skipping $git_target (already exists)"
-            else
-                ln -sf "$git_file" "$git_target"
-                success "Symlinked $git_target"
-            fi
-        fi
-    fi
-    
-    # System files
+
+    link_file "$REPO_DIR/terminal/zshrc" "$HOME/.zshrc"
+    link_file "$REPO_DIR/terminal/alias_prompt.sh" "$HOME/.alias_prompt.sh"
+    link_file "$REPO_DIR/terminal/tmux.conf" "$HOME/.tmux.conf"
+    link_file "$REPO_DIR/git/gitconfig" "$HOME/.gitconfig"
     # Note: iTerm2 config (app/iterm2/) is not symlinked — iTerm2 only loads
     # preferences via Settings → General → Preferences → "Load preferences from
     # a custom folder", which must be set manually in the UI.
-    local system_files=("system/hushlogin")
-    for file in "${system_files[@]}"; do
-        local source="$REPO_DIR/$file"
-        local target_name=$(basename "$file")
-        local target="$HOME/.$target_name"
-        
-        if [ ! -f "$source" ]; then
-            continue
-        fi
-        
-        if [ "$DRY_RUN" = true ]; then
-            log "[DRY RUN] Would symlink: $source → $target"
-        else
-            if [ -e "$target" ] && [ ! -L "$target" ]; then
-                log "Skipping $target (already exists)"
-            else
-                ln -sf "$source" "$target"
-                success "Symlinked $target"
-            fi
-        fi
-    done
+    link_file "$REPO_DIR/mac/hushlogin" "$HOME/.hushlogin"
 }
 
 install_homebrew() {
@@ -285,57 +240,16 @@ configure_zsh() {
 
 
 install_neovim_config() {
-     log "Setting up Neovim configuration..."
-     
-     if [ "$DRY_RUN" = true ]; then
-         log "[DRY RUN] Would create ~/.config/nvim and symlink all editor files"
-         return
-     fi
-     
-     mkdir -p ~/.config/nvim
-     
-     local editor_dir="$REPO_DIR/editor"
-     
-     # Programmatically symlink all files and directories from editor/
-     # Skip the README.md file and symlink everything else
-     find "$editor_dir" -maxdepth 1 \( -type f -o -type d \) ! -name "README.md" ! -name ".git*" | while read -r item; do
-         local item_name=$(basename "$item")
-         local target="$HOME/.config/nvim/$item_name"
-         
-         # Skip the editor directory itself
-         [ "$item" = "$editor_dir" ] && continue
-         
-         if [ "$DRY_RUN" = true ]; then
-             log "[DRY RUN] Would symlink: $item → $target"
-         else
-             # Check if target already exists
-             if [ -e "$target" ] || [ -L "$target" ]; then
-                 # If it's a symlink, check if it points to the correct location
-                 if [ -L "$target" ]; then
-                     local current_link=$(readlink "$target")
-                     if [ "$current_link" = "$item" ]; then
-                         log "Symlink $target already correct"
-                         continue
-                     else
-                         log "Updating incorrect symlink: $target"
-                         rm "$target"
-                     fi
-                 # If it's a regular file/directory, skip it
-                 elif [ ! -L "$target" ]; then
-                     log "Skipping $target (regular file/directory exists)"
-                     continue
-                 fi
-             fi
-             
-             # Create the symlink
-             if ln -sf "$item" "$target" 2>/dev/null; then
-                 success "Symlinked $(basename "$item")"
-             else
-                 log "Failed to create symlink: $item → $target"
-             fi
-         fi
-     done
- }
+    log "Setting up Neovim configuration..."
+
+    # Symlink every file and directory from neovim/ (except README.md)
+    local item name
+    for item in "$REPO_DIR/neovim"/*; do
+        name="$(basename "$item")"
+        [ "$name" = "README.md" ] && continue
+        link_file "$item" "$HOME/.config/nvim/$name"
+    done
+}
 
 
 install_zsh_theme() {
@@ -350,18 +264,8 @@ install_zsh_theme() {
         log "Oh-My-Zsh custom themes directory not found. Skipping theme installation."
         return
     fi
-    
-    local theme_source="$REPO_DIR/shell/cobalt2.zsh-theme"
-    local theme_target="$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme"
-    
-    if [ -f "$theme_source" ]; then
-        if [ -e "$theme_target" ] && [ ! -L "$theme_target" ]; then
-            log "Skipping $theme_target (already exists)"
-        else
-            ln -sf "$theme_source" "$theme_target"
-            success "Symlinked cobalt2.zsh-theme"
-        fi
-    fi
+
+    link_file "$REPO_DIR/terminal/cobalt2.zsh-theme" "$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme"
 }
 
 
@@ -397,11 +301,11 @@ restore_keyboard_shortcuts() {
     log "Restoring keyboard shortcuts..."
     
     if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would restore keyboard shortcuts from $REPO_DIR/system/keyboard-shortcuts.json"
+        log "[DRY RUN] Would restore keyboard shortcuts from $REPO_DIR/mac/keyboard-shortcuts.json"
         return
     fi
     
-    local shortcuts_file="$REPO_DIR/system/keyboard-shortcuts.json"
+    local shortcuts_file="$REPO_DIR/mac/keyboard-shortcuts.json"
     
     if [ ! -f "$shortcuts_file" ]; then
         log "Keyboard shortcuts file not found. Skipping restoration."
@@ -571,20 +475,205 @@ apply_macos_settings() {
     log "Applying macOS system settings..."
     
     if [ "$DRY_RUN" = true ]; then
-        log "[DRY RUN] Would run: $REPO_DIR/system/macos.sh"
+        log "[DRY RUN] Would run: $REPO_DIR/mac/macos.sh"
         return
     fi
     
-    if [ ! -f "$REPO_DIR/system/macos.sh" ]; then
-        error "macos.sh not found at $REPO_DIR/system/macos.sh"
+    if [ ! -f "$REPO_DIR/mac/macos.sh" ]; then
+        error "macos.sh not found at $REPO_DIR/mac/macos.sh"
     fi
     
-    if ! bash "$REPO_DIR/system/macos.sh"; then
+    if ! bash "$REPO_DIR/mac/macos.sh"; then
         log "⚠ Some macOS settings failed to apply (commonly TCC/Safari sandbox issues). Continuing."
         return 0
     fi
 
     success "macOS settings applied"
+}
+
+# ═══ Setup validation ═══
+# Every check either passes or fails — failures are counted and reported,
+# so a green run means the setup actually works.
+
+PASSED=0
+FAILED=0
+
+v_pass() {
+    echo "✓ $1"
+    PASSED=$((PASSED+1))
+}
+
+v_fail() {
+    echo "✗ $1${2:+ — $2}"
+    FAILED=$((FAILED+1))
+}
+
+v_section() {
+    echo ""
+    echo "═══ $1 ═══"
+}
+
+# v_check <description> <command...>
+# Runs the command; passes on exit 0, otherwise fails and shows the first
+# line of its output as the reason.
+v_check() {
+    local desc="$1" out
+    shift
+    if out=$("$@" 2>&1); then
+        v_pass "$desc"
+    else
+        v_fail "$desc" "$(echo "$out" | head -1)"
+    fi
+}
+
+# v_check_symlink <link> <expected-target>
+# The link must exist, be a symlink, point at the expected repo file,
+# and resolve (a dangling symlink is a failure, not a pass).
+v_check_symlink() {
+    local link="$1" expected="$2" actual
+    local desc="$link"
+    [ "${link#"$HOME"/}" != "$link" ] && desc="~/${link#"$HOME"/}"
+    desc="$desc → ${expected#"$REPO_DIR"/}"
+    if [ ! -e "$link" ] && [ ! -L "$link" ]; then
+        v_fail "$desc" "missing"
+    elif [ ! -L "$link" ]; then
+        v_fail "$desc" "exists but is not a symlink"
+    else
+        actual="$(readlink "$link")"
+        if [ "$actual" != "$expected" ]; then
+            v_fail "$desc" "points to $actual"
+        elif [ ! -e "$link" ]; then
+            v_fail "$desc" "dangling symlink"
+        else
+            v_pass "$desc"
+        fi
+    fi
+}
+
+v_check_nvim_loads() {
+    local err
+    # First launch may bootstrap plugins (lazy.nvim) — warm it up, then
+    # require a clean, silent start.
+    nvim --headless +quitall > /dev/null 2>&1 || true
+    err=$(nvim --headless +quitall 2>&1)
+    if [ -n "$err" ]; then
+        echo "$err"
+        return 1
+    fi
+}
+
+v_check_tmux_config() {
+    local sock="validate-$$" err rc
+    err=$(tmux -L "$sock" -f "$HOME/.tmux.conf" new-session -d true 2>&1)
+    rc=$?
+    tmux -L "$sock" kill-server 2>/dev/null
+    if [ $rc -ne 0 ] || [ -n "$err" ]; then
+        echo "$err"
+        return 1
+    fi
+}
+
+v_check_brew_bundle() {
+    local out rc missing
+    out=$(brew bundle check --file="$REPO_DIR/brew/Brewfile" --verbose 2>/dev/null)
+    rc=$?
+    if [ $rc -ne 0 ]; then
+        missing=$(echo "$out" | grep -c "needs to be installed")
+        echo "$missing entries missing or outdated (brew bundle check --verbose for the list)"
+        return 1
+    fi
+}
+
+run_validation() {
+    # Checks are expected to fail without aborting the script
+    set +e
+    PASSED=0
+    FAILED=0
+
+    v_section "Symlinks"
+
+    v_check_symlink "$HOME/.zshrc" "$REPO_DIR/terminal/zshrc"
+    v_check_symlink "$HOME/.alias_prompt.sh" "$REPO_DIR/terminal/alias_prompt.sh"
+    v_check_symlink "$HOME/.tmux.conf" "$REPO_DIR/terminal/tmux.conf"
+    v_check_symlink "$HOME/.gitconfig" "$REPO_DIR/git/gitconfig"
+    v_check_symlink "$HOME/.hushlogin" "$REPO_DIR/mac/hushlogin"
+    v_check_symlink "$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme" "$REPO_DIR/terminal/cobalt2.zsh-theme"
+
+    # install.sh symlinks every item in neovim/ (except README.md) into ~/.config/nvim
+    local item name
+    for item in "$REPO_DIR/neovim"/*; do
+        name="$(basename "$item")"
+        [ "$name" = "README.md" ] && continue
+        v_check_symlink "$HOME/.config/nvim/$name" "$item"
+    done
+
+    v_section "Configs Load"
+
+    if command_exists zsh; then
+        v_check "zshrc has valid syntax" zsh -n "$HOME/.zshrc"
+        v_check "zsh starts interactively" zsh -ic 'exit 0'
+    else
+        v_fail "zsh installed" "not found"
+    fi
+
+    if command_exists nvim; then
+        v_check "Neovim loads config headlessly" v_check_nvim_loads
+    else
+        v_fail "Neovim installed" "not found"
+    fi
+
+    if command_exists tmux; then
+        v_check "tmux config parses" v_check_tmux_config
+    else
+        v_fail "tmux installed" "not found"
+    fi
+
+    v_check "gitconfig is readable (user.name set)" git config --get user.name
+
+    v_section "Shell Environment"
+
+    v_check "Zsh is the default shell" sh -c 'echo "$SHELL" | grep -q zsh'
+    [ -d "$HOME/.oh-my-zsh" ] && v_pass "Oh-My-Zsh is installed" || v_fail "Oh-My-Zsh is installed" "~/.oh-my-zsh missing"
+
+    v_section "Homebrew"
+
+    if command_exists brew; then
+        v_pass "Homebrew is installed"
+        v_check "Brewfile packages installed (brew bundle check)" v_check_brew_bundle
+    else
+        v_fail "Homebrew is installed" "not found"
+    fi
+
+    v_section "Key Tools"
+
+    local tool
+    for tool in git jq node python3 go; do
+        v_check "$tool is installed" command -v "$tool"
+    done
+
+    v_section "Repo Health"
+
+    if command_exists jq; then
+        v_check "keyboard-shortcuts.json is valid JSON" jq empty "$REPO_DIR/mac/keyboard-shortcuts.json"
+    fi
+    v_check "install.sh has valid syntax" bash -n "$REPO_DIR/install.sh"
+
+    v_section "Summary"
+
+    echo ""
+    echo "Validation Results:"
+    echo "  ✓ Passed: $PASSED"
+    echo "  ✗ Failed: $FAILED"
+    echo ""
+
+    if [ "$FAILED" -eq 0 ]; then
+        echo "Setup validation successful!"
+    else
+        echo "Some checks failed. Review the output above."
+    fi
+
+    set -e
+    [ "$FAILED" -eq 0 ]
 }
 
 print_installation_plan() {
@@ -616,6 +705,15 @@ main() {
     echo ""
     
     parse_arguments "$@"
+
+    if [ "$VALIDATE_ONLY" = true ]; then
+        if run_validation; then
+            exit 0
+        else
+            exit 1
+        fi
+    fi
+
     print_installation_plan
     
     if [ "$INSTALL_SHELL" = true ]; then
@@ -659,11 +757,27 @@ main() {
     echo ""
     if [ "$DRY_RUN" = false ]; then
         success "Installation complete!"
+
+        local validation_ok=true
+        if [ "$INSTALL_SHELL" = true ] && [ "$INSTALL_EDITOR" = true ] && \
+           [ "$INSTALL_GIT" = true ] && [ "$INSTALL_TERMINAL" = true ] && \
+           [ "$INSTALL_SYSTEM" = true ] && [ "$INSTALL_BREW" = true ]; then
+            log "═ Validating Setup ═"
+            run_validation || validation_ok=false
+        else
+            echo ""
+            echo "Partial install — validate the full setup with: ./install.sh --validate"
+        fi
+
         echo ""
         echo "Next steps:"
         echo "1. Reload your terminal: exec zsh"
-        echo "2. Run validation: ./scripts/validate-setup.sh"
-        echo "3. Review documentation: https://github.com/jasonfungsing/dotfiles"
+        echo "2. Review documentation: https://github.com/jasonfungsing/dotfiles"
+
+        if [ "$validation_ok" = false ]; then
+            echo ""
+            error "Installation finished but validation failed. Review the output above."
+        fi
     else
         log "Dry run complete. No changes were made."
         echo ""
