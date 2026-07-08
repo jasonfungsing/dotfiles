@@ -52,23 +52,107 @@ run_step() {
     echo "⚠ Step failed (continuing): $desc" >&2
 }
 
+# Installs Xcode Command Line Tools if missing. Tries the headless
+# softwareupdate route first (a touch-file makes the CLT appear in the
+# update catalogue — the same trick CI systems use), then falls back to
+# the GUI installer and waits for the user to click through.
+ensure_command_line_tools() {
+    if xcode-select -p > /dev/null 2>&1; then
+        return 0
+    fi
+
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would install Xcode Command Line Tools"
+        return 0
+    fi
+
+    log "Xcode Command Line Tools missing — attempting automatic install..."
+
+    local touchfile="/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
+    touch "$touchfile"
+    local label
+    label=$(softwareupdate -l 2>/dev/null | grep -o 'Label: Command Line Tools.*' | sed 's/^Label: //' | sort -V | tail -1)
+    if [ -n "$label" ]; then
+        log "Installing: $label (this can take 5-15 minutes)..."
+        sudo softwareupdate -i "$label" --verbose
+    fi
+    rm -f "$touchfile"
+
+    if xcode-select -p > /dev/null 2>&1; then
+        success "Command Line Tools installed"
+        return 0
+    fi
+
+    # Headless route failed — hand over to the GUI installer and wait
+    if [ -t 0 ]; then
+        log "Opening the Command Line Tools installer — click Install in the dialog (waiting up to 30 minutes)..."
+        xcode-select --install > /dev/null 2>&1
+        local waited=0
+        until xcode-select -p > /dev/null 2>&1; do
+            sleep 15
+            waited=$((waited + 15))
+            [ "$waited" -ge 1800 ] && break
+        done
+    fi
+
+    if xcode-select -p > /dev/null 2>&1; then
+        success "Command Line Tools installed"
+        return 0
+    fi
+
+    error "Could not install Xcode Command Line Tools automatically. Run: xcode-select --install  (then re-run this script)"
+}
+
 # Fatal, system-wide conditions only — anything that means NOTHING could
 # install. Everything else is a recoverable per-step failure.
 preflight_checks() {
     [ "$(uname -s)" = "Darwin" ] || error "This script only supports macOS."
 
+    [ "$(id -u)" -ne 0 ] || error "Do not run as root/sudo — Homebrew refuses root and symlinks would land in root's home. Run as your normal user; steps that need admin rights prompt for the password themselves."
+
     [ -n "$HOME" ] && [ -w "$HOME" ] || error "\$HOME is not set or not writable."
+
+    ensure_command_line_tools
 
     local f
     for f in brew/Brewfile terminal/zshrc mac/macos.sh neovim/init.lua; do
         [ -e "$REPO_DIR/$f" ] || error "Repository incomplete: $REPO_DIR/$f is missing. Re-clone the dotfiles repo."
     done
 
+    # A full install needs ~5-10 GB (Xcode's App Store copy alone is huge)
+    local free_gb
+    free_gb=$(df -g "$HOME" 2>/dev/null | awk 'NR==2 {print $4}')
+    if [ -n "$free_gb" ] && [ "$free_gb" -lt 10 ]; then
+        echo "⚠ Only ${free_gb} GB free — a full install needs 5-10 GB; downloads may fail partway." >&2
+    fi
+
     if [ "$DRY_RUN" = false ]; then
         if ! curl -fsSL --max-time 10 --head https://github.com > /dev/null 2>&1; then
-            error "No network connectivity (github.com unreachable) — Homebrew, packages, Oh-My-Zsh, and tmux plugins all need it. Connect and re-run."
+            error "No network connectivity (github.com unreachable) — Homebrew, packages, Oh-My-Zsh, and tmux plugins all need it. Connect and re-run. (On a corporate network, an SSL-inspecting proxy can also cause this — check HTTPS_PROXY settings.)"
         fi
     fi
+}
+
+# Ask for the admin password once up front and keep it fresh in the
+# background — several cask installers (Okta Verify, Logi Options+,
+# Little Snitch) and App Store removals need sudo, and a mid-run prompt
+# can time out unnoticed during long downloads.
+SUDO_KEEPALIVE_PID=""
+
+prime_sudo() {
+    if [ ! -t 0 ]; then
+        log "Non-interactive run — skipping sudo priming; steps needing admin rights may fail and will be listed in the summary."
+        return 0
+    fi
+    log "Some app installers need admin rights — you may be asked for your password now (once)."
+    if sudo -v; then
+        ( while sleep 50; do sudo -n -v 2> /dev/null || exit; kill -0 "$$" 2> /dev/null || exit; done ) &
+        SUDO_KEEPALIVE_PID=$!
+        trap '[ -n "$SUDO_KEEPALIVE_PID" ] && kill "$SUDO_KEEPALIVE_PID" 2> /dev/null' EXIT
+    else
+        log "⚠ Could not obtain admin rights — steps needing sudo may fail and will be listed in the summary."
+    fi
+    return 0
 }
 
 # link_file <source> <target>
@@ -270,9 +354,17 @@ install_homebrew() {
         success "Homebrew already installed"
     fi
 
-    if [ -f "/opt/homebrew/bin/brew" ]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    fi
+    # Put brew on this script's PATH regardless of prefix:
+    # /opt/homebrew on Apple Silicon, /usr/local on Intel.
+    local prefix
+    for prefix in /opt/homebrew /usr/local; do
+        if [ -x "$prefix/bin/brew" ]; then
+            eval "$("$prefix/bin/brew" shellenv)"
+            break
+        fi
+    done
+
+    command_exists brew || { log "✗ brew still not on PATH after install"; return 1; }
 }
 
 install_oh_my_zsh() {
@@ -631,7 +723,16 @@ install_unmet_entry() {
     case "$line" in
         "Formula "*" needs to be linked."*)
             name="${line#Formula }"; name="${name%% needs*}"
-            brew_item "link formula $name" brew link --overwrite "$name"
+            local link_out
+            if link_out=$(brew link --overwrite "$name" 2>&1); then
+                success "link formula $name"
+            elif echo "$link_out" | grep -q "keg-only"; then
+                success "formula $name is keg-only — linking not required"
+            else
+                echo "$link_out" | tail -2 >&2
+                FAILED_STEPS+=("brew entry: link formula $name")
+                echo "⚠ Failed: link formula $name (continuing with remaining entries)" >&2
+            fi
             ;;
         "Formula "*)
             name="${line#Formula }"; name="${name%% needs*}"
@@ -958,6 +1059,10 @@ main() {
 
     preflight_checks
     print_installation_plan
+
+    if [ "$INSTALL_BREW" = true ] && [ "$INSTALL_APPS" = true ] && [ "$DRY_RUN" = false ]; then
+        prime_sudo
+    fi
 
     # Packages and applications install first so config steps that need the
     # binaries (tmux plugins, Neovim bootstrap, iTerm2 preferences) find them.

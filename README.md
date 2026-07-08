@@ -79,10 +79,12 @@ The `install.sh` script automates the entire setup process:
 8. Validates the finished setup
 
 **Failure handling:** the installer only aborts up front for system-wide
-problems (not macOS, no network, incomplete repo clone). After that, a
-failing step never stops the run — the remaining steps continue, and every
-failure is listed in a summary at the end (with a non-zero exit code).
-Fix the causes and re-run; all steps are idempotent.
+problems (not macOS, running as root, no network, incomplete repo clone,
+Command Line Tools missing and uninstallable — it tries a headless install
+and the GUI installer first). After that, a failing step never stops the
+run — the remaining steps continue, and every failure is listed in a
+summary at the end (with a non-zero exit code). Fix the causes and re-run;
+all steps are idempotent.
 
 A full installation takes roughly 25-45 minutes, depending on internet and disk speed.
 
@@ -239,6 +241,23 @@ dotfiles/
 ```
 
 ## Troubleshooting
+
+### Things the installer cannot do for you
+
+Some failures need a human — they'll appear in the end-of-run failure
+summary, and these are the fixes:
+
+| Failure | Manual fix |
+|---|---|
+| App Store apps fail ("Not signed in") | Sign into the App Store app, re-run |
+| App Store app not purchased on this Apple ID | Buy/accept it in the App Store once, re-run |
+| Cask adopt fails on an app you installed by hand (version mismatch) | Trash the old app copy, re-run (brew installs a fresh one) |
+| "Operation not permitted" modifying an app bundle, even with sudo | System Settings → Privacy & Security → App Management → enable your terminal, restart it, re-run |
+| Safari settings skipped (TCC) | Grant your terminal Full Disk Access, re-run |
+| Little Snitch / network filter blocks downloads | Approve the connections in the filter, re-run |
+| Corporate proxy breaks TLS downloads | Set `HTTPS_PROXY`/trust the proxy cert per IT instructions |
+| MDM-managed apps (CrowdStrike Falcon, Workspace ONE) | Deliberately not brew-managed — leave them to IT |
+| System-extension apps (Little Snitch) installed but inert | Approve the extension in System Settings when prompted |
 
 ### Installation script fails
 
