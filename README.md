@@ -47,10 +47,13 @@ Organized by category:
 - **Miscellaneous**: GraphQL, Pandoc, Tesseract OCR, Figlet
 
 ### Applications (via Homebrew Cask & Mac App Store)
-- IDEs: Xcode, Visual Studio Code
-- Productivity: Raycast, Slack
-- Security: Little Snitch
-- Media: AdBlock for Safari
+- IDEs: Xcode, Visual Studio Code, Antigravity IDE
+- Terminal: iTerm2 (+ Powerline fonts)
+- Browsers: Google Chrome
+- AI assistants: Claude desktop, Gemini
+- Productivity: Raycast, Slack, Setapp, Logi Options+
+- Security: Little Snitch, Okta Verify
+- Media: AdBlock for Safari, Dark Reader for Safari
 
 ### VS Code Extensions
 Development extensions including Python, Go, Docker, GitHub integration, and Claude Code.
@@ -65,14 +68,14 @@ The `install.sh` script automates the entire setup process:
 ./install.sh
 ```
 
-**What it does:**
-1. Creates symlinks for all dotfiles to your home directory
-2. Installs Homebrew (if not already installed)
-3. Installs Oh-My-Zsh framework
-4. Sets Zsh as the default shell
-5. Applies macOS system preferences
-6. Installs all packages from Brewfile
-7. Configures VS Code extensions
+**What it does (in order — apps install before their configs):**
+1. Installs Homebrew, then all Brewfile packages, applications, and VS Code extensions
+2. Installs Oh-My-Zsh and sets Zsh as the default shell
+3. Creates symlinks for all dotfiles to your home directory
+4. Installs tmux plugins and points iTerm2 at its config folder (app/iterm2/)
+5. Sets up the Neovim configuration
+6. Applies macOS system preferences and keyboard shortcuts
+7. Validates the finished setup
 
 A full installation takes roughly 25-45 minutes, depending on internet and disk speed.
 

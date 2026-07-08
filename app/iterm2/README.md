@@ -17,8 +17,12 @@ iTerm2 terminal emulator settings.
 
 ## How to Use
 
-Not handled by `install.sh` — iTerm2 only loads external preferences via a
-setting that must be picked manually in the UI:
+`install.sh` configures this automatically (after installing iTerm2 via
+brew): it points iTerm2's "Load preferences from a custom folder or URL"
+setting at this folder. Quit iTerm2 before running the installer, or re-run
+it afterwards — a running iTerm2 can overwrite the setting when it quits.
+
+To set it manually instead:
 
 1. Open iTerm2
 2. Go to: Settings → General → Preferences

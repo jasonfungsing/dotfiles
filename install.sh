@@ -170,9 +170,8 @@ install_dotfiles() {
     link_file "$REPO_DIR/terminal/alias_prompt.sh" "$HOME/.alias_prompt.sh"
     link_file "$REPO_DIR/terminal/tmux.conf" "$HOME/.tmux.conf"
     link_file "$REPO_DIR/git/gitconfig" "$HOME/.gitconfig"
-    # Note: iTerm2 config (app/iterm2/) is not symlinked — iTerm2 only loads
-    # preferences via Settings → General → Preferences → "Load preferences from
-    # a custom folder", which must be set manually in the UI.
+    # Note: iTerm2 config (app/iterm2/) is not symlinked — configure_iterm2
+    # points iTerm2's "load preferences from a custom folder" setting at it.
     link_file "$REPO_DIR/mac/hushlogin" "$HOME/.hushlogin"
 }
 
@@ -251,6 +250,28 @@ install_neovim_config() {
     done
 }
 
+
+configure_iterm2() {
+    log "Configuring iTerm2 preferences folder..."
+
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would point iTerm2 at $REPO_DIR/app/iterm2 for preferences"
+        return
+    fi
+
+    if [ ! -d "/Applications/iTerm.app" ]; then
+        log "iTerm2 not installed. Skipping preferences configuration."
+        return
+    fi
+
+    if pgrep -xq iTerm2; then
+        log "⚠ iTerm2 is running — it may overwrite this setting when it quits. Re-run after closing iTerm2 if it doesn't stick."
+    fi
+
+    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$REPO_DIR/app/iterm2"
+    defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+    success "iTerm2 set to load preferences from $REPO_DIR/app/iterm2"
+}
 
 install_zsh_theme() {
     log "Installing Zsh theme (cobalt2)..."
@@ -651,6 +672,14 @@ run_validation() {
         v_check "$tool is installed" command -v "$tool"
     done
 
+    if [ -d "/Applications/iTerm.app" ]; then
+        if [ "$(defaults read com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null)" = "$REPO_DIR/app/iterm2" ]; then
+            v_pass "iTerm2 loads preferences from app/iterm2"
+        else
+            v_fail "iTerm2 loads preferences from app/iterm2" "PrefsCustomFolder is $(defaults read com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null || echo unset)"
+        fi
+    fi
+
     v_section "Repo Health"
 
     if command_exists jq; then
@@ -716,6 +745,14 @@ main() {
 
     print_installation_plan
     
+    # Packages and applications install first so config steps that need the
+    # binaries (tmux plugins, Neovim bootstrap, iTerm2 preferences) find them.
+    if [ "$INSTALL_BREW" = true ]; then
+        log "═ Packages & Applications ═"
+        install_homebrew
+        install_packages
+    fi
+
     if [ "$INSTALL_SHELL" = true ]; then
         log "═ Shell Configuration ═"
         install_homebrew
@@ -724,28 +761,23 @@ main() {
         install_dotfiles
         install_zsh_theme
     fi
-    
+
     if [ "$INSTALL_GIT" = true ]; then
         log "═ Git Configuration ═"
         install_dotfiles
     fi
-    
+
     if [ "$INSTALL_TERMINAL" = true ]; then
         log "═ Terminal Configuration ═"
         install_dotfiles
         install_tmux_plugins
+        configure_iterm2
     fi
-    
+
     if [ "$INSTALL_EDITOR" = true ]; then
         log "═ Editor Configuration ═"
         install_dotfiles
         install_neovim_config
-    fi
-    
-    if [ "$INSTALL_BREW" = true ]; then
-        log "═ Packages & Applications ═"
-        install_homebrew
-        install_packages
     fi
 
     if [ "$INSTALL_SYSTEM" = true ]; then
