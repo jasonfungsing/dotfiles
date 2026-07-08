@@ -77,6 +77,12 @@ The `install.sh` script automates the entire setup process:
 6. Applies macOS system preferences and keyboard shortcuts
 7. Validates the finished setup
 
+**Failure handling:** the installer only aborts up front for system-wide
+problems (not macOS, no network, incomplete repo clone). After that, a
+failing step never stops the run — the remaining steps continue, and every
+failure is listed in a summary at the end (with a non-zero exit code).
+Fix the causes and re-run; all steps are idempotent.
+
 A full installation takes roughly 25-45 minutes, depending on internet and disk speed.
 
 ### Command-Line Flags

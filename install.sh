@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -e
+# No `set -e` on purpose: individual step failures are recorded and reported
+# at the end while the rest of the install continues. Only preflight_checks
+# (conditions under which nothing could install) aborts the script.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$SCRIPT_DIR"
@@ -31,6 +33,43 @@ command_exists() {
     type "$1" > /dev/null 2>&1
 }
 
+# ═══ Step failure handling ═══
+# Steps run through run_step: a failing step is recorded and the install
+# moves on. All failures are listed in a summary at the end and make the
+# script exit non-zero.
+
+FAILED_STEPS=()
+
+# run_step <description> <function> [args...]
+run_step() {
+    local desc="$1"
+    shift
+    if "$@"; then
+        return 0
+    fi
+    FAILED_STEPS+=("$desc")
+    echo "⚠ Step failed (continuing): $desc" >&2
+}
+
+# Fatal, system-wide conditions only — anything that means NOTHING could
+# install. Everything else is a recoverable per-step failure.
+preflight_checks() {
+    [ "$(uname -s)" = "Darwin" ] || error "This script only supports macOS."
+
+    [ -n "$HOME" ] && [ -w "$HOME" ] || error "\$HOME is not set or not writable."
+
+    local f
+    for f in brew/Brewfile terminal/zshrc mac/macos.sh neovim/init.lua; do
+        [ -e "$REPO_DIR/$f" ] || error "Repository incomplete: $REPO_DIR/$f is missing. Re-clone the dotfiles repo."
+    done
+
+    if [ "$DRY_RUN" = false ]; then
+        if ! curl -fsSL --max-time 10 --head https://github.com > /dev/null 2>&1; then
+            error "No network connectivity (github.com unreachable) — Homebrew, packages, Oh-My-Zsh, and tmux plugins all need it. Connect and re-run."
+        fi
+    fi
+}
+
 # link_file <source> <target>
 # Symlinks target → source, overriding whatever is there so re-runs always
 # converge on the repo's state: correct symlinks are left alone, wrong or
@@ -56,12 +95,19 @@ link_file() {
         fi
     elif [ -e "$target" ]; then
         local backup="$target.backup.$(date +%Y%m%d-%H%M%S)"
-        mv "$target" "$backup"
+        if ! mv "$target" "$backup"; then
+            FAILED_STEPS+=("symlink $target (could not back up existing file)")
+            echo "⚠ Could not back up $target — leaving it untouched" >&2
+            return 1
+        fi
         log "Backed up existing $target → $backup"
     fi
 
-    mkdir -p "$(dirname "$target")"
-    ln -sfn "$source" "$target"
+    if ! mkdir -p "$(dirname "$target")" || ! ln -sfn "$source" "$target"; then
+        FAILED_STEPS+=("symlink $target")
+        echo "⚠ Failed to symlink $target" >&2
+        return 1
+    fi
     success "Symlinked $target"
 }
 
@@ -163,16 +209,35 @@ EXAMPLES:
 EOF
 }
 
-install_dotfiles() {
-    log "Installing dotfiles..."
+# Per-component dotfile linking. link_file records its own failures, so
+# these always return 0 — a failed link is reported without failing the
+# surrounding step twice.
 
+install_shell_dotfiles() {
+    log "Linking shell dotfiles..."
     link_file "$REPO_DIR/terminal/zshrc" "$HOME/.zshrc"
     link_file "$REPO_DIR/terminal/alias_prompt.sh" "$HOME/.alias_prompt.sh"
-    link_file "$REPO_DIR/terminal/tmux.conf" "$HOME/.tmux.conf"
+    return 0
+}
+
+install_git_dotfiles() {
+    log "Linking git config..."
     link_file "$REPO_DIR/git/gitconfig" "$HOME/.gitconfig"
+    return 0
+}
+
+install_terminal_dotfiles() {
+    log "Linking terminal dotfiles..."
     # Note: iTerm2 config (app/iterm2/) is not symlinked — configure_iterm2
     # points iTerm2's "load preferences from a custom folder" setting at it.
+    link_file "$REPO_DIR/terminal/tmux.conf" "$HOME/.tmux.conf"
+    return 0
+}
+
+install_system_dotfiles() {
+    log "Linking system dotfiles..."
     link_file "$REPO_DIR/mac/hushlogin" "$HOME/.hushlogin"
+    return 0
 }
 
 install_homebrew() {
@@ -185,12 +250,15 @@ install_homebrew() {
     
     if ! command_exists brew; then
         log "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+            log "✗ Homebrew installation failed"
+            return 1
+        fi
         success "Homebrew installed"
     else
         success "Homebrew already installed"
     fi
-    
+
     if [ -f "/opt/homebrew/bin/brew" ]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
@@ -206,7 +274,10 @@ install_oh_my_zsh() {
     
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         log "Installing Oh-My-Zsh..."
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+        if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
+            log "✗ Oh-My-Zsh installation failed"
+            return 1
+        fi
         success "Oh-My-Zsh installed"
     else
         success "Oh-My-Zsh already installed"
@@ -223,14 +294,25 @@ configure_zsh() {
     
     local zsh_path
     zsh_path="$(command -v zsh)"
-    
+
+    if [ -z "$zsh_path" ]; then
+        log "✗ zsh not found on PATH"
+        return 1
+    fi
+
     if ! grep "$zsh_path" /etc/shells > /dev/null; then
         log "Adding $zsh_path to /etc/shells"
-        echo "$zsh_path" | sudo tee -a /etc/shells > /dev/null
+        if ! echo "$zsh_path" | sudo tee -a /etc/shells > /dev/null; then
+            log "✗ Could not add $zsh_path to /etc/shells"
+            return 1
+        fi
     fi
-    
+
     if [ "$SHELL" != "$zsh_path" ]; then
-        chsh -s "$zsh_path"
+        if ! chsh -s "$zsh_path"; then
+            log "✗ chsh failed to change the default shell"
+            return 1
+        fi
         success "Default shell changed to $zsh_path"
     else
         success "Zsh already default shell"
@@ -268,8 +350,11 @@ configure_iterm2() {
         log "⚠ iTerm2 is running — it may overwrite this setting when it quits. Re-run after closing iTerm2 if it doesn't stick."
     fi
 
-    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$REPO_DIR/app/iterm2"
-    defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+    if ! defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$REPO_DIR/app/iterm2" || \
+       ! defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true; then
+        log "✗ Failed to write iTerm2 preference keys"
+        return 1
+    fi
     success "iTerm2 set to load preferences from $REPO_DIR/app/iterm2"
 }
 
@@ -299,22 +384,28 @@ install_tmux_plugins() {
     fi
     
     if ! command_exists tmux; then
-        log "Tmux not found. Skipping TPM installation."
-        return
+        log "✗ tmux not found — it should have been installed by the packages step"
+        return 1
     fi
-    
+
     local tpm_path="$HOME/.tmux/plugins/tpm"
-    
+
     if [ ! -d "$tpm_path" ]; then
         log "Cloning Tmux Plugin Manager..."
-        git clone https://github.com/tmux-plugins/tpm "$tpm_path"
+        if ! git clone https://github.com/tmux-plugins/tpm "$tpm_path"; then
+            log "✗ Failed to clone TPM"
+            return 1
+        fi
         success "TPM cloned successfully"
     else
         success "TPM already installed"
     fi
-    
+
     log "Installing Tmux plugins..."
-    "$tpm_path/bin/install_plugins" > /dev/null 2>&1
+    if ! "$tpm_path/bin/install_plugins" > /dev/null 2>&1; then
+        log "✗ TPM plugin installation failed (run $tpm_path/bin/install_plugins to see why)"
+        return 1
+    fi
     success "Tmux plugins installed"
 }
 
@@ -327,15 +418,15 @@ restore_keyboard_shortcuts() {
     fi
     
     local shortcuts_file="$REPO_DIR/mac/keyboard-shortcuts.json"
-    
+
     if [ ! -f "$shortcuts_file" ]; then
-        log "Keyboard shortcuts file not found. Skipping restoration."
-        return
+        log "✗ Keyboard shortcuts file not found at $shortcuts_file"
+        return 1
     fi
-    
+
     if ! command_exists jq; then
-        log "jq not found. Skipping keyboard shortcuts restoration."
-        return
+        log "✗ jq not found — it should have been installed by the packages step"
+        return 1
     fi
     
     log "Restoring keyboard shortcuts from $shortcuts_file..."
@@ -452,10 +543,6 @@ restore_app_shortcuts() {
 install_packages() {
     log "Installing Homebrew packages..."
 
-    if [ ! -f "$REPO_DIR/brew/Brewfile" ]; then
-        error "Brewfile not found at $REPO_DIR/brew/Brewfile"
-    fi
-
     local bundle_args=(install --file="$REPO_DIR/brew/Brewfile" --verbose)
     if [ "$INSTALL_APPS" = false ]; then
         bundle_args+=(--no-cask --no-mas --no-vscode)
@@ -467,14 +554,13 @@ install_packages() {
     fi
 
     if ! command_exists brew; then
-        error "Homebrew not installed. Cannot install packages."
+        log "✗ Homebrew not installed. Cannot install packages."
+        return 1
     fi
 
     log "Running: brew bundle ${bundle_args[*]}"
-    set +e
     brew bundle "${bundle_args[@]}"
     local bundle_exit=$?
-    set -e
 
     local check_output
     check_output=$(brew bundle check --file="$REPO_DIR/brew/Brewfile" --no-upgrade --verbose 2>&1)
@@ -482,7 +568,8 @@ install_packages() {
 
     if [ $check_exit -ne 0 ]; then
         echo "$check_output" >&2
-        error "brew bundle check reports unmet dependencies (bundle exit $bundle_exit, check exit $check_exit). See output above. Likely cause: a renamed/deleted formula or cask in the Brewfile — prune the failing entry and re-run."
+        log "✗ brew bundle check reports unmet dependencies (bundle exit $bundle_exit, check exit $check_exit). Likely cause: a renamed/deleted formula or cask in the Brewfile — prune the failing entry and re-run."
+        return 1
     fi
 
     if [ $bundle_exit -ne 0 ]; then
@@ -500,13 +587,9 @@ apply_macos_settings() {
         return
     fi
     
-    if [ ! -f "$REPO_DIR/mac/macos.sh" ]; then
-        error "macos.sh not found at $REPO_DIR/mac/macos.sh"
-    fi
-    
     if ! bash "$REPO_DIR/mac/macos.sh"; then
-        log "⚠ Some macOS settings failed to apply (commonly TCC/Safari sandbox issues). Continuing."
-        return 0
+        log "✗ macos.sh failed (beyond the usual TCC/Safari warnings)"
+        return 1
     fi
 
     success "macOS settings applied"
@@ -606,8 +689,6 @@ v_check_brew_bundle() {
 }
 
 run_validation() {
-    # Checks are expected to fail without aborting the script
-    set +e
     PASSED=0
     FAILED=0
 
@@ -701,7 +782,6 @@ run_validation() {
         echo "Some checks failed. Review the output above."
     fi
 
-    set -e
     [ "$FAILED" -eq 0 ]
 }
 
@@ -743,53 +823,55 @@ main() {
         fi
     fi
 
+    preflight_checks
     print_installation_plan
-    
+
     # Packages and applications install first so config steps that need the
     # binaries (tmux plugins, Neovim bootstrap, iTerm2 preferences) find them.
+    if [ "$INSTALL_BREW" = true ] || [ "$INSTALL_SHELL" = true ]; then
+        log "═ Homebrew ═"
+        run_step "Install Homebrew" install_homebrew
+    fi
+
     if [ "$INSTALL_BREW" = true ]; then
         log "═ Packages & Applications ═"
-        install_homebrew
-        install_packages
+        run_step "Install Brewfile packages and applications" install_packages
     fi
 
     if [ "$INSTALL_SHELL" = true ]; then
         log "═ Shell Configuration ═"
-        install_homebrew
-        install_oh_my_zsh
-        configure_zsh
-        install_dotfiles
-        install_zsh_theme
+        run_step "Install Oh-My-Zsh" install_oh_my_zsh
+        run_step "Set Zsh as default shell" configure_zsh
+        run_step "Link shell dotfiles" install_shell_dotfiles
+        run_step "Install cobalt2 zsh theme" install_zsh_theme
     fi
 
     if [ "$INSTALL_GIT" = true ]; then
         log "═ Git Configuration ═"
-        install_dotfiles
+        run_step "Link git config" install_git_dotfiles
     fi
 
     if [ "$INSTALL_TERMINAL" = true ]; then
         log "═ Terminal Configuration ═"
-        install_dotfiles
-        install_tmux_plugins
-        configure_iterm2
+        run_step "Link terminal dotfiles" install_terminal_dotfiles
+        run_step "Install tmux plugins" install_tmux_plugins
+        run_step "Configure iTerm2 preferences folder" configure_iterm2
     fi
 
     if [ "$INSTALL_EDITOR" = true ]; then
         log "═ Editor Configuration ═"
-        install_dotfiles
-        install_neovim_config
+        run_step "Link Neovim config" install_neovim_config
     fi
 
     if [ "$INSTALL_SYSTEM" = true ]; then
         log "═ System Preferences ═"
-        apply_macos_settings
-        restore_keyboard_shortcuts
+        run_step "Link system dotfiles" install_system_dotfiles
+        run_step "Apply macOS settings" apply_macos_settings
+        run_step "Restore keyboard shortcuts" restore_keyboard_shortcuts
     fi
-    
+
     echo ""
     if [ "$DRY_RUN" = false ]; then
-        success "Installation complete!"
-
         local validation_ok=true
         if [ "$INSTALL_SHELL" = true ] && [ "$INSTALL_EDITOR" = true ] && \
            [ "$INSTALL_GIT" = true ] && [ "$INSTALL_TERMINAL" = true ] && \
@@ -801,14 +883,27 @@ main() {
             echo "Partial install — validate the full setup with: ./install.sh --validate"
         fi
 
+        # Failure summary — every recorded step failure, listed at the end.
+        echo ""
+        if [ ${#FAILED_STEPS[@]} -eq 0 ]; then
+            success "Installation complete — all steps succeeded!"
+        else
+            echo "⚠ Installation finished with ${#FAILED_STEPS[@]} failed step(s):"
+            local s
+            for s in "${FAILED_STEPS[@]}"; do
+                echo "  ✗ $s"
+            done
+            echo ""
+            echo "Fix the causes and re-run ./install.sh — completed steps are idempotent."
+        fi
+
         echo ""
         echo "Next steps:"
         echo "1. Reload your terminal: exec zsh"
         echo "2. Review documentation: https://github.com/jasonfungsing/dotfiles"
 
-        if [ "$validation_ok" = false ]; then
-            echo ""
-            error "Installation finished but validation failed. Review the output above."
+        if [ ${#FAILED_STEPS[@]} -gt 0 ] || [ "$validation_ok" = false ]; then
+            exit 1
         fi
     else
         log "Dry run complete. No changes were made."
