@@ -570,24 +570,102 @@ install_packages() {
     fi
 
     log "Running: brew bundle ${bundle_args[*]}"
+    # One transient download failure (CDN 503, dropped connection) makes brew
+    # bundle abort the whole batch before installing anything. Run it once for
+    # bulk speed, then install whatever is still unmet entry-by-entry below —
+    # a bad download then only fails that one entry.
     brew bundle "${bundle_args[@]}"
-    local bundle_exit=$?
 
-    local check_output
-    check_output=$(brew bundle check --file="$REPO_DIR/brew/Brewfile" --no-upgrade --verbose 2>&1)
-    local check_exit=$?
+    local unmet
+    unmet=$(unmet_brewfile_entries)
+    if [ -z "$unmet" ]; then
+        success "Packages installed"
+        return 0
+    fi
 
-    if [ $check_exit -ne 0 ]; then
-        echo "$check_output" >&2
-        log "✗ brew bundle check reports unmet dependencies (bundle exit $bundle_exit, check exit $check_exit). Likely cause: a renamed/deleted formula or cask in the Brewfile — prune the failing entry and re-run."
+    log "⚠ brew bundle left some entries unsatisfied — installing them individually so one failure can't block the rest..."
+    while IFS= read -r line; do
+        install_unmet_entry "$line"
+    done <<< "$unmet"
+
+    unmet=$(unmet_brewfile_entries)
+    if [ -n "$unmet" ]; then
+        echo "$unmet" >&2
+        log "✗ Some Brewfile entries could not be installed (each is listed in the failure summary). Transient download errors usually clear — re-run ./install.sh later."
         return 1
     fi
 
-    if [ $bundle_exit -ne 0 ]; then
-        log "⚠ brew bundle returned exit $bundle_exit but all required packages are present (likely a deprecated entry skipped). Continuing."
-    fi
+    success "Packages installed (some recovered individually)"
+}
 
-    success "Packages installed"
+# Unmet Brewfile entries as "→ ..." lines from brew bundle check.
+# Respects --no-apps by only reporting formulae in that mode.
+unmet_brewfile_entries() {
+    local out
+    out=$(brew bundle check --file="$REPO_DIR/brew/Brewfile" --no-upgrade --verbose 2>&1 | grep "^→ ")
+    if [ "$INSTALL_APPS" = false ]; then
+        out=$(echo "$out" | grep "^→ Formula" || true)
+    fi
+    echo "$out"
+}
+
+# brew_item <description> <command...> — one package/app/extension install;
+# a failure is recorded by name and the caller moves on to the next entry.
+brew_item() {
+    local desc="$1" out
+    shift
+    log "Installing $desc..."
+    if out=$("$@" 2>&1); then
+        success "$desc"
+        return 0
+    fi
+    echo "$out" | tail -2 >&2
+    FAILED_STEPS+=("brew entry: $desc")
+    echo "⚠ Failed: $desc (continuing with remaining entries)" >&2
+    return 1
+}
+
+# install_unmet_entry <line> — dispatch one "→ ..." line from bundle check.
+install_unmet_entry() {
+    local line="${1#→ }" name id
+    case "$line" in
+        "Formula "*" needs to be linked."*)
+            name="${line#Formula }"; name="${name%% needs*}"
+            brew_item "link formula $name" brew link --overwrite "$name"
+            ;;
+        "Formula "*)
+            name="${line#Formula }"; name="${name%% needs*}"
+            if brew list --formula "$name" > /dev/null 2>&1; then
+                brew_item "formula $name (upgrade)" brew upgrade "$name"
+            else
+                brew_item "formula $name" brew install "$name"
+            fi
+            ;;
+        "Cask "*)
+            name="${line#Cask }"; name="${name%% needs*}"
+            if brew list --cask "$name" > /dev/null 2>&1; then
+                brew_item "cask $name (upgrade)" brew upgrade --cask "$name"
+            else
+                brew_item "cask $name" brew install --cask "$name"
+            fi
+            ;;
+        "App "*)
+            name="${line#App }"; name="${name%% needs*}"
+            id=$(grep -F "mas \"$name\"" "$REPO_DIR/brew/Brewfile" | sed -E 's/.*id: ([0-9]+).*/\1/' | head -1)
+            if [ -n "$id" ]; then
+                brew_item "App Store app $name" mas install "$id"
+            else
+                FAILED_STEPS+=("brew entry: App Store app $name (no id found in Brewfile)")
+            fi
+            ;;
+        "VSCode Extension "*)
+            name="${line#VSCode Extension }"; name="${name%% needs*}"
+            brew_item "VS Code extension $name" code --install-extension "$name"
+            ;;
+        *)
+            FAILED_STEPS+=("brew entry: unrecognised bundle check line: $line")
+            ;;
+    esac
 }
 
 # Uninstalls every brew formula, cask, tap, and VS Code extension that is
