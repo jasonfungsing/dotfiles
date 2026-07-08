@@ -788,7 +788,15 @@ prune_packages() {
     fi
 
     local plan
-    plan=$(brew bundle cleanup --file="$REPO_DIR/brew/Brewfile" 2>/dev/null | grep -v "bundle cleanup --force")
+    plan=$(brew bundle cleanup --file="$REPO_DIR/brew/Brewfile" 2>&1 | grep -v "bundle cleanup --force")
+
+    # cleanup exits 1 both for "items pending" and real errors — the output
+    # is the reliable signal. An error must not read as "nothing to prune".
+    if echo "$plan" | grep -q "^Error"; then
+        echo "$plan" | grep "^Error" >&2
+        log "✗ brew bundle cleanup failed — cannot tell whether undeclared packages remain"
+        return 1
+    fi
 
     if ! echo "$plan" | grep -q "Would"; then
         success "Nothing to prune — machine matches the Brewfile"
