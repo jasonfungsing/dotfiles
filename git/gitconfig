@@ -76,8 +76,6 @@
 [push]
     default = simple
 	autoSetupRemote = true
-[hub]
-	protocol = https
 [http]
 	sslVerify = false
 [pull]

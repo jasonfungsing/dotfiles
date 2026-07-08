@@ -98,8 +98,6 @@ source $ZSH/oh-my-zsh.sh
 
 fpath=(/usr/local/share/zsh-completions $fpath)
 
-eval "$(thefuck --alias)"
-
 alias t='tmux'
 alias mux="tmuxinator"
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"

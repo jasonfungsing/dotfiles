@@ -66,17 +66,17 @@ brew list --cask
 
 | Category | Key packages |
 |----------|--------------|
-| Text processing & search | `ripgrep`, `ack`, `the_silver_searcher`, `bat`, `fd`, `jq`, `diff-so-fancy`, `wdiff`, `highlight` |
+| Text processing & search | `ripgrep`, `bat`, `fd`, `jq`, `diff-so-fancy`, `wdiff`, `highlight` |
 | Navigation & files | `autojump`, `z`, `eza` (modern `ls` with colours), `nnn`, `tree`, `rename` |
 | Languages & runtimes | `go`, `node`, `python3`, `ruby`, `gawk` |
 | Version & package managers | `fnm`, `nvm`, `rbenv`/`ruby-build`, `jabba`, `pnpm`, `yarn`, `pipenv`, `uv`, `cocoapods` |
 | Build tools | `make`, `cmake`, `gcc`, `gradle`, `maven`, `openjdk`, `protobuf`, `buf`, `pkgconf` |
 | DevOps & cloud | `docker`, `docker-compose`, `kubernetes-cli` (kubectl), `kind`, `minikube`, `kops`, `kubectx`, `kustomize`, `helm`, `skaffold`, `stern`, `k6`, `lazydocker` |
-| Git & GitHub | `git`, `git-lfs`, `gh`, `hub`, `lazygit`, `tig`, `gnupg` |
+| Git & GitHub | `git`, `git-lfs`, `gh`, `lazygit`, `tig`, `gnupg` |
 | System & terminal | `tmux`, `reattach-to-user-namespace`, `htop`, `btop`, `coreutils`, `zsh`, `zsh-completions`, `zsh-syntax-highlighting`, `direnv`, `entr`, `watchman`, `shellcheck` |
 | Networking | `curl`, `wget`, `nmap`, `mosh` |
 | Documentation & media | `pandoc`, `markdown`, `tesseract` (OCR), `graphviz`, `cloc`, `figlet`, `cmatrix` |
-| Productivity helpers | `cheat`, `navi`, `tldr`, `thefuck`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
+| Productivity helpers | `cheat`, `navi`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
 
 ### Casks (GUI applications)
 
