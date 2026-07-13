@@ -1,88 +1,112 @@
-[user]
-	name = Jason Feng
-	email = jasonfungsing@gmail.com
-[github]
-    user = jasonfungsing
-[gitlab]
-    user = jasonfungsing
+# ~/.gitconfig — managed in the dotfiles repo (git/gitconfig)
+#
+# Machine-specific overrides (work identity, proxy settings) belong in
+# ~/.gitconfig.local — included at the bottom, so it wins over everything.
 
-[credential]
-	helper = osxkeychain
-[filter "lfs"]
-    clean = git lfs clean %f
-    smudge = git lfs smudge %f
-    required = true
-  	process = git-lfs filter-process
+# ═══ Identity ═══
+
+[user]
+    name = Jason Feng
+    email = jasonfungsing@gmail.com
+
+# ═══ Core ═══
+
 [core]
     excludesfile = ~/.gitignore_global
     ignorecase = false
-	editor = vim
+    editor = nvim
+
+[init]
+    defaultBranch = main
+
+# ═══ Diff & merge ═══
 
 [diff]
     tool = vscode
     algorithm = patience
 
 [difftool]
-	prompt = false
+    prompt = false
 
 [difftool "vscode"]
-	cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
+    cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
 
 [merge]
-	tool = vscode
+    tool = vscode
 
 [mergetool]
-	prompt = false
+    prompt = false
 
 [mergetool "vscode"]
-	cmd = code --wait --merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+    cmd = code --wait --merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
 
-[alias]
-    dk=difftool
-    dkc=difftool --cached
-    mk=mergetool
-    mkc=mergetool --cached
-
-    dv = difftool --tool=vimdiff
-    dvc = difftool --tool=vimdiff --cached
-    mv = mergetool --tool=vimdiff
-    mvc = mergetool --tool=vimdiff --cached
-
-    tree = log --oneline --branches --remotes --tags --graph --oneline --abbrev-commit --author-date-order --decorate --format=format:'%C(bold blue)%h%C(reset) %C(reset)%C(bold yellow)%d%C(reset) - %C(dim white)%aD (%ar)%C(reset)%n'' %C(bold cyan)%s%C(reset) %C(white)- %an%C(reset)%C(white) <%ae%C(reset)%C(white)>'
-    cl = clone
-    s = status
-    co = checkout
-    d = diff
-    p = pull
-    pa = pull --all
-    ph = push
-    aa = add --all
-    f = fetch
-    fa = fetch --all
-    al = add --patch
-    rbom = rebase origin/master
-    c = commit
-    cm = commit -m
-    ca = commit --amend
-    b = branch
-    bd = branch -d
-    bD = branch -D
-
-    undo = reset --soft HEAD~1
-
-    pr= "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
-    cleanup = "!git fetch -p origin && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D"
+# ═══ Workflow behaviour ═══
 
 [push]
     default = simple
-	autoSetupRemote = true
-[http]
-	sslVerify = false
+    autoSetupRemote = true
+
 [pull]
-	ff = only
+    ff = only
     rebase = true
+
 [rebase]
     instructionFormat = "[%an - %ar] %s"
     autoStash = true
-[init]
-	defaultBranch = main
+
+# ═══ Integrations ═══
+
+[credential]
+    helper = osxkeychain
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+# ═══ Aliases ═══
+
+[alias]
+    # Status & inspection
+    s = status
+    d = diff
+    tree = log --oneline --branches --remotes --tags --graph --abbrev-commit --author-date-order --decorate --format=format:'%C(bold blue)%h%C(reset) %C(reset)%C(bold yellow)%d%C(reset) - %C(dim white)%aD (%ar)%C(reset)%n'' %C(bold cyan)%s%C(reset) %C(white)- %an%C(reset)%C(white) <%ae%C(reset)%C(white)>'
+
+    # Everyday flow
+    cl = clone
+    co = checkout
+    p = pull
+    pa = pull --all
+    ph = push
+    f = fetch
+    fa = fetch --all
+    aa = add --all
+    al = add --patch
+    c = commit
+    cm = commit -m
+    ca = commit --amend
+    undo = reset --soft HEAD~1
+
+    # Branches
+    b = branch
+    bd = branch -d
+    bD = branch -D
+    rbom = rebase origin/master
+    cleanup = "!git fetch -p origin && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D"
+
+    # Review helpers
+    pr = "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+
+    # Diff/merge tool shortcuts — default (vscode); postfix "v" for nvim
+    dk = difftool
+    dkc = difftool --cached
+    mk = mergetool
+    dkv = difftool --tool=nvimdiff
+    dkcv = difftool --tool=nvimdiff --cached
+    mkv = mergetool --tool=nvimdiff
+
+# ═══ Machine-local ═══
+
+[include]
+    path = ~/.gitconfig.local

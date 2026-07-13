@@ -169,15 +169,21 @@ Edit `alias_prompt.sh` and `zshrc` to add or modify aliases. See the [terminal d
 
 ### Private Configuration
 
-Create `~/.zshrc.private` for machine-specific settings:
+Two untracked files hold machine-specific settings, both loaded automatically:
+
+`~/.zshrc.private` — shell settings:
 
 ```bash
-# ~/.zshrc.private
 export API_KEY="your-key"
 alias work="cd /path/to/work"
 ```
 
-This file is sourced automatically and won't be tracked by git.
+`~/.gitconfig.local` — git overrides (wins over the shared gitconfig):
+
+```ini
+[user]
+    email = work.email@company.com
+```
 
 ### Changing macOS Settings
 
