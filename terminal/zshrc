@@ -96,11 +96,11 @@ alias mnk=minikube
 alias gc=gcloud
 
 # macOS sleep control (needs sudo; check current state with sleepstatus)
-# nosleep:  stop the Mac sleeping entirely — even with the lid closed.
-#           Useful for long downloads/builds or serving while clamshelled.
-#           Applies to all power states (-a) and persists until undone.
-# yessleep: restore normal sleep behaviour (sleeps on lid close again).
-alias nosleep="sudo pmset -a disablesleep 1 && echo '☕Sleep disabled'"
+# nosleep:  keep the Mac awake — even with the lid closed — but ONLY while
+#           on AC power (-c). On battery it sleeps normally, so a closed
+#           laptop in a bag won't cook itself. Persists until yessleep.
+# yessleep: restore normal sleep behaviour on all power sources (-a).
+alias nosleep="sudo pmset -c disablesleep 1 && echo '☕ Sleep disabled while on AC power (battery behaviour unchanged)'"
 alias yessleep="sudo pmset -a disablesleep 0 && echo '💤 Sleep enabled'"
 
 # Misc
@@ -118,7 +118,7 @@ islidclosed() {
 sleepstatus() {
   val=$(pmset -g | awk '/SleepDisabled/ {print $2}')
   if [[ "$val" == "1" ]]; then
-    echo "☕ Sleep DISABLED — Mac stays awake when closed"
+    echo "☕ Sleep DISABLED — Mac stays awake even when lid closed"
   else
     echo "💤 Sleep ENABLED — default behavior (sleeps on lid close)"
   fi
