@@ -1,133 +1,108 @@
-# Suppress compinstall and compctl from system zsh initialization
-# Prevents interactive completion configuration wizard on startup
-# This is the ultimate guard against compinstall prompts everywhere
+# ~/.zshrc — managed in the dotfiles repo (terminal/zshrc)
+#
+#   1. Pre-init guards
+#   2. Homebrew prefix & fpath
+#   3. Oh-My-Zsh
+#   4. PATH
+#   5. Environment
+#   6. Aliases
+#   7. Functions
+#   8. Completions & tool hooks
+#   9. Private / machine-local
+#
+# Order matters: sections 1–2 must run before Oh-My-Zsh loads (it calls
+# compinit at load time), and completions register after compinit runs.
+
+# ═══ 1. Pre-init guards ═══
+
+# Suppress compinstall/compfix prompts from system zsh initialisation
 skip_global_compinit=1
 SKIP_COMPFIX=true
 ZSH_DISABLE_COMPFIX=true
 unsetopt promptcr
 
-# Load Alias Prompt
-source ~/.alias_prompt.sh
+# ═══ 2. Homebrew prefix & fpath ═══
 
-# Homebrew prefix (Apple Silicon or Intel)
-BREW_PREFIX="/opt/homebrew"
-[ -d "$BREW_PREFIX" ] || BREW_PREFIX="/usr/local"
+BREW_PREFIX="/opt/homebrew"                           # Apple Silicon
+[ -d "$BREW_PREFIX" ] || BREW_PREFIX="/usr/local"     # Intel
 
 # Keep fpath valid across brew zsh upgrades: an upgrade deletes the old
 # versioned Cellar function dir that running shells point at, breaking
 # compinit on re-source. The unversioned share path is stable, and must be
-# added BEFORE oh-my-zsh loads (it calls compinit at load time).
+# added BEFORE oh-my-zsh loads.
 [ -d "$BREW_PREFIX/share/zsh/functions" ] && fpath=($BREW_PREFIX/share/zsh/functions $fpath)
+[ -d "$BREW_PREFIX/share/zsh/site-functions" ] && fpath=($BREW_PREFIX/share/zsh/site-functions $fpath)
 [ -d "$BREW_PREFIX/share/zsh-completions" ] && fpath=($BREW_PREFIX/share/zsh-completions $fpath)
+[ -d "$HOME/.docker/completions" ] && fpath=($HOME/.docker/completions $fpath)
 
 # A shell that survived a zsh upgrade still holds function stubs tied to the
 # deleted files; drop them so they re-resolve from the current fpath when
 # this file is re-sourced. No-op in fresh shells (nothing loaded yet).
 unfunction compinit bashcompinit compdump compaudit 2>/dev/null
 
-# Path to your oh-my-zsh installation.
+# ═══ 3. Oh-My-Zsh ═══
+
+source ~/.alias_prompt.sh
+
 export ZSH=~/.oh-my-zsh
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
 ZSH_THEME="cobalt2"
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=30
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-ZSH_DISABLE_COMPFIX=true
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(git tmux brew npm macos aws gitignore golang mvn python sublime xcode z tmuxinator kubectl autojump dotenv)
-
-# User configuration
-
-# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-# export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+# Override cobalt2's user@host prompt segment
+prompt_context() {
+  prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
+}
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='nvim'
-# else
-#   export EDITOR='mvim'
-# fi
+# ═══ 4. PATH ═══
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+export PATH="$BREW_PREFIX/sbin:$PATH"
+export PATH="$BREW_PREFIX/bin:$PATH"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+# Antigravity CLI + IDE
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/.antigravity-ide/antigravity-ide/bin:$PATH"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# ═══ 5. Environment ═══
 
+export EDITOR='nvim'
+export VISUAL='nvim'
+export NVM_DIR="$HOME/.nvm"
+
+# ═══ 6. Aliases ═══
+
+# Terminal & multiplexing
 alias t='tmux'
 alias mux="tmuxinator"
-alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
+
+# Editors & dev tools
+alias v="nvim"
+alias y="yarn"
+alias python=python3
+
+# Update everything (brew, oh-my-zsh, neovim plugins)
 alias update="brew update; brew upgrade --yes; brew upgrade --cask --greedy --yes; brew cleanup; omz update; nvim +Lazy sync +qa"
 alias u=update
 alias vu="nvim +Lazy sync +qa"
-alias y="yarn"
-alias v="nvim"
-alias i="idea"
-alias weather='f() { curl wttr.in/$1. };f'
+
+# Git
+alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
+
+# Cloud & Kubernetes
 alias k=kubectl
-alias python=python3
 alias mnk=minikube
 alias gc=gcloud
+
+# macOS sleep control
 alias nosleep="sudo pmset -a disablesleep 1 && echo '☕Sleep disabled'"
 alias yessleep="sudo pmset -a disablesleep 0 && echo '💤 Sleep enabled'"
+
+# Misc
+alias weather='f() { curl wttr.in/$1. };f'
+
+# ═══ 7. Functions ═══
 
 # Check MacBook lid sleep status
 sleepstatus() {
@@ -139,38 +114,7 @@ sleepstatus() {
   fi
 }
 
-prompt_context() {
-  prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
-}
-
-# (Intel-era /usr/local exports removed — those keg paths don't exist on
-# Apple Silicon, and /usr/local/bin is already in the base PATH)
-export PATH="$BREW_PREFIX/sbin:$PATH"
-export PATH="$BREW_PREFIX/bin:$PATH"
-
-export EDITOR='nvim'
-export VISUAL='nvim'
-
-# Auto complete for kubernetes
-if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
-fi
-
-# Auto complete for git
-[[ -r "$BREW_PREFIX/etc/profile.d/bash_completion.sh" ]] && . "$BREW_PREFIX/etc/profile.d/bash_completion.sh"
-
-[ -f "$BREW_PREFIX/etc/profile.d/autojump.sh" ] && . "$BREW_PREFIX/etc/profile.d/autojump.sh"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$BREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$BREW_PREFIX/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-fi
-
-# Add Docker completions to fpath
-fpath=($HOME/.docker/completions $fpath)
+# ═══ 8. Completions & tool hooks ═══
 
 # Initialise completion system with caching: full rebuild if the dump is
 # missing or older than a day, otherwise trust the cache (-C, fast)
@@ -183,22 +127,26 @@ else
 fi
 unset _zcompdump
 
+
+# bash-style completions (used by nvm below)
+[[ -r "$BREW_PREFIX/etc/profile.d/bash_completion.sh" ]] && . "$BREW_PREFIX/etc/profile.d/bash_completion.sh"
+
+# autojump
+[ -f "$BREW_PREFIX/etc/profile.d/autojump.sh" ] && . "$BREW_PREFIX/etc/profile.d/autojump.sh"
+
+# nvm
+[ -s "$BREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$BREW_PREFIX/opt/nvm/nvm.sh"
+[ -s "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
+
+# fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# direnv
 eval "$(direnv hook zsh)"
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc' ]; then . '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'; fi
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc' ]; then . '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'; fi
+# ═══ 9. Private / machine-local (not tracked in git) ═══
 
-# Load private config files
 if [ -f ~/.zshrc.private ]; then
   source ~/.zshrc.private
 fi
-
-# Added by Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-
-# Added by Antigravity IDE
-export PATH="$HOME/.antigravity-ide/antigravity-ide/bin:$PATH"
