@@ -9,6 +9,22 @@ unsetopt promptcr
 # Load Alias Prompt
 source ~/.alias_prompt.sh
 
+# Homebrew prefix (Apple Silicon or Intel)
+BREW_PREFIX="/opt/homebrew"
+[ -d "$BREW_PREFIX" ] || BREW_PREFIX="/usr/local"
+
+# Keep fpath valid across brew zsh upgrades: an upgrade deletes the old
+# versioned Cellar function dir that running shells point at, breaking
+# compinit on re-source. The unversioned share path is stable, and must be
+# added BEFORE oh-my-zsh loads (it calls compinit at load time).
+[ -d "$BREW_PREFIX/share/zsh/functions" ] && fpath=($BREW_PREFIX/share/zsh/functions $fpath)
+[ -d "$BREW_PREFIX/share/zsh-completions" ] && fpath=($BREW_PREFIX/share/zsh-completions $fpath)
+
+# A shell that survived a zsh upgrade still holds function stubs tied to the
+# deleted files; drop them so they re-resolve from the current fpath when
+# this file is re-sourced. No-op in fresh shells (nothing loaded yet).
+unfunction compinit bashcompinit compdump compaudit 2>/dev/null
+
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -96,8 +112,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-fpath=(/usr/local/share/zsh-completions $fpath)
-
 alias t='tmux'
 alias mux="tmuxinator"
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
@@ -129,15 +143,10 @@ prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
 }
 
-export PATH="/usr/local/opt/helm@2/bin:$PATH"
-export PATH="/usr/local/opt/texinfo/bin:$PATH"
-export PATH="/usr/local/opt/curl/bin:$PATH"
-export PATH="/usr/local/opt/icu4c/bin:$PATH"
-export PATH="/usr/local/opt/icu4c/sbin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/bin:$PATH"
-export PATH="/opt/homebrew/sbin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH"
+# (Intel-era /usr/local exports removed — those keg paths don't exist on
+# Apple Silicon, and /usr/local/bin is already in the base PATH)
+export PATH="$BREW_PREFIX/sbin:$PATH"
+export PATH="$BREW_PREFIX/bin:$PATH"
 
 export EDITOR='nvim'
 export VISUAL='nvim'
@@ -147,11 +156,14 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+# Auto complete for git
+[[ -r "$BREW_PREFIX/etc/profile.d/bash_completion.sh" ]] && . "$BREW_PREFIX/etc/profile.d/bash_completion.sh"
+
+[ -f "$BREW_PREFIX/etc/profile.d/autojump.sh" ] && . "$BREW_PREFIX/etc/profile.d/autojump.sh"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+[ -s "$BREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$BREW_PREFIX/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
@@ -160,17 +172,19 @@ fi
 # Add Docker completions to fpath
 fpath=($HOME/.docker/completions $fpath)
 
-# Initialise completion system with caching
+# Initialise completion system with caching: full rebuild if the dump is
+# missing or older than a day, otherwise trust the cache (-C, fast)
 autoload -Uz compinit
-if [[ -n ${ZDOTDIR}/.zcompdump(#qNmh+24) ]]; then
+_zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+if [ ! -f "$_zcompdump" ] || [ -n "$(find "$_zcompdump" -mtime +0 2>/dev/null)" ]; then
   compinit
 else
   compinit -C
 fi
+unset _zcompdump
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(direnv hook zsh)"
-export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.1/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc' ]; then . '/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'; fi
