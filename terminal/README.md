@@ -123,6 +123,72 @@ To remove permanently, delete the line from `zshrc` and reload the shell.
 alias
 ```
 
+## Keyboard Shortcuts
+
+Zsh line editing runs in **emacs mode**. Generated from the live bindings
+(`bindkey`), so this reflects what the keys actually do. `Option` requires
+iTerm2's "Left Option key: Esc+" profile setting (`Esc` then the key works
+everywhere). See the tmux part below for the tmux master sheet.
+
+### Fuzzy finding (fzf)
+
+| Keys | Action |
+|---|---|
+| `Ctrl+R` | Fuzzy-search command history |
+| `Ctrl+T` | Fuzzy-find files/dirs, insert selection at cursor |
+| `Option+C` | Fuzzy-pick a directory and cd into it |
+| `**<Tab>` | Fuzzy completion (e.g. `nvim **<Tab>`, `cd **<Tab>`) |
+
+### History
+
+| Keys | Action |
+|---|---|
+| `↑` / `↓` | Search history filtered by what you've typed so far |
+| `Option+.` | Insert the last argument of the previous command (repeat to go older) |
+| `Option+P` / `Option+N` | Previous / next command starting with the same first word |
+| `Ctrl+O` | Run this line, then queue the next line from history |
+| `Option+A` | Run this line but keep it on the prompt (for reruns with tweaks) |
+| `Space` | Expands history references inline (`!!`, `!$`, …) |
+
+### Moving around the line
+
+| Keys | Action |
+|---|---|
+| `Ctrl+A` / `Ctrl+E` | Start / end of line |
+| `Option+←/→` (or `Option+B/F`) | Back / forward one word |
+| `Ctrl+X Ctrl+X` | Jump between cursor and mark |
+
+### Editing
+
+| Keys | Action |
+|---|---|
+| `Ctrl+W` / `Option+D` | Delete word before / after cursor |
+| `Ctrl+U` | Delete the whole line |
+| `Ctrl+K` | Delete to end of line |
+| `Ctrl+Y`, then `Option+Y` | Paste deleted text back; cycle older deletions |
+| `Ctrl+_` | Undo |
+| `Option+T` | Transpose words |
+| `Option+U` | UPPERCASE word |
+| `Ctrl+X Ctrl+E` | **Edit the command line in nvim** — great for long commands |
+| `Ctrl+Q` (or `Option+Q`) | Stash the line, type another command, stashed line returns |
+
+### Completion
+
+| Keys | Action |
+|---|---|
+| `Tab` | Complete (fzf-aware) |
+| `Shift+Tab` | Cycle completion menu backwards |
+| `Ctrl+X a` | Expand an alias in place (see what `u` really runs) |
+| `Option+H` | Open the man page for the command you're typing |
+
+### Fun ones
+
+| Keys | Action |
+|---|---|
+| `Option+L` | Run `ls` without losing what you've typed |
+| `F2 F2` | Toggle `npm install` ⇄ `npm uninstall` on the current line *(omz npm plugin)* |
+| `Ctrl+L` | Clear screen (`Ctrl+K` in tmux also wipes scrollback) |
+
 ## Oh-My-Zsh Plugins
 
 Enabled plugins provide additional aliases:
@@ -268,89 +334,133 @@ tmux list-sessions
 
 - ✅ Optimised keybindings for productivity
 - ✅ Mouse support for pane selection
-- ✅ Seamless pane navigation (with vim-tmux-navigator)
+- ✅ Vim-style pane navigation (pain-control)
 - ✅ Vi-like keybindings for copy mode
-- ✅ Custom status bar
+- ✅ Manual session save/restore (resurrect)
+- ✅ Custom status bar with CPU and battery
 - ✅ Plugin support (via tpm)
 
-## Core Keybindings
+## Keyboard Shortcuts
 
-### Session Management
-```bash
-tmux new-session -s name      # Create new session
-tmux list-sessions            # List all sessions
-tmux attach-session -t name   # Attach to session
-tmux kill-session -t name     # Kill session
-```
+**The prefix is `Ctrl+f`** (not tmux's default `Ctrl+b`). Every binding below
+written as `C-f x` means: press `Ctrl+f`, release, then press `x`. This
+reference was generated from the live server (`tmux list-keys`) with all
+plugins loaded, so it reflects what the keys actually do — including plugin
+overrides. `C-f ?` shows the searchable list inside tmux.
 
-### Window Management
-```bash
-Prefix + c                    # Create new window
-Prefix + n                    # Next window
-Prefix + p                    # Previous window
-Prefix + w                    # List windows
-Prefix + &                    # Kill window
-Prefix + ,                    # Rename window
-```
+### Sessions
 
-### Pane Management
-```bash
-Prefix + %                    # Split pane vertically
-Prefix + "                    # Split pane horizontally
-Prefix + arrow keys           # Navigate panes
-Prefix + x                    # Kill pane
-Prefix + z                    # Zoom pane (toggle)
-```
+| Keys | Action |
+|---|---|
+| `C-f s` | Choose session from a tree (also shows windows) |
+| `C-f $` | Rename current session |
+| `C-f (` / `C-f )` | Previous / next session |
+| `C-f d` | Detach from session |
+| `C-f D` | Choose a client to detach |
 
-### Copy Mode
-```bash
-Prefix + [                    # Enter copy mode
-j/k                           # Move down/up
-w/b                           # Move forward/backward word
-/                             # Search forward
-?                             # Search backward
-Space                         # Start selection
-Enter                         # Copy selection
-Prefix + ]                    # Paste
-```
+### Save & restore (tmux-resurrect — manual only)
 
-## Prefix Key
+| Keys | Action |
+|---|---|
+| `C-f C-s` | **Save** snapshot of all sessions/windows/panes (and vim sessions, per `@resurrect-strategy-vim`) into `~/.tmux/resurrect/` |
+| `C-f C-r` | **Restore** the latest snapshot (e.g. after a reboot) |
 
-Default prefix: `Ctrl + b`
+### Windows
 
-To customise, edit `tmux.conf`:
-```bash
-unbind C-b
-set-option -g prefix C-a
-bind-key C-a send-prefix
-```
+| Keys | Action |
+|---|---|
+| `C-f c` | New window (keeps current directory) |
+| `C-f u` / `C-f o` | Previous / next window *(custom)* |
+| `C-f n` / `C-f C-p` | Next / previous window |
+| `C-f 1`…`9` | Jump to window by number (numbering starts at 1) |
+| `C-f w` | Choose window from a tree |
+| `C-f ,` | Rename window |
+| `C-f &` | Kill window (confirms) |
+| `C-f <` / `C-f >` | Move window left / right (repeatable) |
+| `C-f f` | Find window by name |
+| `C-f .` | Move window to another index |
 
-## Mouse Support
+### Panes — create & destroy
 
-Mouse support is enabled:
-- Click to select pane
-- Scroll to navigate in copy mode
-- Click and drag to select text
+| Keys | Action |
+|---|---|
+| `C-f \|` or `C-f %` | Split vertically (keeps current directory) |
+| `C-f -` or `C-f "` | Split horizontally (keeps current directory) |
+| `C-f \` | Full-width vertical split |
+| `C-f _` | Full-height horizontal split |
+| `C-f x` | Kill pane (confirms) |
+| `C-f !` | Break pane out into its own window |
 
-Toggle mouse:
-```bash
-# Inside tmux
-Prefix + m                    # Toggle mouse on/off
-```
+### Panes — navigate & arrange
 
-## Integration with Vim/Neovim
+| Keys | Action |
+|---|---|
+| `C-f h/j/k/l` (or `C-h/j/k/l`, or arrows) | Move between panes vim-style |
+| `C-f ;` | Jump to last-used pane |
+| `C-f H/J/K/L` | Resize by 2 cells (repeatable — keep tapping) |
+| `C-f M-arrows` | Resize by 5 cells |
+| `C-f z` | Zoom / unzoom pane |
+| `C-f {` / `C-f }` | Swap pane up / down |
+| `C-f C-o` / `C-f M-o` | Rotate all panes forward / backward |
+| `C-f q` | Show pane numbers (press number to jump) |
+| `C-f Space` / `C-f M-1`…`M-7` | Cycle / pick pane layouts |
+| `C-f E` | Even out pane sizes |
+| `C-f C-a` | Toggle typing into ALL panes at once |
+| `C-f m` | Mark pane (`C-f M` clears) |
 
-Navigate between tmux panes and vim splits seamlessly with vim-tmux-navigator plugin.
+### Copy mode & clipboard (vi keys)
 
-**From tmux pane to vim:**
-```bash
-Ctrl + h/j/k/l               # Navigate left/down/up/right
-```
+| Keys | Action |
+|---|---|
+| `C-f Escape` or `C-f [` | Enter copy mode |
+| `h/j/k/l`, `w/b`, `0/$`, `g/G` | Move vim-style (word, line, top/bottom) |
+| `C-u` / `C-d` | Half-page up / down |
+| `/` / `?` then `n/N` | Search down / up, jump between matches |
+| `v` | Start selection (`V` toggles rectangle) |
+| `y` | Copy selection to the macOS clipboard, exit copy mode |
+| `o` | Open selection (file/URL) with the default app *(tmux-open)* |
+| `C-o` | Open selection in nvim *(tmux-open)* |
+| `q` or `Escape` | Exit copy mode |
+| `C-f p` or `C-f ]` | Paste |
+| `C-f =` / `C-f #` | Choose / list paste buffers |
+| `C-f y` | Copy the shell command line you're typing *(tmux-yank)* |
+| `C-f Y` | Copy the pane's working directory *(tmux-yank)* |
 
-**From vim to tmux pane:**
-```bash
-Ctrl + h/j/k/l               # Navigate left/down/up/right
-```
+### Search the screen (tmux-copycat)
+
+Results are highlighted; `n`/`N` jump between matches, `Enter` copies one.
+
+| Keys | Action |
+|---|---|
+| `C-f /` | Prompt for a regex search |
+| `C-f C-u` | Search URLs |
+| `C-f C-f` | Search file paths |
+| `C-f C-d` | Search numbers |
+| `C-f C-g` | Search git-status files |
+| `C-f M-h` | Search git SHAs |
+| `C-f M-i` | Search IP addresses |
+
+### No prefix needed
+
+| Keys | Action |
+|---|---|
+| `C-k` | Clear screen **and** scrollback history |
+| Mouse drag | Select text (copies to clipboard on release) |
+| Mouse wheel | Scroll (enters copy mode automatically) |
+| Right-click | Context menus on panes, windows, status bar |
+| Drag pane border | Resize panes |
+
+### Config & plugins
+
+| Keys | Action |
+|---|---|
+| `C-f r` (or `C-f R`) | Reload tmux.conf |
+| `C-f I` | Install plugins listed in tmux.conf *(tpm)* |
+| `C-f U` | Update plugins *(tpm)* |
+| `C-f M-u` | Remove plugins no longer listed *(tpm)* |
+| `C-f ?` | Searchable list of every binding |
+| `C-f :` | tmux command prompt |
+| `C-f t` | Clock 🕐 |
 
 ## Status Bar
 
@@ -418,11 +528,15 @@ tmux supports plugins via tpm (tmux plugin manager).
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
-### Popular Plugins
-- `tmux-plugins/tmux-resurrect` - Restore tmux sessions
-- `tmux-plugins/tmux-continuum` - Continuous session saving
+### Installed Plugins
+- `tmux-plugins/tpm` - Plugin manager
 - `tmux-plugins/tmux-sensible` - Sensible defaults
-- `christoomey/vim-tmux-navigator` - Seamless vim/tmux navigation
+- `tmux-plugins/tmux-resurrect` - Manual session save/restore (`C-f C-s` / `C-f C-r`)
+- `tmux-plugins/tmux-yank` - Copy to the macOS clipboard
+- `tmux-plugins/tmux-copycat` - Regex/URL/file searches
+- `tmux-plugins/tmux-open` - Open highlighted files/URLs
+- `tmux-plugins/tmux-pain-control` - Standard pane bindings
+- `tmux-plugins/tmux-cpu` + `tmux-battery` - Status line info
 
 ### Add Plugin to Config
 ```bash
@@ -457,12 +571,11 @@ cat ~/.tmux.conf | grep "bind"
 
 ### Pane navigation not working
 ```bash
-# Ensure vim-tmux-navigator is installed
-# Check tmux version (2.3+ required for some features)
+# Check tmux version
 tmux -V
 
-# Test basic navigation
-Prefix + hjkl
+# List the actual live bindings
+tmux list-keys -T prefix
 ```
 
 ### Colors not displaying correctly
@@ -512,5 +625,4 @@ For full dotfiles installation, see the **[root README](../README.md)**.
 - [Zsh Plugins](https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins)
 - [tmux Manual](http://man.openbsd.org/tmux)
 - [tmux Plugin Manager](https://github.com/tmux-plugins/tpm)
-- [Vim Tmux Navigator](https://github.com/christoomey/vim-tmux-navigator)
 - [tmux Cheat Sheet](https://cheatsheets.quartermaster.me/tmux.html)
