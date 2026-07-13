@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+# macOS system preferences — run via install.sh or directly: bash mac/macos.sh
+#
+#   1. General UI & system
+#   2. Finder
+#   3. Dock
+#   4. Keyboard & input
+#   5. Trackpad
+#   6. Safari & Mail (mostly disabled — see note)
+#   7. Apply (restart affected apps)
+#
+# Commented-out settings are kept on purpose: they're the menu of options —
+# uncomment to enable. See mac/README.md for what each setting does.
+
 # Best-effort: a single failed `defaults write` (e.g. a TCC-protected domain)
 # must not abort the whole installer. Errors are surfaced inline.
 set +e
@@ -7,93 +20,50 @@ set +e
 echo -e "\\n\\nSetting MacOS settings"
 echo "=============================="
 
-# echo "Finder: show all filename extensions"
-# defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+# ═══ 1. General UI & system ═══
 
-echo "show hidden files by default"
-defaults write com.apple.Finder AppleShowAllFiles -bool false
-
-echo "expand save dialog by default"
+echo "Expand save dialog by default"
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 
-# echo "show the ~/Library folder in Finder"
-# chflags nohidden ~/Library
-
-echo "Enable full keyboard access for all controls (e.g. enable Tab in modal dialogs)"
+echo "Enable full keyboard access for all controls (e.g. Tab in modal dialogs)"
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
 echo "Enable subpixel font rendering on non-Apple LCDs"
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
 
-# echo "Enable the 2D Dock"
-# defaults write com.apple.dock no-glass -bool true
-
-echo "Automatically hide and show the Dock"
-defaults write com.apple.dock autohide -bool true
-
-echo "Position the Dock on the right side of the screen"
-defaults write com.apple.dock orientation -string "right"
-
-# echo "Make Dock icons of hidden applications translucent"
-# defaults write com.apple.dock showhidden -bool true
-
-# echo "Always show scrollbars"
-# defaults write NSGlobalDomain AppleShowScrollBars -string "Auto"
-
-# echo "Allow quitting Finder via ⌘ + Q; doing so will also hide desktop icons"
-# defaults write com.apple.finder QuitMenuItem -bool true
-
-# echo "Disable window animations and Get Info animations in Finder"
-# defaults write com.apple.finder DisableAllAnimations -bool true
-
-echo "Use current directory as default search scope in Finder"
-defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
-
-echo "Show Path bar in Finder"
-defaults write com.apple.finder ShowPathbar -bool false
-
-echo "Show Status bar in Finder"
-defaults write com.apple.finder ShowStatusBar -bool false
+echo "Disable the 'Are you sure you want to open this application?' dialog"
+defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # echo "Expand print panel by default"
 # defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
 
-echo "Disable the "Are you sure you want to open this application?" dialog"
-defaults write com.apple.LaunchServices LSQuarantine -bool false
+# echo "Always show scrollbars"
+# defaults write NSGlobalDomain AppleShowScrollBars -string "Auto"
 
-# echo "Disable shadow in screenshots"
-# defaults write com.apple.screencapture disable-shadow -bool true
+# echo "Disable opening and closing window animations"
+# defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 
-# echo "Enable highlight hover effect for the grid view of a stack (Dock)"
-# defaults write com.apple.dock mouse-over-hilte-stack -bool true
-
-# echo "Enable spring loading for all Dock items"
-# defaults write enable-spring-load-actions-on-all-items -bool true
-
-# echo "Show indicator lights for open applications in the Dock"
-# defaults write com.apple.dock show-process-indicators -bool true
-
-# echo "Don't animate opening applications from the Dock"
-# defaults write com.apple.dock launchanim -bool false
+# echo "Increase window resize speed for Cocoa applications"
+# defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 # echo "Display ASCII control characters using caret notation in standard text views"
 # Try e.g. `cd /tmp; unidecode "\x{0000}" > cc.txt; open -e cc.txt`
 # defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
 
-echo "Disable press-and-hold for keys in favor of key repeat"
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# echo "Disable Resume system-wide"
+# defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
 
-echo "Set a blazingly fast keyboard repeat rate"
-defaults write NSGlobalDomain KeyRepeat -int 1
+# echo "Disable the 'reopen windows when logging back in' option"
+# This works, although the checkbox will still appear to be checked.
+# defaults write com.apple.loginwindow TALLogoutSavesState -bool false
+# defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool false
 
-echo "Set a shorter Delay until key repeat"
-defaults write NSGlobalDomain InitialKeyRepeat -int 15
+# echo "Require password immediately after sleep or screen saver begins"
+# defaults write com.apple.screensaver askForPassword -int 1
+# defaults write com.apple.screensaver askForPasswordDelay -int 0
 
-# echo "Disable auto-correct"
-# defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-
-# echo "Disable opening and closing window animations"
-# defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+# echo "Disable shadow in screenshots"
+# defaults write com.apple.screencapture disable-shadow -bool true
 
 # echo "Disable disk image verification"
 # defaults write com.apple.frameworks.diskimages skip-verify -bool true
@@ -105,11 +75,34 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 # defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
 # defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
 
+# ═══ 2. Finder ═══
+
+echo "Hide hidden files by default (toggle in Finder with Cmd+Shift+.)"
+defaults write com.apple.Finder AppleShowAllFiles -bool false
+
+echo "Use current directory as default search scope in Finder"
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+echo "Hide the Path bar in Finder"
+defaults write com.apple.finder ShowPathbar -bool false
+
+echo "Hide the Status bar in Finder"
+defaults write com.apple.finder ShowStatusBar -bool false
+
+# echo "Finder: show all filename extensions"
+# defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# echo "show the ~/Library folder in Finder"
+# chflags nohidden ~/Library
+
+# echo "Allow quitting Finder via ⌘ + Q; doing so will also hide desktop icons"
+# defaults write com.apple.finder QuitMenuItem -bool true
+
+# echo "Disable window animations and Get Info animations in Finder"
+# defaults write com.apple.finder DisableAllAnimations -bool true
+
 # echo "Display full POSIX path as Finder window title"
 # defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
-
-# echo "Increase window resize speed for Cocoa applications"
-# defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 # echo "Avoid creating .DS_Store files on network volumes"
 # defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
@@ -129,9 +122,47 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 # echo "Empty Trash securely by default"
 # defaults write com.apple.finder EmptyTrashSecurely -bool true
 
-# echo "Require password immediately after sleep or screen saver begins"
-# defaults write com.apple.screensaver askForPassword -int 1
-# defaults write com.apple.screensaver askForPasswordDelay -int 0
+# ═══ 3. Dock ═══
+
+echo "Automatically hide and show the Dock"
+defaults write com.apple.dock autohide -bool true
+
+echo "Position the Dock on the right side of the screen"
+defaults write com.apple.dock orientation -string "right"
+
+# echo "Enable the 2D Dock"
+# defaults write com.apple.dock no-glass -bool true
+
+# echo "Make Dock icons of hidden applications translucent"
+# defaults write com.apple.dock showhidden -bool true
+
+# echo "Enable highlight hover effect for the grid view of a stack (Dock)"
+# defaults write com.apple.dock mouse-over-hilte-stack -bool true
+
+# echo "Enable spring loading for all Dock items"
+# defaults write enable-spring-load-actions-on-all-items -bool true
+
+# echo "Show indicator lights for open applications in the Dock"
+# defaults write com.apple.dock show-process-indicators -bool true
+
+# echo "Don't animate opening applications from the Dock"
+# defaults write com.apple.dock launchanim -bool false
+
+# ═══ 4. Keyboard & input ═══
+
+echo "Disable press-and-hold for keys in favor of key repeat"
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+echo "Set a blazingly fast keyboard repeat rate"
+defaults write NSGlobalDomain KeyRepeat -int 1
+
+echo "Set a shorter Delay until key repeat"
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
+# echo "Disable auto-correct"
+# defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+# ═══ 5. Trackpad ═══
 
 echo "Enable tap to click (Trackpad)"
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
@@ -140,13 +171,15 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 # defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
 # defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
 
-# echo "Disable Safari's thumbnail cache for History and Top Sites"
-# defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
+# ═══ 6. Safari & Mail ═══
 
 # Safari tweaks removed: Safari preferences are TCC-protected and need the
 # terminal to have Full Disk Access — two cosmetic settings (internal debug
 # menu, bookmarks bar icons) are not worth that grant. Set them manually in
 # Safari's own settings if wanted.
+
+# echo "Disable Safari's thumbnail cache for History and Top Sites"
+# defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
 
 # echo "Make Safari's search banners default to Contains instead of Starts With"
 # defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
@@ -158,16 +191,9 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 # defaults write com.apple.Mail DisableReplyAnimations -bool true
 # defaults write com.apple.Mail DisableSendAnimations -bool true
 
-# echo "Disable Resume system-wide"
-# defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
-
-# echo "Disable the "reopen windows when logging back in" option"
-# This works, although the checkbox will still appear to be checked.
-# defaults write com.apple.loginwindow TALLogoutSavesState -bool false
-# defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool false
-
+# ═══ 7. Apply ═══
 
 echo "Kill affected applications"
-for app in Finder Dock Mail SystemUIServer; do 
+for app in Finder Dock Mail SystemUIServer; do
     pkill -f "$app" >/dev/null 2>&1 || true
 done

@@ -95,7 +95,11 @@ alias k=kubectl
 alias mnk=minikube
 alias gc=gcloud
 
-# macOS sleep control
+# macOS sleep control (needs sudo; check current state with sleepstatus)
+# nosleep:  stop the Mac sleeping entirely — even with the lid closed.
+#           Useful for long downloads/builds or serving while clamshelled.
+#           Applies to all power states (-a) and persists until undone.
+# yessleep: restore normal sleep behaviour (sleeps on lid close again).
 alias nosleep="sudo pmset -a disablesleep 1 && echo '☕Sleep disabled'"
 alias yessleep="sudo pmset -a disablesleep 0 && echo '💤 Sleep enabled'"
 
@@ -103,6 +107,12 @@ alias yessleep="sudo pmset -a disablesleep 0 && echo '💤 Sleep enabled'"
 alias weather='f() { curl wttr.in/$1. };f'
 
 # ═══ 7. Functions ═══
+
+# Is the MacBook lid closed? Prints "Yes" or "No" — handy over SSH or in
+# scripts to check the laptop's physical state (clamshell mode).
+islidclosed() {
+  ioreg -r -k AppleClamshellState | awk '/AppleClamshellState/ {print $NF}'
+}
 
 # Check MacBook lid sleep status
 sleepstatus() {
