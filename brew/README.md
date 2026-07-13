@@ -79,14 +79,14 @@ brew list --cask
 | Build tools | `make`, `cmake`, `gcc`, `gradle`, `maven`, `openjdk`, `protobuf`, `buf`, `pkgconf` |
 | DevOps & cloud | `docker`, `docker-compose`, `kubernetes-cli` (kubectl), `kind`, `minikube`, `kops`, `kubectx`, `kustomize`, `helm`, `skaffold`, `stern`, `k6`, `lazydocker` |
 | Git & GitHub | `git`, `git-lfs`, `gh`, `lazygit`, `tig`, `gnupg` |
-| System & terminal | `tmux`, `reattach-to-user-namespace`, `htop`, `btop`, `coreutils`, `zsh`, `zsh-completions`, `zsh-syntax-highlighting`, `direnv`, `entr`, `watchman`, `shellcheck` |
-| Networking | `curl`, `wget`, `nmap`, `mosh` |
+| System & terminal | `tmux`, `reattach-to-user-namespace`, `htop`, `btop`, `coreutils`, `zsh`, `zsh-completions`, `zsh-syntax-highlighting`, `bash-completion@2`, `direnv`, `entr`, `watchman`, `shellcheck` |
+| Networking | `curl`, `wget`, `nmap`, `mosh`, `tailscale` |
 | Documentation & media | `pandoc`, `markdown`, `tesseract` (OCR), `graphviz`, `cloc`, `figlet`, `cmatrix` |
 | Productivity helpers | `cheat`, `navi`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
 
 ### Casks (GUI applications)
 
-`visual-studio-code`, `iterm2`, `google-chrome`, `slack`, `claude` (Claude desktop), `claude-code` (CLI), `google-gemini`, `antigravity-cli`/`antigravity-ide`, `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and Powerline-patched fonts (`font-fira-code`, `font-cascadia-mono`, `font-3270-nerd-font`).
+`visual-studio-code`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `claude` (Claude desktop), `claude-code` (CLI), `google-gemini`, `antigravity-cli`/`antigravity-ide`, `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and Powerline-patched fonts (`font-fira-code`, `font-cascadia-mono`, `font-3270-nerd-font`).
 
 > Corporate security agents (CrowdStrike Falcon, Workspace ONE Hub) are deliberately not managed by brew — they belong to device management.
 
