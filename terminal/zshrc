@@ -49,9 +49,27 @@ plugins=(git tmux brew npm macos gitignore golang mvn python xcode z tmuxinator 
 
 source $ZSH/oh-my-zsh.sh
 
-# Override cobalt2's user@host prompt segment
+# Override cobalt2's prompt segments with greyscale levels (matches
+# lualine's gruvbox greys), darker to lighter left-to-right: darkest user
+# wedge, dark grey directory, light grey git segment. Colours are
+# 256-palette indices: 246 ≈ #949494, 239 ≈ #4e4e4e, 237 ≈ #3a3a3a,
+# 235 ≈ #262626, 250 ≈ #bcbcbc.
 prompt_context() {
-  prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
+  prompt_segment 237 250 "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
+}
+prompt_dir() {
+  prompt_segment 239 250 '%3~'
+}
+prompt_git() {
+  local ref dirty
+  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+    ZSH_THEME_GIT_PROMPT_DIRTY='±'
+    dirty=$(parse_git_dirty)
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
+    prompt_segment 246 235
+    #  = powerline branch glyph, as in stock cobalt2 (± marks local changes)
+    echo -n "${ref/refs\/heads\// }$dirty"
+  fi
 }
 
 # Alias reminder (Enter-key widget). Must load AFTER oh-my-zsh: omz forces
