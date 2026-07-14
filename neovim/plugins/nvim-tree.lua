@@ -31,36 +31,15 @@ require("nvim-tree").setup({
       git_placement = "before",
       padding = " ",
       symlink_arrow = " ➛ ",
+      -- No custom glyphs: nvim-tree's defaults are nerd-font icons and
+      -- per-filetype file icons come from nvim-web-devicons — the
+      -- terminal font must be a Nerd Font for these to render
       show = {
         file = true,
         folder = true,
         folder_arrow = true,
         git = true,
       },
-        glyphs = {
-          default = "📄",
-          symlink = "🔗",
-          bookmark = "🔖",
-          folder = {
-            arrow_closed = "▶",
-            arrow_open = "▼",
-            default = "📁",
-            open = "📂",
-            empty = "📁",
-            empty_open = "📂",
-            symlink = "🔗",
-            symlink_open = "🔗",
-          },
-          git = {
-            unstaged = "✗",
-            staged = "✓",
-            unmerged = "⚠",
-            renamed = "➜",
-            untracked = "★",
-            deleted = "✖",
-            ignored = "◌",
-          },
-        },
     },
   },
   sync_root_with_cwd = true,

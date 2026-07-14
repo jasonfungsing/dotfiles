@@ -74,7 +74,8 @@ The leader key is `,`. A few highlights:
 
 | Key | Action |
 |-----|--------|
-| `F1` | **Live shortcut sheet** — full which-key view of every keymap (drill into prefixes) |
+| `Ctrl+/` | **Searchable shortcut sheet** — fuzzy-search every keymap (Telescope); Enter executes the selection |
+| `F1` | Which-key view of every keymap (drill into prefixes) |
 | `,ne` | Toggle file tree (nvim-tree) |
 | `,n<Space>` | Reveal current file in tree |
 | `,t` | Toggle code outline (Aerial, LSP symbols) |

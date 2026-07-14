@@ -17,77 +17,13 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim with all plugins
 require("lazy").setup({
-  -- Icons for file types (must load before nvim-tree)
+  -- Icons for file types (must load before nvim-tree). Stock devicons =
+  -- VSCode-style per-filetype nerd-font glyphs with colors; needs the
+  -- terminal to use a Nerd Font to render
   {
     "nvim-tree/nvim-web-devicons",
     lazy = false,
-    config = function()
-      require("nvim-web-devicons").setup({
-        override = {
-          js = {
-            icon = "📜",
-            color = "#cbcb41",
-            name = "Js"
-          },
-          md = {
-            icon = "📝",
-            color = "#519aba",
-            name = "Md"
-          },
-          lua = {
-            icon = "🌙",
-            color = "#51a0cf",
-            name = "Lua"
-          },
-          py = {
-            icon = "🐍",
-            color = "#4584b6",
-            name = "Py"
-          },
-          go = {
-            icon = "🐹",
-            color = "#519aba",
-            name = "Go"
-          },
-          json = {
-            icon = "📋",
-            color = "#cbcb41",
-            name = "Json"
-          },
-          sh = {
-            icon = "🐚",
-            color = "#4d5a5e",
-            name = "Sh"
-          }
-        },
-        default = true,
-        strict = true,
-        override_by_filename = {
-          [".gitignore"] = {
-            icon = "🚫",
-            color = "#f1502f",
-            name = "Gitignore"
-          },
-          ["README.md"] = {
-            icon = "📖",
-            color = "#519aba",
-            name = "Readme"
-          },
-          ["Dockerfile"] = {
-            icon = "🐳",
-            color = "#458ee6",
-            name = "Dockerfile"
-          }
-        },
-        override_by_extension = {
-          ["log"] = {
-            icon = "📄",
-            color = "#81e043",
-            name = "Log"
-          }
-        }
-      })
-    end,
+    opts = { default = true },
   },
 
   -- File navigation
@@ -408,13 +344,19 @@ require("lazy").setup({
       { "<C-l>", "<cmd>TmuxNavigateRight<cr>", desc = "Window/pane right" },
     },
   },
-  -- Jump anywhere on screen: ,,w (words forward), ,,b (back), ,,s (char)
-  { "easymotion/vim-easymotion", event = "VeryLazy" },
-
   -- Fuzzy finder for files, buffers, and keybindings
   {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
+    keys = {
+      -- Ctrl+/ (arrives as <C-_> in most terminals, <C-/> in newer ones):
+      -- searchable sheet of every keymap; Enter executes the selection —
+      -- the nvim sibling of the zsh Ctrl+/ shortcut sheet. The custom
+      -- picker (defined in plugins/telescope.lua) shows two clean columns:
+      -- key + description, normal mode only, no <Plug> mappings
+      { "<C-_>", function() _G.Telescope_shortcut_sheet() end, desc = "Searchable shortcut sheet" },
+      { "<C-/>", function() _G.Telescope_shortcut_sheet() end, desc = "Searchable shortcut sheet" },
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
@@ -448,9 +390,6 @@ require("lazy").setup({
     event = "VeryLazy",
     keys = {
       { "<F1>", "<cmd>WhichKey<cr>", desc = "Shortcut sheet (drill into prefixes)" },
-      -- Ctrl+/ arrives as <C-_> in most terminals, <C-/> in newer ones
-      { "<C-_>", "<cmd>WhichKey<cr>", desc = "Shortcut sheet" },
-      { "<C-/>", "<cmd>WhichKey<cr>", desc = "Shortcut sheet" },
     },
     config = function()
       require("plugins.which-key")

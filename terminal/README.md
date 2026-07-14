@@ -144,7 +144,7 @@ README used to duplicate them in tables, which drifted):
 |---|---|---|
 | zsh prompt (incl. inside tmux) | `Ctrl+/` or `F1` | Searchable sheet: tmux keys (with descriptions), aliases, functions, zsh bindings |
 | tmux | `C-f ?` | Searchable popup of the tmux bindings |
-| Neovim | `F1` | which-key view of every keymap (drill into prefixes) |
+| Neovim | `Ctrl+/` or `F1` | Searchable keymap sheet (Telescope, Enter executes) / which-key drill-down |
 
 Sheet controls: type to filter (exact substring), `Tab` / `Shift + Tab` to
 move, `Enter` runs a tmux/zsh line or puts an alias/function on the prompt,
