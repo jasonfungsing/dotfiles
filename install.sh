@@ -312,6 +312,7 @@ install_shell_dotfiles() {
     log "Linking shell dotfiles..."
     link_file "$REPO_DIR/terminal/zshrc" "$HOME/.zshrc"
     link_file "$REPO_DIR/terminal/alias_prompt.sh" "$HOME/.alias_prompt.sh"
+    link_file "$REPO_DIR/terminal/shortcut-sheet.zsh" "$HOME/.shortcut-sheet.zsh"
     return 0
 }
 
@@ -945,6 +946,7 @@ run_validation() {
 
     v_check_symlink "$HOME/.zshrc" "$REPO_DIR/terminal/zshrc"
     v_check_symlink "$HOME/.alias_prompt.sh" "$REPO_DIR/terminal/alias_prompt.sh"
+    v_check_symlink "$HOME/.shortcut-sheet.zsh" "$REPO_DIR/terminal/shortcut-sheet.zsh"
     v_check_symlink "$HOME/.tmux.conf" "$REPO_DIR/terminal/tmux.conf"
     v_check_symlink "$HOME/.gitconfig" "$REPO_DIR/git/gitconfig"
     v_check_symlink "$HOME/.hushlogin" "$REPO_DIR/mac/hushlogin"

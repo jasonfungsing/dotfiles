@@ -6,6 +6,7 @@ Zsh shell configuration (aliases, theme, plugins) and tmux terminal multiplexer.
 
 - **`zshrc`** - Main Zsh configuration
 - **`alias_prompt.sh`** - Enter-key widget that reminds you when a command has an alias
+- **`shortcut-sheet.zsh`** - The dynamic shortcut sheet widget (`Ctrl+/` / `F1`)
 - **`cobalt2.zsh-theme`** - Custom Zsh theme (Cobalt2)
 - **`tmux.conf`** - tmux configuration and keybindings
 
