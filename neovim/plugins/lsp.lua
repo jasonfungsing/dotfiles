@@ -4,40 +4,32 @@
 -- Setup LSP capabilities for nvim-cmp
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- LSP keymaps (applied when LSP attaches to buffer)
+-- LSP keymaps (applied when LSP attaches to buffer). Only maps that don't
+-- shadow global keys: formatting is conform's <leader>mp, the diagnostic
+-- float is <leader>xf, and K / [d / ]d / grn / gra / grr / gri are nvim
+-- built-in defaults. <C-k> stays free for window navigation.
 local on_attach = function(client, bufnr)
-  local opts = { buffer = bufnr, silent = true }
-  
+  local function map(lhs, rhs, desc)
+    vim.keymap.set("n", lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
+  end
+
   -- LSP navigation
-  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-  vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-  vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-  vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-  vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
-  
-  -- Documentation and help
-  vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-  
+  map("gd", vim.lsp.buf.definition, "Go to definition")
+  map("gD", vim.lsp.buf.declaration, "Go to declaration")
+  map("gi", vim.lsp.buf.implementation, "Go to implementation")
+  map("gr", vim.lsp.buf.references, "LSP references")
+  map("gt", vim.lsp.buf.type_definition, "Go to type definition")
+
   -- Code actions and refactoring
-  vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-  vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-  vim.keymap.set("n", "<leader>f", function()
-    vim.lsp.buf.format({ async = true })
-  end, opts)
-  
-  -- Diagnostics
-  vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-  vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-  vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
-  vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
-  
+  map("<leader>ca", vim.lsp.buf.code_action, "Code action")
+  map("<leader>rn", vim.lsp.buf.rename, "Rename symbol")
+
   -- Workspace management
-  vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-  vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-  vim.keymap.set("n", "<leader>wl", function()
+  map("<leader>wa", vim.lsp.buf.add_workspace_folder, "Add workspace folder")
+  map("<leader>wr", vim.lsp.buf.remove_workspace_folder, "Remove workspace folder")
+  map("<leader>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, opts)
+  end, "List workspace folders")
 end
 
 -- Configure diagnostics display

@@ -98,7 +98,7 @@ Example:
 Determine if the mapping is:
 - **General navigation/utility** → Add to `keymaps/general.lua`
 - **Buffer/tab related** → Add to `keymaps/buffer.lua`
-- **Window/editing/diagnostics** → Add to `keymaps/lsp.lua`
+- **Window/editing/diagnostics** → Add to `keymaps/editor.lua`
 - **Plugin-specific** → Prefer the plugin's `keys = {...}` in `plugins/init.lua`
   (lazy-loads the plugin on first press), or the plugin's config file
 

@@ -350,12 +350,11 @@ require("lazy").setup({
     cmd = "Telescope",
     keys = {
       -- Ctrl+/ (arrives as <C-_> in most terminals, <C-/> in newer ones):
-      -- searchable sheet of every keymap; Enter executes the selection —
-      -- the nvim sibling of the zsh Ctrl+/ shortcut sheet. The custom
-      -- picker (defined in plugins/telescope.lua) shows two clean columns:
-      -- key + description, normal mode only, no <Plug> mappings
-      { "<C-_>", function() _G.Telescope_shortcut_sheet() end, desc = "Searchable shortcut sheet" },
-      { "<C-/>", function() _G.Telescope_shortcut_sheet() end, desc = "Searchable shortcut sheet" },
+      -- searchable, sectioned sheet of every keymap; Enter executes the
+      -- selection — the nvim sibling of the zsh Ctrl+/ shortcut sheet
+      -- (custom picker in plugins/shortcut-sheet.lua)
+      { "<C-_>", function() require("plugins.shortcut-sheet").open() end, desc = "Searchable shortcut sheet" },
+      { "<C-/>", function() require("plugins.shortcut-sheet").open() end, desc = "Searchable shortcut sheet" },
     },
     dependencies = {
       "nvim-lua/plenary.nvim",

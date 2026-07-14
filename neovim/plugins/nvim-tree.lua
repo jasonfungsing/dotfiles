@@ -60,10 +60,9 @@ require("nvim-tree").setup({
 
 -- Key mappings for nvim-tree
 local keymap = vim.keymap.set
-local opts = { noremap = true, silent = true }
 
-keymap("n", "<leader>ne", ":NvimTreeToggle<CR>", opts)
-keymap("n", "<leader>n ", ":NvimTreeFindFile<CR>", opts)
+keymap("n", "<leader>ne", ":NvimTreeToggle<CR>", { noremap = true, silent = true, desc = "Toggle file tree" })
+keymap("n", "<leader>n ", ":NvimTreeFindFile<CR>", { noremap = true, silent = true, desc = "Reveal file in tree" })
 
 -- Open nvim-tree automatically when Neovim starts up if no files were specified
 vim.api.nvim_create_autocmd("StdinReadPre", {
