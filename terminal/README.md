@@ -73,7 +73,7 @@ All custom aliases are defined in `zshrc`.
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `gpa` | `find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;` | Git pull every repository in the current folder |
-| `gc` | `gcloud` | Google Cloud CLI |
+| `gc` | `git commit --verbose` | From the omz git plugin |
 | `k` | `kubectl` | Kubernetes CLI |
 | `mnk` | `minikube` | Minikube local Kubernetes |
 
@@ -192,12 +192,11 @@ everywhere). See the tmux part below for the tmux master sheet.
 ## Oh-My-Zsh Plugins
 
 Enabled plugins provide additional aliases:
-- **git** - Git shortcuts (`ga`, `gcmsg`, `gd`, `gco`, `gbr`, etc.)
-- **tmux** - Tmux helpers
+- **git** - Git shortcuts (`gc`, `ga`, `gcmsg`, `gd`, `gco`, `gbr`, etc.)
+- **tmux** / **tmuxinator** - Tmux helpers
 - **brew** - Homebrew commands
 - **npm** - Node package manager
 - **python** - Python utilities
-- **aws** - AWS CLI shortcuts
 - **kubectl** - Kubernetes commands
 
 ### Explore plugins

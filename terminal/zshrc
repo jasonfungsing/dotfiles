@@ -47,7 +47,7 @@ source ~/.alias_prompt.sh
 export ZSH=~/.oh-my-zsh
 ZSH_THEME="cobalt2"
 export UPDATE_ZSH_DAYS=30
-plugins=(git tmux brew npm macos aws gitignore golang mvn python sublime xcode z tmuxinator kubectl autojump dotenv)
+plugins=(git tmux brew npm macos gitignore golang mvn python xcode z tmuxinator kubectl autojump dotenv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -96,7 +96,6 @@ alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;
 # Cloud & Kubernetes
 alias k=kubectl
 alias mnk=minikube
-alias gc=gcloud
 
 # macOS sleep control (needs sudo; check current state with sleepstatus)
 # nosleep:  keep the Mac awake — even with the lid closed — but ONLY while

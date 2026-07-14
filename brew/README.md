@@ -79,7 +79,7 @@ brew list --cask
 | Build tools | `make`, `cmake`, `gcc`, `gradle`, `maven`, `openjdk`, `protobuf`, `buf`, `pkgconf` |
 | DevOps & cloud | `docker`, `docker-compose`, `kubernetes-cli` (kubectl), `kind`, `minikube`, `kops`, `kubectx`, `kustomize`, `helm`, `skaffold`, `stern`, `k6`, `lazydocker` |
 | Git & GitHub | `git`, `git-lfs`, `gh`, `lazygit`, `tig`, `gnupg` |
-| System & terminal | `tmux`, `reattach-to-user-namespace`, `htop`, `btop`, `coreutils`, `zsh`, `zsh-completions`, `zsh-syntax-highlighting`, `bash-completion@2`, `direnv`, `entr`, `watchman`, `shellcheck` |
+| System & terminal | `tmux`, `tmuxinator`, `reattach-to-user-namespace`, `htop`, `btop`, `coreutils`, `zsh`, `zsh-completions`, `zsh-syntax-highlighting`, `bash-completion@2`, `direnv`, `entr`, `watchman`, `shellcheck` |
 | Networking | `curl`, `wget`, `nmap`, `mosh`, `tailscale` |
 | Documentation & media | `pandoc`, `markdown`, `tesseract` (OCR), `graphviz`, `cloc`, `figlet`, `cmatrix` |
 | Productivity helpers | `cheat`, `navi`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
