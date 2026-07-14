@@ -5,7 +5,7 @@ Zsh shell configuration (aliases, theme, plugins) and tmux terminal multiplexer.
 ## File Structure
 
 - **`zshrc`** - Main Zsh configuration
-- **`alias_prompt.sh`** - Prompt helpers, including an alias reminder
+- **`alias_prompt.sh`** - Enter-key widget that reminds you when a command has an alias
 - **`cobalt2.zsh-theme`** - Custom Zsh theme (Cobalt2)
 - **`tmux.conf`** - tmux configuration and keybindings
 
@@ -17,8 +17,9 @@ Zsh shell configuration (aliases, theme, plugins) and tmux terminal multiplexer.
 
 ### Installation
 ```bash
-# Symlink zshrc
+# Symlink zshrc and the alias reminder it sources
 ln -s ~/.dotfiles/terminal/zshrc ~/.zshrc
+ln -s ~/.dotfiles/terminal/alias_prompt.sh ~/.alias_prompt.sh
 
 # Reload shell
 source ~/.zshrc
@@ -39,10 +40,10 @@ Main shell configuration file that:
 - Defines custom aliases (see [Available Aliases](#available-aliases))
 - Sets up environment variables
 - Configures plugin behaviour
-- Initialises shell utilities (fnm, nvm, rbenv)
+- Initialises shell utilities (nvm, autojump, fzf, direnv, thefuck)
 
 ### alias_prompt.sh
-Prompt helper sourced by `zshrc` — when you type a command that already has an alias, it reminds you to use the alias instead.
+ZLE widget sourced by `zshrc` that hijacks the Enter key: if the line you typed is exactly the expansion of an existing alias, it prints the alias and clears the line (the command does not run), nudging you to use the alias. Anything else runs as normal.
 
 ### cobalt2.zsh-theme
 Custom Zsh theme providing:
@@ -52,7 +53,7 @@ Custom Zsh theme providing:
 
 ## Available Aliases
 
-All custom aliases are defined in `zshrc`.
+All custom aliases are defined in `zshrc`, except where a row notes it comes from a plugin or tool hook.
 
 ### Terminal & Multiplexing
 
@@ -66,7 +67,6 @@ All custom aliases are defined in `zshrc`.
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `v` | `nvim` | Open Neovim |
-| `i` | `idea` | Open IntelliJ IDEA |
 
 ### Git, Cloud & Kubernetes
 
@@ -82,9 +82,18 @@ All custom aliases are defined in `zshrc`.
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `y` | `yarn` | Yarn package manager |
-| `update` | `brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; nvim +Lazy sync +qa` | Update all packages, casks, Oh-My-Zsh and Neovim plugins |
+| `update` | `brew update; brew upgrade --yes; brew upgrade --cask --greedy --yes; brew cleanup; omz update; nvim --headless "+Lazy! sync" +qa` | Update all packages, casks, Oh-My-Zsh and Neovim plugins |
 | `u` | `update` | Shorthand for `update` |
-| `vu` | `nvim +Lazy sync +qa` | Update Neovim plugins only |
+| `vu` | `nvim --headless "+Lazy! sync" +qa` | Update Neovim plugins only |
+
+### macOS Power & Lid
+
+| Name | Command | Purpose |
+|-------|---------|---------|
+| `nosleep` | `sudo pmset -c disablesleep 1` | Keep the Mac awake — even with the lid closed — but only while on AC power; on battery it sleeps normally |
+| `yessleep` | `sudo pmset -a disablesleep 0` | Restore normal sleep behaviour on all power sources |
+| `sleepstatus` | *(function)* | Report whether sleep is currently disabled |
+| `islidclosed` | *(function)* | Print `Yes`/`No` for the lid (clamshell) state — handy over SSH |
 
 ### Utilities
 
@@ -92,6 +101,7 @@ All custom aliases are defined in `zshrc`.
 |-------|---------|---------|
 | `weather` | `curl wttr.in/$1.` | Check weather for a location |
 | `python` | `python3` | Use Python 3 by default |
+| `fuck` | `thefuck` | Correct the previous command (hook only loads if thefuck is installed) |
 
 ### Usage
 ```bash
@@ -108,7 +118,7 @@ alias myalias="command"
 ```
 
 ### Permanent
-1. Edit `zshrc` (the aliases live near the bottom of the file)
+1. Edit `zshrc` (the aliases live in the `6. Aliases` section)
 2. Add: `alias myalias="command"`
 3. Reload shell: `source ~/.zshrc`
 
@@ -191,13 +201,21 @@ everywhere). See the tmux part below for the tmux master sheet.
 
 ## Oh-My-Zsh Plugins
 
-Enabled plugins provide additional aliases:
+Enabled plugins (the `plugins=(...)` array in `zshrc`) provide additional aliases:
 - **git** - Git shortcuts (`gc`, `ga`, `gcmsg`, `gd`, `gco`, `gbr`, etc.)
-- **tmux** / **tmuxinator** - Tmux helpers
-- **brew** - Homebrew commands
-- **npm** - Node package manager
-- **python** - Python utilities
-- **kubectl** - Kubernetes commands
+- **tmux** / **tmuxinator** - Tmux helpers (`tl`, `tksv`, `txs`, etc.)
+- **brew** - Homebrew commands (`bubu`, `bi`, etc.)
+- **npm** - Node package manager shortcuts and completion
+- **macos** - macOS helpers (`showfiles`, `hidefiles`, etc.)
+- **gitignore** - Fetch `.gitignore` templates (`gi`)
+- **golang** - Go shortcuts (`gor`, `got`, etc.) and completion
+- **mvn** - Maven shortcuts (`mvnci`, `mvnct`, etc.)
+- **python** - Python utilities (`py`, `pyserver`, etc.)
+- **xcode** - Xcode helpers (`xcb`, `xcdd`, etc.)
+- **z** - Jump to frecent directories (`z`)
+- **kubectl** - Kubernetes commands (`kgp`, `kaf`, etc.) and completion
+- **autojump** - Directory jumping (`j`, works with the autojump hook)
+- **dotenv** - Auto-loads `.env` files when you `cd` into a directory
 
 ### Explore plugins
 ```bash
@@ -242,7 +260,7 @@ plugins=(git tmux brew npm python)
 ```
 
 ### Modify prompt
-Edit `alias_prompt.sh` or `cobalt2.zsh-theme`
+Edit `cobalt2.zsh-theme` (or the `prompt_context` override in `zshrc`)
 
 ## Troubleshooting
 
@@ -280,21 +298,14 @@ If an alias shadows a command you want to run directly:
 
 ### Theme not displaying
 ```bash
-# Verify theme file exists
-ls ~/.oh-my-zsh/themes/cobalt2.zsh-theme
+# Verify theme file exists (install.sh symlinks it into oh-my-zsh's custom themes)
+ls ~/.oh-my-zsh/custom/themes/cobalt2.zsh-theme
 
 # Check theme is loaded
 echo $ZSH_THEME
 
 # Restart terminal
 ```
-
-## Keyboard Shortcuts
-
-Shell prompt includes keyboard configuration for:
-- Fast keyboard repeat rate
-- Short key repeat delay
-- Optimised for development workflows
 
 ---
 
@@ -463,18 +474,18 @@ Results are highlighted; `n`/`N` jump between matches, `Enter` copies one.
 
 ## Status Bar
 
-The status bar displays:
+The status bar sits at the **top** of the screen and displays:
 - Current session name
 - Window list with active indicator
-- System information (time, date)
-- Custom status text
+- Battery percentage *(tmux-battery)*
+- CPU percentage *(tmux-cpu)*
+- Day, date and time
 
 Customise by editing `tmux.conf`:
 ```bash
-set-option -g status-bg black
-set-option -g status-fg white
-set-option -g status-left "[#S] "
-set-option -g status-right "%H:%M %d-%b-%y"
+set-option -g status-position top
+set -g status-style fg=white,bg=blue
+set -g status-right 'Batt:#{battery_percentage} | CPU:#{cpu_percentage} | %a %d %h %H:%M '
 ```
 
 ## Common Workflows

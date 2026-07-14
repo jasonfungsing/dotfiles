@@ -45,8 +45,8 @@ nvim myfile.py
 # Open multiple files in splits
 nvim -O file1.txt file2.txt
 
-# Update plugins
-nvim +Lazy sync +qa
+# Update plugins (quote "+Lazy! sync" as one argument)
+nvim --headless "+Lazy! sync" +qa
 
 # Check health
 nvim +checkhealth
@@ -56,7 +56,7 @@ Shell aliases from [terminal/](../terminal/README.md):
 
 ```bash
 v myfile.js   # Opens file in Neovim
-vu            # Updates all plugins (nvim +Lazy sync +qa)
+vu            # Updates all plugins (nvim --headless "+Lazy! sync" +qa)
 ```
 
 ## Key Features
@@ -97,8 +97,8 @@ Inside Neovim:
 
 ### Update plugins
 ```bash
-# From terminal
-nvim +Lazy sync +qa
+# From terminal (quote "+Lazy! sync" as one argument)
+nvim --headless "+Lazy! sync" +qa
 
 # Or inside Neovim
 :Lazy sync
@@ -109,7 +109,9 @@ Add a spec to `plugins/init.lua` (see [CONFIG_STRUCTURE.md](CONFIG_STRUCTURE.md)
 ```lua
 {
   'author/plugin-name',
-  opts = { ... }
+  config = function()
+    require('plugins.plugin-name')
+  end,
 }
 ```
 
@@ -132,14 +134,13 @@ vim.api.nvim_create_autocmd('FileType', {
 ```
 
 ### Configure plugins
-Each plugin can be customised via `opts`:
+Each plugin's settings live in its own file under `plugins/` — edit that file rather than the spec in `plugins/init.lua`. For example, in `plugins/lualine.lua`:
 ```lua
-{
-  'nvim-lualine/lualine.nvim',
-  opts = {
-    theme = 'dracula'
+require('lualine').setup({
+  options = {
+    theme = 'auto'
   }
-}
+})
 ```
 
 ## Language Support
@@ -183,13 +184,7 @@ nvim
 ```
 
 ### Colours look wrong
-Ensure your terminal supports true colour:
-```bash
-# Set in ~/.zshrc
-export TERM=xterm-256color
-
-# Restart terminal and Neovim
-```
+True colour (`termguicolors`) is already enabled in `config/core.lua`. Ensure your terminal emulator supports true colour (iTerm2 does), then restart the terminal and Neovim.
 
 ### Slow startup
 Profile startup time:
@@ -205,7 +200,7 @@ sort -rn -k 2 startup.log | head -20
 brew upgrade neovim
 
 # Update all plugins
-nvim +Lazy sync +qa   # or the `vu` alias
+nvim --headless "+Lazy! sync" +qa   # or the `vu` alias
 ```
 
 ## Documentation

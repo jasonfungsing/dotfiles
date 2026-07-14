@@ -8,6 +8,7 @@ macOS system settings, preferences, and configuration files.
 - **`export-shortcuts.sh`** - Export keyboard shortcuts from system
 - **`keyboard-shortcuts.json`** - Custom keyboard shortcuts
 - **`hushlogin`** - Terminal startup message control
+- **`README.md`** - This documentation
 
 > iTerm2 settings have moved to [app/iterm2/](../app/iterm2/)
 
@@ -27,19 +28,18 @@ The script automatically restarts affected applications (Finder, Dock, Mail, Sys
 **Purpose:** System-wide keyboard shortcuts
 
 **Contains:**
-- Application-specific shortcuts
-- System shortcuts
-- Custom keybindings
+- System shortcuts (`com.apple.symbolichotkeys` → `AppleSymbolicHotKeys`)
+- Application-specific shortcuts (per-app `NSUserKeyEquivalents`)
 
 **Format:** JSON configuration file
 
 **How to use:**
-- Manually import to System Preferences
-- Or use provided configuration
+- Restored automatically by `./install.sh` (the "Restore keyboard shortcuts" step, also run with `--system-only`)
+- Or set shortcuts manually in System Settings
 
 **macOS Shortcut Location:**
 ```
-System Preferences → Keyboard → Shortcuts
+System Settings → Keyboard → Keyboard Shortcuts
 ```
 
 ---
@@ -94,7 +94,7 @@ bash mac/macos.sh
 # Export current keyboard shortcuts
 bash mac/export-shortcuts.sh
 
-# Output: keyboard-shortcuts.json
+# Output: mac/keyboard-shortcuts.json
 ```
 
 **Use cases:**
@@ -112,39 +112,13 @@ bash mac/export-shortcuts.sh
 
 Detailed explanations of the settings applied by `macos.sh`.
 
-### Finder
-
-**Show hidden files**
-```bash
-defaults write com.apple.Finder AppleShowAllFiles -bool false
-```
-Hides hidden files by default in Finder. Toggle with `Cmd + Shift + .` in Finder.
+### General UI & System
 
 **Expand save dialog**
 ```bash
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 ```
 Automatically expands the file browser when opening "Save As" dialogs.
-
-**Use current directory as default search scope**
-```bash
-defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
-```
-Makes Finder search the current directory by default instead of all locations.
-
-**Path bar**
-```bash
-defaults write com.apple.finder ShowPathbar -bool false
-```
-Hides the path bar in Finder (showing full directory path at bottom).
-
-**Status bar**
-```bash
-defaults write com.apple.finder ShowStatusBar -bool false
-```
-Hides the status bar in Finder (showing file count and size info).
-
-### System-Wide
 
 **Full keyboard access**
 ```bash
@@ -157,6 +131,54 @@ Enables full keyboard navigation for all controls, allowing Tab to move through 
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
 ```
 Enables subpixel font rendering on non-Apple displays for smoother text appearance on external monitors.
+
+**Disable app opening dialog**
+```bash
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+```
+Disables the "Are you sure you want to open this application?" dialog for downloaded apps.
+
+### Finder
+
+**Hide hidden files**
+```bash
+defaults write com.apple.Finder AppleShowAllFiles -bool false
+```
+Hides hidden files by default in Finder. Toggle with `Cmd + Shift + .` in Finder.
+
+**Use current directory as default search scope**
+```bash
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+```
+Makes Finder search the current directory by default instead of all locations.
+
+**Hide path bar**
+```bash
+defaults write com.apple.finder ShowPathbar -bool false
+```
+Hides the path bar in Finder (the full directory path at the bottom of the window).
+
+**Hide status bar**
+```bash
+defaults write com.apple.finder ShowStatusBar -bool false
+```
+Hides the status bar in Finder (the file count and size info).
+
+### Dock
+
+**Auto-hide Dock**
+```bash
+defaults write com.apple.dock autohide -bool true
+```
+Automatically hides the Dock when not in use, providing more screen space. Move the mouse to the Dock's edge of the screen to reveal it.
+
+**Dock position**
+```bash
+defaults write com.apple.dock orientation -string "right"
+```
+Positions the Dock on the right side of the screen.
+
+### Keyboard & Input
 
 **Disable press-and-hold for keys**
 ```bash
@@ -176,26 +198,6 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 ```
 Reduces delay before key repeat starts (15 = 225ms). Enables faster key repeat activation.
 
-**Disable app opening dialog**
-```bash
-defaults write com.apple.LaunchServices LSQuarantine -bool false
-```
-Disables the "Are you sure you want to open this application?" dialog for downloaded apps.
-
-### Dock
-
-**Auto-hide Dock**
-```bash
-defaults write com.apple.dock autohide -bool true
-```
-Automatically hides the Dock when not in use, providing more screen space. Move the mouse to the Dock's edge of the screen to reveal it.
-
-**Dock position**
-```bash
-defaults write com.apple.dock orientation -string "right"
-```
-Positions the Dock on the right side of the screen.
-
 ### Trackpad
 
 **Tap to click**
@@ -206,15 +208,14 @@ Enables tapping on trackpad to register as a click instead of requiring physical
 
 ### Commented Out Settings
 
-The `macos.sh` script includes many commented-out settings. These are disabled by default but can be uncommented if desired:
+The `macos.sh` script includes many commented-out settings, grouped under the same section headings as the active ones. These are disabled by default but can be uncommented if desired:
 
-- **Display:** show all filename extensions, show ~/Library folder in Finder, show path in Finder title bar, display ASCII control characters
-- **Performance:** 2D Dock, disable window animations, disable Get Info animations
-- **Finder behaviour:** allow quitting Finder via Cmd+Q, show indicator lights in Dock, spring loading for Dock items
-- **Security:** require password immediately after sleep, disable "reopen windows when logging back in"
-- **Auto-correct:** disable automatic spelling correction
-- **Disk images:** skip disk image verification, auto-open volumes when mounted
-- **Screenshots:** disable shadow in screenshots
+- **General UI & system:** expand print panel by default, always show scrollbars, disable window open/close animations, faster Cocoa window resizing, display ASCII control characters, disable Resume system-wide, disable "reopen windows when logging back in", require password immediately after sleep, disable shadow in screenshots, skip disk image verification, auto-open volumes when mounted
+- **Finder:** show all filename extensions, show the ~/Library folder, allow quitting Finder via Cmd+Q, disable window and Get Info animations, display full POSIX path as window title, avoid .DS_Store files on network volumes, disable the file-extension-change warning, show item info below desktop icons, snap-to-grid for desktop icons, disable the empty-Trash warning, empty Trash securely
+- **Dock:** 2D Dock, translucent icons for hidden apps, highlight hover effect for stacks, spring loading for all Dock items, indicator lights for open applications, don't animate opening applications
+- **Keyboard & input:** disable auto-correct
+- **Trackpad:** map bottom-right corner to right-click
+- **Safari & Mail:** Safari thumbnail cache, Contains search banners and Web Inspector context menu (left disabled — see the TCC note above), Mail send/reply animations
 
 ## Customisation
 
@@ -262,10 +263,11 @@ To revert to macOS defaults, run:
 # Restore specific settings
 defaults delete NSGlobalDomain AppleKeyboardUIMode
 
-# Remove all custom settings
+# Remove all custom settings (NSGlobalDomain deletes ALL global preferences, not just these)
 defaults delete NSGlobalDomain
 defaults delete com.apple.Finder
 defaults delete com.apple.dock
+defaults delete com.apple.LaunchServices
 defaults delete com.apple.driver.AppleBluetoothMultitouch.trackpad
 ```
 
@@ -284,9 +286,11 @@ cat mac/keyboard-shortcuts.json
 # Verify JSON format
 python3 -m json.tool mac/keyboard-shortcuts.json
 
-# Restart system services
-sudo launchctl stop com.apple.securityd
-sudo launchctl start com.apple.securityd
+# Re-apply shortcuts from the repo
+./install.sh --system-only
+
+# Refresh the preferences daemon cache
+killall cfprefsd
 ```
 
 ### Terminal startup messages still showing
@@ -331,4 +335,4 @@ These settings are compatible with macOS 26.3+, and most work on older versions.
 - [macOS Defaults Documentation](https://macos-defaults.com/)
 - [Awesome macOS Defaults](https://github.com/kevinSuttle/macOS-Defaults)
 - `defaults` man page: `man defaults`
-- [System Preferences](https://support.apple.com/en-au/guide/mac-help/mh15217/mac)
+- [System Settings](https://support.apple.com/en-au/guide/mac-help/mh15217/mac)

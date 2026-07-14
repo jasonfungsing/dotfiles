@@ -35,12 +35,7 @@ Run these from this directory (or point `--file` at `brew/Brewfile` from the rep
 brew bundle --file=Brewfile
 ```
 
-Install a specific type only:
-```bash
-brew bundle --file=Brewfile --formula   # CLI tools only
-brew bundle --file=Brewfile --cask      # GUI applications only
-brew bundle --file=Brewfile --mas       # App Store apps only
-```
+> `brew bundle` has no per-type install filters — it always installs every entry type. To skip individual entries by name, list them (space-separated) in the `HOMEBREW_BUNDLE_BREW_SKIP`, `HOMEBREW_BUNDLE_CASK_SKIP` or `HOMEBREW_BUNDLE_MAS_SKIP` environment variables.
 
 ### Update packages
 ```bash
@@ -51,13 +46,13 @@ brew upgrade
 ### Add a new package
 ```bash
 brew install <package-name>
-brew bundle dump --file=Brewfile --describe --force
+brew bundle dump --file=Brewfile --force --no-describe
 ```
 
 ### Remove a package
 ```bash
 brew uninstall <package-name>
-brew bundle dump --file=Brewfile --describe --force
+brew bundle dump --file=Brewfile --force --no-describe
 ```
 
 ### List installed packages
@@ -72,21 +67,23 @@ brew list --cask
 
 | Category | Key packages |
 |----------|--------------|
-| Text processing & search | `ripgrep`, `bat`, `fd`, `fzf`, `jq`, `diff-so-fancy`, `wdiff`, `highlight` |
+| Text processing & search | `ripgrep`, `bat`, `fd`, `fzf`, `jq`, `diff-so-fancy`, `wdiff`, `highlight`, `grep` (GNU) |
 | Navigation & files | `autojump`, `z`, `eza` (modern `ls` with colours), `nnn`, `tree`, `rename` |
-| Languages & runtimes | `go`, `node`, `python3`, `ruby`, `gawk` |
+| Languages & runtimes | `go`, `golangci-lint`, `node`, `python3`, `ruby`, `gawk` |
 | Version & package managers | `fnm`, `nvm`, `rbenv`/`ruby-build`, `jabba`, `pnpm`, `yarn`, `pipenv`, `uv`, `cocoapods` |
 | Build tools | `make`, `cmake`, `gcc`, `gradle`, `maven`, `openjdk`, `protobuf`, `buf`, `pkgconf` |
-| DevOps & cloud | `docker`, `docker-compose`, `kubernetes-cli` (kubectl), `kind`, `minikube`, `kops`, `kubectx`, `kustomize`, `helm`, `skaffold`, `stern`, `k6`, `lazydocker` |
+| DevOps & cloud | `docker`, `docker-compose`, `docker-credential-helper`, `kubernetes-cli` (kubectl), `kind`, `minikube`, `kops`, `kubectx`, `kustomize`, `helm`, `skaffold`, `stern`, `k6`, `lazydocker` |
 | Git & GitHub | `git`, `git-lfs`, `gh`, `lazygit`, `tig`, `gnupg` |
 | System & terminal | `tmux`, `tmuxinator`, `reattach-to-user-namespace`, `htop`, `btop`, `coreutils`, `zsh`, `zsh-completions`, `zsh-syntax-highlighting`, `bash-completion@2`, `direnv`, `entr`, `watchman`, `shellcheck` |
+| Editors | `neovim` (configuration lives in [neovim/](../neovim/README.md)) |
 | Networking | `curl`, `wget`, `nmap`, `mosh`, `tailscale` |
 | Documentation & media | `pandoc`, `markdown`, `tesseract` (OCR), `graphviz`, `cloc`, `figlet`, `cmatrix` |
 | Productivity helpers | `cheat`, `navi`, `thefuck`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
+| Libraries & databases | `rocksdb` |
 
 ### Casks (GUI applications)
 
-`visual-studio-code`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `claude` (Claude desktop), `claude-code` (CLI), `google-gemini`, `antigravity-cli`/`antigravity-ide`, `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and Powerline-patched fonts (`font-fira-code`, `font-cascadia-mono`, `font-3270-nerd-font`).
+`visual-studio-code`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `claude` (Claude desktop), `claude-code` (CLI), `google-gemini`, `antigravity-cli`/`antigravity-ide`, `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
 
 > Corporate security agents (CrowdStrike Falcon, Workspace ONE Hub) are deliberately not managed by brew — they belong to device management.
 
@@ -129,5 +126,5 @@ brew bundle check --file=Brewfile --verbose
 ## See Also
 
 - [Homebrew Documentation](https://docs.brew.sh/)
-- [Homebrew Bundle](https://github.com/Homebrew/homebrew-bundle)
+- [Homebrew Bundle & Brewfile](https://docs.brew.sh/Brew-Bundle-and-Brewfile)
 - `man brew`
