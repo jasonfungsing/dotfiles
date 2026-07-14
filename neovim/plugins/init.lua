@@ -363,18 +363,20 @@ require("lazy").setup({
   { "fatih/vim-go", ft = "go" },
 
   -- Text manipulation
-  "tpope/vim-markdown",
-  "godlygeek/tabular",
+  { "tpope/vim-markdown", ft = "markdown" },
+  { "godlygeek/tabular", cmd = "Tabularize" },
 
   -- UI enhancements
-  "morhetz/gruvbox",
-  "jeffkreeftmeijer/vim-numbertoggle",
-
-  -- Rainbow parentheses (temporarily removed due to submodule issues)
-  -- Can be re-added later if needed
+  -- The colourscheme must load eagerly so theme/colours.lua can apply it
+  { "morhetz/gruvbox", lazy = false, priority = 1000 },
+  -- Relative numbers in normal mode, absolute in insert — autocmd driven
+  { "jeffkreeftmeijer/vim-numbertoggle", event = "VeryLazy" },
+  -- Physics-based smooth scrolling (rebinds C-d/C-u/C-f/C-b)
+  { "yuttie/comfortable-motion.vim", event = "VeryLazy" },
 
   -- Git integration
-  "tpope/vim-fugitive",
+  -- Fugitive: :Git status/blame/log etc.
+  { "tpope/vim-fugitive", event = "VeryLazy" },
   {
     "lewis6991/gitsigns.nvim",
     event = { "BufReadPre", "BufNewFile" },
@@ -382,11 +384,25 @@ require("lazy").setup({
       require("plugins.gitsigns")
     end,
   },
-  "tpope/vim-projectionist",
+  -- Alternate files (:A) and project-specific configuration
+  { "tpope/vim-projectionist", event = { "BufReadPre", "BufNewFile" } },
 
   -- Navigation
-  "christoomey/vim-tmux-navigator",
-  "easymotion/vim-easymotion",
+  -- Seamless vim-window/tmux-pane hops on Ctrl+H/J/K/L (supersedes the
+  -- plain window-nav maps; crossing INTO vim from tmux would additionally
+  -- need the tmux-side vim-tmux-navigator plugin)
+  {
+    "christoomey/vim-tmux-navigator",
+    cmd = { "TmuxNavigateLeft", "TmuxNavigateDown", "TmuxNavigateUp", "TmuxNavigateRight" },
+    keys = {
+      { "<C-h>", "<cmd>TmuxNavigateLeft<cr>", desc = "Window/pane left" },
+      { "<C-j>", "<cmd>TmuxNavigateDown<cr>", desc = "Window/pane down" },
+      { "<C-k>", "<cmd>TmuxNavigateUp<cr>", desc = "Window/pane up" },
+      { "<C-l>", "<cmd>TmuxNavigateRight<cr>", desc = "Window/pane right" },
+    },
+  },
+  -- Jump anywhere on screen: ,,w (words forward), ,,b (back), ,,s (char)
+  { "easymotion/vim-easymotion", event = "VeryLazy" },
 
   -- Fuzzy finder for files, buffers, and keybindings
   {
@@ -426,10 +442,12 @@ require("lazy").setup({
   },
 
   -- Development utilities
-  "rizzatti/dash.vim",
-  "benmills/vimux",
-  "yuttie/comfortable-motion.vim",
-  "kristijanhusak/vim-carbon-now-sh",
+  -- :Dash looks up the word under the cursor in Dash.app (needs the app)
+  { "rizzatti/dash.vim", cmd = { "Dash", "DashKeywords" } },
+  -- Run shell commands in a tmux split from nvim
+  { "benmills/vimux", cmd = { "VimuxRunCommand", "VimuxPromptCommand", "VimuxRunLastCommand", "VimuxCloseRunner" } },
+  -- Share pretty code screenshots via carbon.now.sh
+  { "kristijanhusak/vim-carbon-now-sh", cmd = "CarbonNowSh" },
 
   -- Session management
   {
