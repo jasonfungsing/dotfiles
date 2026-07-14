@@ -49,11 +49,12 @@ plugins=(git tmux brew npm macos gitignore golang mvn python xcode z tmuxinator 
 
 source $ZSH/oh-my-zsh.sh
 
-# Override cobalt2's prompt segments with greyscale levels (matches
-# lualine's gruvbox greys), darker to lighter left-to-right: darkest user
-# wedge, dark grey directory, light grey git segment. Colours are
-# 256-palette indices: 246 ≈ #949494, 239 ≈ #4e4e4e, 237 ≈ #3a3a3a,
-# 235 ≈ #262626, 250 ≈ #bcbcbc.
+# Override cobalt2's prompt segments with greyscale levels, darker to
+# lighter left-to-right: darkest user wedge, dark grey directory, light
+# grey git segment. The grey ramp shared by the whole setup (zsh, tmux,
+# git, fzf, nvim) is documented in neovim/theme/palette.lua; shell configs
+# use the matching 256-palette indices: 250 ≈ #bcbcbc, 246 ≈ #949494,
+# 243 ≈ #767676, 239 ≈ #4e4e4e, 237 ≈ #3a3a3a, 235 ≈ #262626.
 prompt_context() {
   prompt_segment 237 250 "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
 }
@@ -92,6 +93,15 @@ export PATH="$HOME/.antigravity-ide/antigravity-ide/bin:$PATH"
 export EDITOR='nvim'
 export VISUAL='nvim'
 export NVM_DIR="$HOME/.nvm"
+
+# fzf greyscale UI, matching the prompt greys (255 for matches/pointer).
+# Applies to the Ctrl+/ shortcut sheet, Ctrl+R history, Ctrl+T files —
+# every fzf invocation. The tmux prefix-? popup can't read this file, so
+# terminal/tmux.conf carries a copy of this --color string: keep in sync.
+export FZF_DEFAULT_OPTS="--color=fg:250,bg:-1,hl:255,fg+:255,bg+:237,hl+:255,info:243,prompt:250,pointer:255,marker:255,spinner:243,header:243,border:239,separator:239,gutter:-1,query:255"
+
+# grep match highlighting: bright bold grey instead of red
+export GREP_COLORS="mt=1;38;5;255"
 
 # ═══ 6. Aliases ═══
 

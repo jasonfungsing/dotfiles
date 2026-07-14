@@ -155,6 +155,24 @@ iTerm2's "Left Option key: Esc+" profile setting. `Ctrl+/` needs no iTerm2
 configuration and also works in VS Code's terminal and over SSH (it
 replaced the redundant `Ctrl+_` undo — undo remains on `Ctrl+X Ctrl+U`).
 
+## Greyscale Theme
+
+The whole terminal renders in one grey ramp — no accent colours except
+file-type colours (`ls`, completion listings) and code syntax in nvim:
+
+- **zsh prompt** — segment overrides in `zshrc` (§ Oh-My-Zsh)
+- **tmux** — status bar, messages, copy-mode, borders in `tmux.conf`
+- **fzf** — `FZF_DEFAULT_OPTS` in `zshrc` (§ Environment); the tmux `C-f ?`
+  popup carries a synced copy
+- **git output** — `[color "…"]` sections in `git/gitconfig`
+- **grep** — `GREP_COLORS` in `zshrc`
+- **nvim** — see `neovim/theme/palette.lua`, the canonical ramp definition
+  all of the above mirror (shell configs use the matching 256-palette
+  indices, since not everything accepts hex)
+
+To retune the ramp: change `palette.lua` for nvim, then update the indices
+noted in its header across the shell configs.
+
 ## Oh-My-Zsh Plugins
 
 Enabled plugins (the `plugins=(...)` array in `zshrc`) provide additional aliases:

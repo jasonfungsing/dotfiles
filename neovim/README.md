@@ -67,6 +67,21 @@ vu            # Updates all plugins (nvim --headless "+Lazy! sync" +qa)
 - ✅ Native LSP with Mason-managed language servers
 - ✅ Treesitter syntax highlighting and Telescope fuzzy finding
 - ✅ Customisable key mappings
+- ✅ Greyscale UI chrome (gruvbox syntax + coloured file icons stay)
+
+## Greyscale UI
+
+All UI chrome — dashboard, file tree, statusline, diffs, completion popup,
+messages — renders in one grey ramp defined in `theme/palette.lua` (the
+canonical definition; zsh/tmux/git/fzf mirror it, see
+[terminal/README.md](../terminal/README.md#greyscale-theme)). Code syntax
+highlighting and file-type icons keep their colours.
+
+`theme/colours.lua` applies it in two layers: explicit highlight groups for
+the designed surfaces, plus an automatic sweep that desaturates any group
+matching a known plugin-UI prefix (re-run on colorscheme changes and every
+lazy plugin load). Adding a plugin with coloured UI? Add its highlight
+prefix to `ui_prefixes` there.
 
 ## Key Bindings
 

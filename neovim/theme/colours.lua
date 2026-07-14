@@ -12,10 +12,19 @@ local c = require("theme.palette")
 local function greyscale_ui()
   local hl = vim.api.nvim_set_hl
 
-  -- Messages: errors/warnings in the message area render as grey blocks
-  -- instead of gruvbox red/yellow
+  -- Messages: errors/warnings/prompts in the message area render as grey
+  -- blocks instead of gruvbox red/yellow/green
   hl(0, "ErrorMsg", { fg = c.brightest, bg = c.dim, bold = true })
   hl(0, "WarningMsg", { fg = c.brightest, bg = c.dim })
+  hl(0, "Error", { fg = c.brightest, bg = c.dim, bold = true })
+  hl(0, "MoreMsg", { fg = c.bright, bold = true })
+  hl(0, "ModeMsg", { fg = c.bright, bold = true })
+  hl(0, "Question", { fg = c.bright, bold = true })
+  hl(0, "Conceal", { fg = c.mid })
+  hl(0, "VertSplit", { fg = c.dim })
+  hl(0, "Added", { fg = c.bright })
+  hl(0, "Changed", { fg = c.bright })
+  hl(0, "Removed", { fg = c.mid })
 
   -- Line numbers: current line pops in light grey, the rest stay dim
   hl(0, "LineNr", { fg = c.mid })
@@ -57,6 +66,28 @@ local function greyscale_ui()
   hl(0, "SignColumn", { bg = "none" })
   hl(0, "CursorLineSign", { bg = c.subtle })
   hl(0, "FoldColumn", { bg = "none", fg = c.mid })
+
+  -- Core editor UI: search, selection, folds, tabs, titles — grey levels
+  -- instead of gruvbox accents
+  hl(0, "Search", { fg = c.darkest, bg = c.bright })
+  hl(0, "IncSearch", { fg = c.darkest, bg = c.brightest, bold = true })
+  hl(0, "CurSearch", { fg = c.darkest, bg = c.brightest, bold = true })
+  hl(0, "Visual", { bg = c.dim })
+  hl(0, "MatchParen", { bg = c.mid, bold = true })
+  hl(0, "Folded", { fg = c.mid, bg = c.subtle })
+  hl(0, "TabLine", { fg = c.mid, bg = c.faint })
+  hl(0, "TabLineSel", { fg = c.brightest, bg = c.dim })
+  hl(0, "TabLineFill", { bg = c.faint })
+  hl(0, "WildMenu", { fg = c.brightest, bg = c.dim })
+  hl(0, "QuickFixLine", { bg = c.subtle })
+  hl(0, "Directory", { fg = c.brightest })
+  hl(0, "Title", { fg = c.bright, bold = true })
+  hl(0, "EndOfBuffer", { fg = c.dim })
+  hl(0, "NonText", { fg = c.dim })
+  hl(0, "Whitespace", { fg = c.dim })
+  hl(0, "SpecialKey", { fg = c.dim })
+  hl(0, "WinBar", { fg = c.brightest, bg = c.faint })
+  hl(0, "WinBarNC", { fg = c.mid, bg = c.faint })
 
   -- Native statusline + window separator: lualine paints most cells, but
   -- junction cells and non-lualine windows fall back to these
@@ -109,8 +140,61 @@ local function greyscale_ui()
   end
 end
 
-greyscale_ui()
+-- ── Automatic desaturation for every other plugin UI ────────────────────
+-- The explicit groups above are the designed surfaces; every remaining
+-- plugin UI is handled generically: any highlight group starting with one
+-- of these prefixes has its colours converted to their grey luminance
+-- equivalent. Plugins keep their brightness design (selected vs dimmed,
+-- error vs hint) but lose all hue. New plugins: add their prefix here.
+local ui_prefixes = {
+  "Telescope", "WhichKey", "Notify", "Lazy", "Mason", "BufferLine",
+  "Aerial", "Trouble", "Ibl", "IndentBlankline", "Dap", "Spectre",
+  "Diffview", "Harpoon", "ToggleTerm", "Diagnostic",
+  "Float", "NormalFloat",
+  "NvimTree", "CmpItem", "GitSigns", "@ibl", "Spell", "lualine_",
+}
+
+local function to_grey(color)
+  if not color then return nil end
+  local r = math.floor(color / 65536) % 256
+  local g = math.floor(color / 256) % 256
+  local b = color % 256
+  local y = math.floor(0.299 * r + 0.587 * g + 0.114 * b + 0.5)
+  return y * 65536 + y * 256 + y
+end
+
+local function desaturate_plugin_ui()
+  for name in pairs(vim.api.nvim_get_hl(0, {})) do
+    for _, prefix in ipairs(ui_prefixes) do
+      if name:sub(1, #prefix) == prefix then
+        local h = vim.api.nvim_get_hl(0, { name = name, link = false })
+        if h.fg or h.bg or h.sp then
+          h.fg, h.bg, h.sp = to_grey(h.fg), to_grey(h.bg), to_grey(h.sp)
+          h.default = nil
+          vim.api.nvim_set_hl(0, name, h)
+        end
+        break
+      end
+    end
+  end
+end
+
+local function apply_greyscale()
+  greyscale_ui()
+  desaturate_plugin_ui()
+end
+
+apply_greyscale()
 vim.api.nvim_create_autocmd("ColorScheme", {
-  desc = "Re-apply greyscale UI chrome after any colorscheme change",
-  callback = greyscale_ui,
+  desc = "Re-apply greyscale UI after any colorscheme change",
+  callback = apply_greyscale,
+})
+-- Lazy-loaded plugins define their highlight groups only when they load —
+-- desaturate again after each one comes in
+vim.api.nvim_create_autocmd("User", {
+  pattern = "LazyLoad",
+  desc = "Desaturate highlight groups of freshly lazy-loaded plugins",
+  callback = function()
+    vim.schedule(desaturate_plugin_ui)
+  end,
 })

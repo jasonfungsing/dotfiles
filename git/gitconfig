@@ -54,6 +54,30 @@
     instructionFormat = "[%an - %ar] %s"
     autoStash = true
 
+# ═══ Colours ═══
+# Greyscale output, matching the prompt/nvim grey ramp (256-palette:
+# 255 bright → 250 → 246 → 243 dim). Additions render brighter than
+# deletions instead of green vs red.
+
+[color "diff"]
+    meta = 243
+    frag = 246
+    commit = 250
+    old = 243
+    new = 250 bold
+    whitespace = 239 reverse
+
+[color "status"]
+    added = 250 bold
+    changed = 246
+    untracked = 243
+    branch = 250 bold
+
+[color "branch"]
+    current = 250 bold
+    local = 250
+    remote = 243
+
 # ═══ Integrations ═══
 
 [credential]
@@ -71,7 +95,7 @@
     # Status & inspection
     s = status
     d = diff
-    tree = log --oneline --branches --remotes --tags --graph --abbrev-commit --author-date-order --decorate --format=format:'%C(bold blue)%h%C(reset) %C(reset)%C(bold yellow)%d%C(reset) - %C(dim white)%aD (%ar)%C(reset)%n'' %C(bold cyan)%s%C(reset) %C(white)- %an%C(reset)%C(white) <%ae%C(reset)%C(white)>'
+    tree = log --oneline --branches --remotes --tags --graph --abbrev-commit --author-date-order --decorate --format=format:'%C(bold 250)%h%C(reset) %C(reset)%C(bold 246)%d%C(reset) - %C(243)%aD (%ar)%C(reset)%n'' %C(bold 255)%s%C(reset) %C(246)- %an%C(reset)%C(246) <%ae%C(reset)%C(246)>'
 
     # Everyday flow
     cl = clone
