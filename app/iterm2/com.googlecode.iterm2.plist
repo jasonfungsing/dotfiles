@@ -902,13 +902,13 @@
 				<key>Alpha Component</key>
 				<real>1.0</real>
 				<key>Blue Component</key>
-				<real>0.7807632088661194</real>
+				<real>0.5804</real>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>0.7807731032371521</real>
+				<real>0.5804</real>
 				<key>Red Component</key>
-				<real>0.7807546854019165</real>
+				<real>0.5804</real>
 			</dict>
 			<key>Cursor Guide Color</key>
 			<dict>
@@ -928,13 +928,13 @@
 				<key>Alpha Component</key>
 				<real>1.0</real>
 				<key>Blue Component</key>
-				<real>1.0</real>
+				<real>0.149</real>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
-				<real>1.0</real>
+				<real>0.149</real>
 				<key>Red Component</key>
-				<real>0.9999960064888</real>
+				<real>0.149</real>
 			</dict>
 			<key>Cursor Type</key>
 			<integer>2</integer>
@@ -1199,7 +1199,7 @@
 			<key>Silence Bell</key>
 			<true/>
 			<key>Smart Cursor Color</key>
-			<true/>
+			<false/>
 			<key>Smart Selection Rules</key>
 			<array>
 				<dict>

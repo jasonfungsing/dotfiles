@@ -31,14 +31,19 @@ require("nvim-tree").setup({
       git_placement = "before",
       padding = " ",
       symlink_arrow = " ➛ ",
-      -- No custom glyphs: nvim-tree's defaults are nerd-font icons and
-      -- per-filetype file icons come from nvim-web-devicons — the
-      -- terminal font must be a Nerd Font for these to render
+      -- Default glyphs (nerd-font icons; per-filetype file icons come from
+      -- nvim-web-devicons — the terminal font must be a Nerd Font), except
+      -- the unstaged marker: ± to match the zsh prompt's dirty indicator
       show = {
         file = true,
         folder = true,
         folder_arrow = true,
         git = true,
+      },
+      glyphs = {
+        git = {
+          unstaged = "±",
+        },
       },
     },
   },

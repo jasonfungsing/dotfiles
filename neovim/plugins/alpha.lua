@@ -47,6 +47,16 @@ end
 
 dashboard.section.footer.val = footer()
 
+-- Greyscale dashboard: route every section through the Alpha* highlight
+-- groups (grey levels defined in theme/colours.lua) instead of the stock
+-- Type/Keyword/Number colours
+dashboard.section.header.opts.hl = "AlphaHeader"
+dashboard.section.footer.opts.hl = "AlphaFooter"
+for _, btn in ipairs(dashboard.section.buttons.val) do
+  btn.opts.hl = "AlphaButtons"
+  btn.opts.hl_shortcut = "AlphaShortcut"
+end
+
 -- Disable folding on alpha buffer
 dashboard.config.opts.noautocmd = true
 

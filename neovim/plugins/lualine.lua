@@ -1,10 +1,33 @@
 -- Lualine Configuration
 -- Modern statusline with LSP integration
 
+-- Greyscale theme matching the zsh prompt greys: every vim mode uses the
+-- same grey ramp (from theme/palette.lua) instead of gruvbox's per-mode
+-- accent colours (green command mode, blue insert, …)
+local c = require("theme.palette")
+local grey = {
+  a = { fg = c.darkest, bg = c.bright, gui = "bold" },
+  b = { fg = c.brightest, bg = c.dim },
+  c = { fg = c.bright, bg = c.faint },
+}
+local greyscale_theme = {
+  normal = grey,
+  insert = grey,
+  visual = grey,
+  replace = grey,
+  command = grey,
+  terminal = grey,
+  inactive = {
+    a = { fg = c.mid, bg = c.faint },
+    b = { fg = c.mid, bg = c.faint },
+    c = { fg = c.mid, bg = c.faint },
+  },
+}
+
 require("lualine").setup({
   options = {
     icons_enabled = true,
-    theme = "auto",
+    theme = greyscale_theme,
     component_separators = { left = "", right = "" },
     section_separators = { left = "", right = "" },
     disabled_filetypes = {
