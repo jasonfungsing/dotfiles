@@ -82,10 +82,13 @@ alias v="nvim"
 alias y="yarn"
 alias python=python3
 
-# Update everything (brew, oh-my-zsh, neovim plugins)
-alias update="brew update; brew upgrade --yes; brew upgrade --cask --greedy --yes; brew cleanup; omz update; nvim +Lazy sync +qa"
+# Update everything (brew, oh-my-zsh, neovim plugins).
+# The nvim part must be quoted as one arg ("+Lazy! sync") — unquoted, nvim
+# treats "sync" as a filename and never updates anything. Lazy! waits for
+# the sync to finish; --headless prints progress inline in the terminal.
+alias update='brew update; brew upgrade --yes; brew upgrade --cask --greedy --yes; brew cleanup; omz update; nvim --headless "+Lazy! sync" +qa; echo "\n✅ Update complete"'
 alias u=update
-alias vu="nvim +Lazy sync +qa"
+alias vu='nvim --headless "+Lazy! sync" +qa'
 
 # Git
 alias gpa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
