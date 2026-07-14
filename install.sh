@@ -646,10 +646,17 @@ restore_app_shortcuts() {
 install_packages() {
     log "Installing Homebrew packages..."
 
-    local bundle_args=(install --file="$REPO_DIR/brew/Brewfile" --verbose)
+    # Current brew bundle has no per-type install filters (--no-cask etc.
+    # were removed) — for --no-apps, install from a formulae-only copy of
+    # the Brewfile instead.
+    local brewfile="$REPO_DIR/brew/Brewfile"
     if [ "$INSTALL_APPS" = false ]; then
-        bundle_args+=(--no-cask --no-mas --no-vscode)
+        brewfile=$(mktemp /tmp/Brewfile.formulae.XXXXXX)
+        grep -E '^(tap|brew) ' "$REPO_DIR/brew/Brewfile" > "$brewfile"
+        log "Apps skipped — installing formulae only (${brewfile})"
     fi
+
+    local bundle_args=(install --file="$brewfile" --verbose)
 
     if [ "$DRY_RUN" = true ]; then
         log "[DRY RUN] Would run: brew bundle ${bundle_args[*]}"

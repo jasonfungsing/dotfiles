@@ -42,8 +42,6 @@ unfunction compinit bashcompinit compdump compaudit 2>/dev/null
 
 # ═══ 3. Oh-My-Zsh ═══
 
-source ~/.alias_prompt.sh
-
 export ZSH=~/.oh-my-zsh
 ZSH_THEME="cobalt2"
 export UPDATE_ZSH_DAYS=30
@@ -55,6 +53,12 @@ source $ZSH/oh-my-zsh.sh
 prompt_context() {
   prompt_segment white black "%(!.%{%F{yellow}%}.)$DEFAULT_USER"
 }
+
+# Alias reminder (Enter-key widget). Must load AFTER oh-my-zsh: omz forces
+# the emacs keymap (bindkey -e); loaded earlier, a shell that starts in vi
+# mode (EDITOR set, e.g. inside tmux) would bind the widget into the unused
+# viins keymap and the reminder would silently never fire.
+source ~/.alias_prompt.sh
 
 # ═══ 4. PATH ═══
 
