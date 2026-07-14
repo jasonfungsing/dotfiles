@@ -158,7 +158,7 @@ replaced the redundant `Ctrl+_` undo — undo remains on `Ctrl+X Ctrl+U`).
 ## Greyscale Theme
 
 The whole terminal renders in one grey ramp — no accent colours except
-file-type colours (`ls`, completion listings) and code syntax in nvim:
+file-type icons and code syntax in nvim:
 
 - **zsh prompt** — segment overrides in `zshrc` (§ Oh-My-Zsh)
 - **tmux** — status bar, messages, copy-mode, borders in `tmux.conf`
@@ -166,6 +166,10 @@ file-type colours (`ls`, completion listings) and code syntax in nvim:
   popup carries a synced copy
 - **git output** — `[color "…"]` sections in `git/gitconfig`
 - **grep** — `GREP_COLORS` in `zshrc`
+- **ls & completion listings** — `LSCOLORS`/`LS_COLORS` + `list-colors`
+  zstyle in `zshrc`: file types as grey levels (directories brightest bold,
+  executables light, symlinks mid, sockets/pipes dim)
+- **macOS** — Graphite accent/highlight in `mac/macos.sh`
 - **nvim** — see `neovim/theme/palette.lua`, the canonical ramp definition
   all of the above mirror (shell configs use the matching 256-palette
   indices, since not everything accepts hex)

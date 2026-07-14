@@ -103,6 +103,18 @@ export FZF_DEFAULT_OPTS="--color=fg:250,bg:-1,hl:255,fg+:255,bg+:237,hl+:255,inf
 # grep match highlighting: bright bold grey instead of red
 export GREP_COLORS="mt=1;38;5;255"
 
+# ls / completion file-type colours in grey levels: directories brightest
+# (bold), executables light, symlinks mid, sockets/pipes dim, broken links
+# struck through. BSD ls reads LSCOLORS (only ANSI slots — its white/bold
+# letters render grey in iTerm2); zsh completion menus and GNU tools read
+# the richer 256-level LS_COLORS.
+export CLICOLOR=1
+export LSCOLORS="HxhxhxhxhxhxhxhxhxHxHx"
+export LS_COLORS="di=1;38;5;255:ex=1;38;5;250:ln=38;5;246:so=38;5;243:pi=38;5;243:bd=38;5;243:cd=38;5;243:su=1;38;5;250:sg=1;38;5;250:tw=1;38;5;255:ow=1;38;5;255:or=9;38;5;243:mi=9;38;5;243"
+
+# completion listings use the same grey file-type colours
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
 # ═══ 6. Aliases ═══
 
 # Terminal & multiplexing
