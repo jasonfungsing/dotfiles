@@ -22,6 +22,11 @@ echo "=============================="
 
 # ═══ 1. General UI & system ═══
 
+echo "Graphite accent, highlight, and window controls (matches the greyscale terminal/nvim theme)"
+defaults write NSGlobalDomain AppleAccentColor -int -1
+defaults write NSGlobalDomain AppleHighlightColor -string "0.847059 0.847059 0.862745 Graphite"
+defaults write NSGlobalDomain AppleAquaColorVariant -int 6
+
 echo "Expand save dialog by default"
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 
