@@ -10,7 +10,6 @@ neovim/
 ├── CONFIG_STRUCTURE.md         # This file
 ├── config/
 │   ├── core.lua               # Basic Vim options, leader key, indentation
-│   ├── statusline.lua         # Custom statusline with powerline arrows
 │   ├── neovim.lua             # Neovim-specific settings & performance
 │   └── autocmds.lua           # Auto commands (trailing whitespace cleanup)
 ├── keymaps/
@@ -37,7 +36,6 @@ neovim/
 Handles fundamental Vim/Neovim configuration:
 
 - **core.lua** - Basic options (line numbers, indentation, file handling)
-- **statusline.lua** - Custom powerline-style statusline with colour highlights
 - **neovim.lua** - Neovim-specific settings (performance, undo, wildmenu)
 - **autocmds.lua** - Event handlers (trailing whitespace removal on save)
 
@@ -69,7 +67,7 @@ Helper functions and custom commands:
 
 The `init.lua` entry point loads modules in this order:
 
-1. Core configuration (core, statusline, neovim, autocmds)
+1. Core configuration (core, neovim, autocmds)
 2. Key mappings (general, buffer, lsp, dashboard)
 3. Plugins (lazy.nvim bootstrap and all plugins)
 4. Theme (gruvbox colourscheme)
@@ -108,7 +106,7 @@ Determine if the mapping is:
 
 Determine which category the setting belongs to:
 - **Core Vim options** → `config/core.lua`
-- **Statusline styling** → `config/statusline.lua`
+- **Statusline styling** → `plugins/lualine.lua`
 - **Neovim-specific** → `config/neovim.lua`
 - **Visual/theme** → `theme/colours.lua`
 

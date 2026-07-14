@@ -100,11 +100,19 @@ require("lazy").setup({
     end,
   },
 
-  -- Treesitter for better syntax highlighting and code understanding
+  -- Treesitter for better syntax highlighting and code understanding.
+  -- main branch (the rewrite): required for nvim 0.12+ — the frozen master
+  -- branch throws highlighter errors there. Needs the tree-sitter CLI
+  -- (brew "tree-sitter") to compile parsers.
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSInstall", "TSUpdate", "TSUninstall", "TSLog" },
+    dependencies = {
+      { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
+    },
     config = function()
       require("plugins.treesitter")
     end,
@@ -360,7 +368,7 @@ require("lazy").setup({
   -- Language-specific plugins
   { "gavocanov/vim-js-indent", ft = "javascript" },
   { "pangloss/vim-javascript", ft = "javascript" },
-  { "fatih/vim-go", ft = "go" },
+  -- (vim-go removed: gopls via LSP + conform cover it)
 
   -- Text manipulation
   { "tpope/vim-markdown", ft = "markdown" },
@@ -371,8 +379,7 @@ require("lazy").setup({
   { "morhetz/gruvbox", lazy = false, priority = 1000 },
   -- Relative numbers in normal mode, absolute in insert — autocmd driven
   { "jeffkreeftmeijer/vim-numbertoggle", event = "VeryLazy" },
-  -- Physics-based smooth scrolling (rebinds C-d/C-u/C-f/C-b)
-  { "yuttie/comfortable-motion.vim", event = "VeryLazy" },
+  -- (smooth scrolling is native: vim.opt.smoothscroll in config/core.lua)
 
   -- Git integration
   -- Fugitive: :Git status/blame/log etc.
@@ -421,12 +428,16 @@ require("lazy").setup({
     end,
   },
 
-  -- Tags and navigation
+  -- Code outline from LSP/treesitter symbols (replaces tagbar — no ctags)
   {
-    "preservim/tagbar",
-    cmd = "TagbarToggle",
+    "stevearc/aerial.nvim",
+    cmd = { "AerialToggle", "AerialOpen", "AerialNavToggle" },
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
     config = function()
-      require("plugins.tagbar")
+      require("aerial").setup({})
     end,
   },
 

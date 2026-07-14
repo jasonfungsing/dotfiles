@@ -48,8 +48,8 @@ keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", opts)
 -- NvimTree
 keymap("n", "<leader>e", ":NvimTreeToggle<CR>", opts)
 
--- Tagbar
-keymap("n", "<leader>t", ":TagbarToggle<CR>", opts)
+-- Code outline (aerial — LSP/treesitter symbols)
+keymap("n", "<leader>t", ":AerialToggle<CR>", opts)
 
 -- Mason
 keymap("n", "<leader>m", ":Mason<CR>", opts)

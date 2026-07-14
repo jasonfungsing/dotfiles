@@ -76,7 +76,7 @@ The leader key is `,`. A few highlights:
 |-----|--------|
 | `,ne` | Toggle file tree (nvim-tree) |
 | `,n<Space>` | Reveal current file in tree |
-| `,t` | Toggle Tagbar |
+| `,t` | Toggle code outline (Aerial, LSP symbols) |
 | `,f` | Find files (Telescope) |
 | `,w` | Live grep (Telescope) |
 | `,r` | Recent files (Telescope) |

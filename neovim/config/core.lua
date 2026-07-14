@@ -21,6 +21,9 @@ vim.opt.syntax = "enable"
 vim.opt.termguicolors = true
 vim.opt.laststatus = 2
 
+-- Native smooth scrolling (replaces comfortable-motion.vim)
+vim.opt.smoothscroll = true
+
 -- Indentation
 vim.opt.autoindent = true
 vim.opt.smartindent = true

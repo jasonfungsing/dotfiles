@@ -16,6 +16,4 @@ keymap("i", "<C-q>", "<ESC>:bp|bd #<CR>", opts)
 -- Leader key mappings
 keymap("n", "<leader>ne", ":NvimTreeToggle<CR>", opts)
 keymap("n", "<leader>n ", ":NvimTreeFindFile<CR>", opts)
-keymap("n", "<leader>t", function()
-  pcall(vim.cmd, "TagbarToggle")
-end, opts)
+-- (<leader>t code outline lives in keymaps/lsp.lua)
