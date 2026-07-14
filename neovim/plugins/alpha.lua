@@ -29,7 +29,6 @@ dashboard.section.buttons.val = {
   dashboard.button("f", "🔍  Find file", ":Telescope find_files <CR>"),
   dashboard.button("r", "📚  Recent files", ":Telescope oldfiles <CR>"),
   dashboard.button("w", "🔤  Find word", ":Telescope live_grep <CR>"),
-  dashboard.button("p", "📁  Find project", ":Telescope projects <CR>"),
   dashboard.button("c", "⚙️  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
   dashboard.button("s", "💾  Restore session", ":lua require('persistence').load() <CR>"),
   dashboard.button("l", "🔌  Lazy", ":Lazy <CR>"),

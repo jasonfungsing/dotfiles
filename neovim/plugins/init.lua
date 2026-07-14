@@ -204,15 +204,16 @@ require("lazy").setup({
     end,
   },
 
-  -- Better diagnostics and error navigation
+  -- Better diagnostics and error navigation (Trouble v3 command syntax)
   {
     "folke/trouble.nvim",
-    cmd = { "TroubleToggle", "Trouble" },
+    cmd = "Trouble",
     keys = {
-      { "<leader>xx", "<cmd>TroubleToggle<cr>", desc = "Toggle Trouble" },
-      { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics" },
-      { "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics" },
-      { "gR", "<cmd>TroubleToggle lsp_references<cr>", desc = "LSP References" },
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+      { "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
+      { "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
+      { "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Location List (Trouble)" },
+      { "gR", "<cmd>Trouble lsp_references toggle<cr>", desc = "LSP References (Trouble)" },
     },
     config = function()
       require("plugins.trouble")
@@ -328,16 +329,6 @@ require("lazy").setup({
     end,
   },
 
-  -- Modern colorscheme
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    priority = 1000,
-    config = function()
-      require("plugins.catppuccin")
-    end,
-  },
-
   -- Color visualization
   {
     "norcalli/nvim-colorizer.lua",
@@ -358,7 +349,7 @@ require("lazy").setup({
     keys = {
       { "<leader>gd", desc = "Git Diff View" },
       { "<leader>gh", desc = "Git File History" },
-      { "<leader>gc", desc = "Close Git Diff" },
+      { "<leader>gq", desc = "Close Git Diff" },
       { "<leader>gf", desc = "Git File History (current)" },
     },
     config = function()

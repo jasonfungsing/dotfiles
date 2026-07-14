@@ -140,7 +140,7 @@ defaults write com.apple.dock orientation -string "right"
 # defaults write com.apple.dock mouse-over-hilte-stack -bool true
 
 # echo "Enable spring loading for all Dock items"
-# defaults write enable-spring-load-actions-on-all-items -bool true
+# defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
 
 # echo "Show indicator lights for open applications in the Dock"
 # defaults write com.apple.dock show-process-indicators -bool true
@@ -166,6 +166,7 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 echo "Enable tap to click (Trackpad)"
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 
 # echo "Map bottom right Trackpad corner to right-click"
 # defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
@@ -195,5 +196,5 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 
 echo "Kill affected applications"
 for app in Finder Dock Mail SystemUIServer; do
-    pkill -f "$app" >/dev/null 2>&1 || true
+    killall "$app" >/dev/null 2>&1 || true
 done

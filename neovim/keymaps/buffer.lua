@@ -1,19 +1,12 @@
 -- Buffer Management Key Mappings
--- Navigation between buffers and tabs
+-- Note: Ctrl maps are case-insensitive in terminals, so <C-J>/<C-K> etc.
+-- cannot coexist with the window-navigation maps in keymaps/lsp.lua.
+-- Buffer cycling lives on Shift+H / Shift+L (bufferline, plugins/init.lua).
 
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
--- Buffer navigation
-keymap("n", "<C-J>", ":bnext<CR>", opts)
-keymap("n", "<C-K>", ":bprev<CR>", opts)
-
--- Tab navigation
-keymap("n", "<C-L>", ":tabn<CR>", opts)
-keymap("n", "<C-H>", ":tabp<CR>", opts)
-
--- New buffer/tab
-keymap("n", "<C-T>", ":enew<CR>", opts)
+-- New tab
 keymap("n", "<C-t>", "<ESC>:tabnew<CR>", opts)
 
 -- Close buffer

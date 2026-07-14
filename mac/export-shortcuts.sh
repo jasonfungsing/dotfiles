@@ -116,7 +116,7 @@ main() {
     echo ""
     echo "╔════════════════════════════════════════════════════════╗"
     echo "║      Keyboard Shortcuts Export Utility                 ║"
-    echo "║      macOS System Preferences                          ║"
+    echo "║      macOS System Settings                             ║"
     echo "╚════════════════════════════════════════════════════════╝"
     echo ""
     

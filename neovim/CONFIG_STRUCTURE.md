@@ -15,18 +15,18 @@ neovim/
 │   └── autocmds.lua           # Auto commands (trailing whitespace cleanup)
 ├── keymaps/
 │   ├── general.lua            # General navigation & helpers
-│   └── buffer.lua             # Buffer/tab management keymaps
+│   ├── buffer.lua             # Buffer/tab management keymaps
+│   ├── lsp.lua                # Window navigation, editing & plugin keymaps
+│   └── dashboard.lua          # Leader shortcuts mirroring the Alpha dashboard
 ├── plugins/
-│   ├── init.lua               # Lazy.nvim bootstrap & plugin specs
-│   ├── nvim-tree.lua          # File tree navigation
-│   ├── nerd-commenter.lua     # Advanced commenting
-│   ├── ale.lua                # Linting engine configuration
-│   ├── coc.lua                # Language server protocol setup
-│   ├── ctrlp.lua              # Fuzzy file finder with ag
-│   ├── rainbow.lua            # Rainbow parentheses highlighting
-│   └── tagbar.lua             # Code structure navigation
+│   ├── init.lua               # Lazy.nvim bootstrap & all plugin specs
+│   └── <plugin-name>.lua      # One config file per configured plugin
+│                              # (lsp, nvim-cmp, mason-lspconfig, conform,
+│                              #  telescope, nvim-tree, treesitter, trouble,
+│                              #  bufferline, lualine, gitsigns, diffview,
+│                              #  toggleterm, harpoon, alpha, which-key, …)
 ├── theme/
-│   └── colours.lua            # Colourscheme & diff highlighting
+│   └── colours.lua            # Colourscheme (gruvbox) & diff highlighting
 └── utils/
     └── functions.lua          # Helper functions & custom commands
 ```
@@ -45,7 +45,9 @@ Handles fundamental Vim/Neovim configuration:
 Organised key bindings by functionality:
 
 - **general.lua** - Navigation helpers, paste formatting, arrow key warnings
-- **buffer.lua** - Buffer and tab navigation/management
+- **buffer.lua** - Tab/buffer management (new tab, close buffer, NvimTree)
+- **lsp.lua** - Window navigation (Ctrl+H/J/K/L), resizing, text moving, diagnostics float
+- **dashboard.lua** - Leader shortcuts matching the Alpha dashboard buttons
 
 ### `plugins/` - Plugin Management
 All plugin-related configuration through lazy.nvim:
@@ -68,9 +70,9 @@ Helper functions and custom commands:
 The `init.lua` entry point loads modules in this order:
 
 1. Core configuration (core, statusline, neovim, autocmds)
-2. Key mappings (general, buffer)
+2. Key mappings (general, buffer, lsp, dashboard)
 3. Plugins (lazy.nvim bootstrap and all plugins)
-4. Theme (colourscheme)
+4. Theme (gruvbox colourscheme)
 5. Utilities (custom functions)
 
 This order ensures settings are applied before keymaps, and plugins load after core settings.
@@ -98,7 +100,9 @@ Example:
 Determine if the mapping is:
 - **General navigation/utility** → Add to `keymaps/general.lua`
 - **Buffer/tab related** → Add to `keymaps/buffer.lua`
-- **Plugin-specific** → Keep in the plugin's config file
+- **Window/editing/diagnostics** → Add to `keymaps/lsp.lua`
+- **Plugin-specific** → Prefer the plugin's `keys = {...}` in `plugins/init.lua`
+  (lazy-loads the plugin on first press), or the plugin's config file
 
 ## Adding New Settings
 

@@ -324,7 +324,7 @@ install_git_dotfiles() {
 install_terminal_dotfiles() {
     log "Linking terminal dotfiles..."
     # Note: iTerm2 config (app/iterm2/) is not symlinked — configure_iterm2
-    # points iTerm2's "load preferences from a custom folder" setting at it.
+    # points iTerm2's "load settings from a custom folder" setting at it.
     link_file "$REPO_DIR/terminal/tmux.conf" "$HOME/.tmux.conf"
     return 0
 }
@@ -458,7 +458,7 @@ configure_iterm2() {
         log "✗ Failed to write iTerm2 preference keys"
         return 1
     fi
-    success "iTerm2 set to load preferences from $REPO_DIR/app/iterm2"
+    success "iTerm2 set to load settings from $REPO_DIR/app/iterm2"
 }
 
 install_zsh_theme() {

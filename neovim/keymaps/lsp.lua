@@ -19,9 +19,7 @@ keymap("n", "<C-Down>", ":resize +2<CR>", opts)
 keymap("n", "<C-Left>", ":vertical resize -2<CR>", opts)
 keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
 
--- Navigate buffers
-keymap("n", "<S-l>", ":bnext<CR>", opts)
-keymap("n", "<S-h>", ":bprevious<CR>", opts)
+-- Buffer cycling is on Shift+H / Shift+L via bufferline (plugins/init.lua)
 keymap("n", "<leader>bd", ":bdelete<CR>", opts)
 
 -- Move text up and down
@@ -62,6 +60,6 @@ keymap("n", "<leader>m", ":Mason<CR>", opts)
 -- Lazy plugin manager
 keymap("n", "<leader>l", ":Lazy<CR>", opts)
 
--- Diagnostic keymaps (global, not LSP-specific)
-keymap("n", "<leader>xx", vim.diagnostic.open_float, opts)
-keymap("n", "<leader>xl", vim.diagnostic.setloclist, opts)
+-- Diagnostic float; the <leader>x* list views belong to Trouble
+-- (see plugins/init.lua)
+keymap("n", "<leader>xf", vim.diagnostic.open_float, opts)

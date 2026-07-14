@@ -614,7 +614,8 @@ local opts = { noremap = true, silent = true }
 -- Open diffview
 keymap("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", opts)
 keymap("n", "<leader>gh", "<cmd>DiffviewFileHistory<cr>", opts)
-keymap("n", "<leader>gc", "<cmd>DiffviewClose<cr>", opts)
+-- <leader>gq ("quit") — <leader>gc belongs to Telescope git_commits
+keymap("n", "<leader>gq", "<cmd>DiffviewClose<cr>", opts)
 
 -- Git file history for current file
 keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory %<cr>", opts)
