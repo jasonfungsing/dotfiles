@@ -441,14 +441,19 @@ require("lazy").setup({
     end,
   },
 
-  -- Keybinding helper and discoverer
+  -- Keybinding helper and discoverer — F1 / <leader>? open the dynamic
+  -- shortcut sheet generated from the live keymaps (never goes stale)
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    keys = {
+      { "<F1>", "<cmd>WhichKey<cr>", desc = "Shortcut sheet (drill into prefixes)" },
+      -- Ctrl+/ arrives as <C-_> in most terminals, <C-/> in newer ones
+      { "<C-_>", "<cmd>WhichKey<cr>", desc = "Shortcut sheet" },
+      { "<C-/>", "<cmd>WhichKey<cr>", desc = "Shortcut sheet" },
+    },
     config = function()
       require("plugins.which-key")
-      -- Load ultimate help system
-      require("plugins.help-system")
     end,
   },
 

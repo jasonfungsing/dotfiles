@@ -8,7 +8,9 @@ end
 
 wk.setup({
   preset = "helix",
-  delay = 999999,
+  -- Pop the dynamic key sheet after hesitating on a prefix (e.g. press ","
+  -- and wait); F1 opens the full sheet immediately
+  delay = 400,
   win = {
     border = "rounded",
     padding = { 2, 4 },
