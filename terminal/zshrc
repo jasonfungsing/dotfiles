@@ -156,6 +156,10 @@ unset _zcompdump
 # direnv
 eval "$(direnv hook zsh)"
 
+# thefuck — type `fuck` to correct the previous command (guarded: skipped
+# on machines where it isn't installed)
+command -v thefuck > /dev/null && eval "$(thefuck --alias)"
+
 
 # ═══ 9. Private / machine-local (not tracked in git) ═══
 

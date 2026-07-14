@@ -82,7 +82,7 @@ brew list --cask
 | System & terminal | `tmux`, `tmuxinator`, `reattach-to-user-namespace`, `htop`, `btop`, `coreutils`, `zsh`, `zsh-completions`, `zsh-syntax-highlighting`, `bash-completion@2`, `direnv`, `entr`, `watchman`, `shellcheck` |
 | Networking | `curl`, `wget`, `nmap`, `mosh`, `tailscale` |
 | Documentation & media | `pandoc`, `markdown`, `tesseract` (OCR), `graphviz`, `cloc`, `figlet`, `cmatrix` |
-| Productivity helpers | `cheat`, `navi`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
+| Productivity helpers | `cheat`, `navi`, `thefuck`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
 
 ### Casks (GUI applications)
 
