@@ -30,27 +30,30 @@ exec zsh
 | File | Purpose |
 |------|---------|
 | `.zshrc` | Zsh shell configuration with aliases, plugins, and integrations |
-| `.alias_prompt.sh` | Custom aliases and prompt configuration |
-| `.config/nvim/init.lua` | Neovim editor configuration (pure Lua) |
+| `.alias_prompt.sh` | Alias reminder — blocks Enter and suggests the alias when one exists for the typed command |
+| `.config/nvim/*` | Neovim configuration (pure Lua, modular — init.lua plus config/keymaps/plugins/theme/utils) |
 | `.tmux.conf` | Terminal multiplexer (tmux) configuration |
 | `.gitconfig` | Git version control configuration |
 | `.hushlogin` | Suppresses macOS login message |
 
 ### Homebrew Packages (100+)
 Organized by category:
-- **DevOps & Cloud**: Docker, Kubernetes, Helm, AWS CLI, GCloud, Skaffold, Kops, Minikube, Kind
-- **Development**: Go, Node.js, Python, Java, Ruby, Rust support
+- **DevOps & Cloud**: Docker, Kubernetes (kubectl, helm, minikube, kind, kops, skaffold, stern), Tailscale
+- **Development**: Go, Node.js, Python, Java, Ruby
 - **Build Tools**: Maven, Gradle, Make, CMake, Protobuf
-- **CLI Utilities**: git, tmux, kubectl, lazygit, ripgrep, fzf, jq, curl, wget, htop
-- **Language Tools**: golangci-lint, rustfmt, shellcheck, pylint
-- **Databases**: RocksDB, Temporal
-- **Miscellaneous**: GraphQL, Pandoc, Tesseract OCR, Figlet
+- **CLI Utilities**: git, tmux, tmuxinator, lazygit, ripgrep, fzf, jq, curl, wget, btop
+- **Language Tools**: golangci-lint, shellcheck
+- **Databases**: RocksDB
+- **Miscellaneous**: Pandoc, Tesseract OCR, Figlet
+
+See the [full package list with rationale](brew/README.md).
 
 ### Applications (via Homebrew Cask & Mac App Store)
 - IDEs: Xcode, Visual Studio Code, Antigravity IDE
 - Terminal: iTerm2 (+ Powerline fonts)
 - Browsers: Google Chrome
-- AI assistants: Claude desktop, Gemini
+- AI assistants: Claude desktop, Claude Code CLI, Gemini
+- Development: Docker Desktop
 - Productivity: Raycast, Slack, Setapp, Logi Options+
 - Security: Little Snitch, Okta Verify
 - Media: AdBlock for Safari, Dark Reader for Safari
@@ -119,11 +122,14 @@ If you prefer to install manually:
    ```bash
    ln -s ~/.dotfiles/terminal/zshrc ~/.zshrc
    ln -s ~/.dotfiles/terminal/alias_prompt.sh ~/.alias_prompt.sh
-   mkdir -p ~/.config/nvim
-   ln -s ~/.dotfiles/neovim/init.lua ~/.config/nvim/init.lua
    ln -s ~/.dotfiles/terminal/tmux.conf ~/.tmux.conf
    ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
    ln -s ~/.dotfiles/mac/hushlogin ~/.hushlogin
+   # Neovim is modular — link everything, not just init.lua
+   mkdir -p ~/.config/nvim
+   for item in ~/.dotfiles/neovim/*; do
+     [ "$(basename "$item")" = "README.md" ] || ln -s "$item" ~/.config/nvim/
+   done
    ```
 
 3. **Install Homebrew** and add it to your PATH:
@@ -212,7 +218,6 @@ brew upgrade
 ```
 dotfiles/
 ├── README.md                 # This file
-├── CHANGELOG.md              # Version history and changes
 ├── install.sh                # Main installation script
 │
 ├── brew/                     # Homebrew configuration
@@ -274,10 +279,10 @@ If the script exits with an error:
 
 ### Installation fails with permission errors
 
-Run with appropriate permissions:
-```bash
-sudo ./install.sh
-```
+**Do not run the installer with sudo** — it refuses to run as root (Homebrew
+won't, and symlinks would land in root's home). Run it as your normal user;
+the steps that genuinely need admin rights prompt for your password
+themselves.
 
 ### Symlinks already exist
 
@@ -350,6 +355,8 @@ This checks:
 - Zsh is the default shell and Oh-My-Zsh is present
 - `brew bundle check` confirms the machine matches the Brewfile
 - Key tools (git, jq, node, python3, go) are on the PATH
+- iTerm2 loads its preferences from app/iterm2/
+- Repo health: keyboard-shortcuts.json is valid JSON, install.sh parses
 
 It exits 0 only when every check passes.
 
@@ -372,7 +379,8 @@ u  # Update all packages, casks, Oh-My-Zsh, and Neovim plugins
 
 Or use the full command:
 ```bash
-update  # Alias for: brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup; omz update; nvim +Lazy sync +qa
+update  # brew update + upgrade (incl. casks) + cleanup, omz update, then
+        # nvim --headless "+Lazy! sync" +qa to update Neovim plugins
 ```
 
 ## Uninstallation
@@ -386,7 +394,8 @@ rm ~/.tmux.conf
 rm ~/.gitconfig
 rm ~/.alias_prompt.sh
 rm ~/.hushlogin
-rm ~/.config/nvim/init.lua
+rm ~/.oh-my-zsh/custom/themes/cobalt2.zsh-theme
+find ~/.config/nvim -maxdepth 1 -type l -delete   # all Neovim config symlinks
 
 # Set bash back as default shell
 chsh -s /bin/bash
@@ -399,16 +408,16 @@ rm -rf ~/.dotfiles
 
 For detailed information, see:
 - [macOS Settings](mac/README.md)
-- [Homebrew Packages & Lock File](brew/README.md)
-- [Shell Aliases & Terminal Setup](terminal/README.md)
+- [Homebrew Packages](brew/README.md)
+- [Shell Aliases, Keyboard Shortcuts & Terminal Setup](terminal/README.md)
 - [Neovim Setup](neovim/README.md)
 
 ## Technology Stack
 
 This dotfiles configuration supports a modern development stack focused on:
-- **Cloud & DevOps**: Docker, Kubernetes, AWS, Google Cloud
+- **Cloud & DevOps**: Docker, Kubernetes, Tailscale
 - **Backend Development**: Go, Python, Node.js, Java, Ruby
-- **Development Tools**: Git, tmux, Vim, VS Code
+- **Development Tools**: Git, tmux, Neovim, VS Code
 - **Infrastructure**: Helm, Kops, Minikube, Skaffold
 
 ## Contributing
@@ -428,7 +437,7 @@ For issues or questions:
 
 ---
 
-**Last Updated**: March 8, 2026
+**Last Updated**: July 14, 2026
 **macOS Version**: 26.3+
 **Shell**: Zsh
 **Package Manager**: Homebrew

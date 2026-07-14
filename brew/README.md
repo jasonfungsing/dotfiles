@@ -72,7 +72,7 @@ brew list --cask
 
 | Category | Key packages |
 |----------|--------------|
-| Text processing & search | `ripgrep`, `bat`, `fd`, `jq`, `diff-so-fancy`, `wdiff`, `highlight` |
+| Text processing & search | `ripgrep`, `bat`, `fd`, `fzf`, `jq`, `diff-so-fancy`, `wdiff`, `highlight` |
 | Navigation & files | `autojump`, `z`, `eza` (modern `ls` with colours), `nnn`, `tree`, `rename` |
 | Languages & runtimes | `go`, `node`, `python3`, `ruby`, `gawk` |
 | Version & package managers | `fnm`, `nvm`, `rbenv`/`ruby-build`, `jabba`, `pnpm`, `yarn`, `pipenv`, `uv`, `cocoapods` |
