@@ -243,9 +243,9 @@ dotfiles/
 ├── app/                      # Application configuration
 │   ├── iterm2/
 │   │   └── com.googlecode.iterm2.plist  # iTerm2 terminal settings
-│   └── vscode/
-│       ├── settings.json     # VS Code settings (symlinked by install.sh)
-│       └── keybindings.json  # VS Code keybindings (Cmd+Enter → Claude CLI submit)
+│   └── vscode/               # Shared by VS Code AND Antigravity IDE
+│       ├── settings.json     # Editor settings (symlinked by install.sh)
+│       └── keybindings.json  # Keybindings (Cmd+Enter → Claude CLI submit)
 │
 └── mac/                      # macOS system configuration
     ├── macos.sh              # macOS system preferences script

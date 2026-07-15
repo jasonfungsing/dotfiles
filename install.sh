@@ -462,17 +462,21 @@ configure_iterm2() {
     success "iTerm2 set to load settings from $REPO_DIR/app/iterm2"
 }
 
-# VS Code reads user config from ~/Library/Application Support/Code/User —
-# symlink settings and keybindings to the repo copies (app/vscode/). The
-# directory is created if missing so the links are in place before VS
-# Code's first launch.
+# VS Code (and Antigravity IDE, a VS Code fork that reads the same config
+# format) get their user settings and keybindings symlinked to the shared
+# repo copies (app/vscode/). Directories are created if missing so the
+# links are in place before each editor's first launch.
 install_vscode_config() {
-    local vscode_user="$HOME/Library/Application Support/Code/User"
-    if [ "$DRY_RUN" != true ]; then
-        mkdir -p "$vscode_user"
-    fi
-    link_file "$REPO_DIR/app/vscode/settings.json" "$vscode_user/settings.json"
-    link_file "$REPO_DIR/app/vscode/keybindings.json" "$vscode_user/keybindings.json"
+    local user_dir
+    for user_dir in \
+        "$HOME/Library/Application Support/Code/User" \
+        "$HOME/Library/Application Support/Antigravity IDE/User"; do
+        if [ "$DRY_RUN" != true ]; then
+            mkdir -p "$user_dir"
+        fi
+        link_file "$REPO_DIR/app/vscode/settings.json" "$user_dir/settings.json"
+        link_file "$REPO_DIR/app/vscode/keybindings.json" "$user_dir/keybindings.json"
+    done
 }
 
 install_zsh_theme() {
@@ -966,6 +970,8 @@ run_validation() {
     v_check_symlink "$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme" "$REPO_DIR/terminal/cobalt2.zsh-theme"
     v_check_symlink "$HOME/Library/Application Support/Code/User/settings.json" "$REPO_DIR/app/vscode/settings.json"
     v_check_symlink "$HOME/Library/Application Support/Code/User/keybindings.json" "$REPO_DIR/app/vscode/keybindings.json"
+    v_check_symlink "$HOME/Library/Application Support/Antigravity IDE/User/settings.json" "$REPO_DIR/app/vscode/settings.json"
+    v_check_symlink "$HOME/Library/Application Support/Antigravity IDE/User/keybindings.json" "$REPO_DIR/app/vscode/keybindings.json"
 
     # install.sh symlinks every item in neovim/ (except README.md) into ~/.config/nvim
     local item name

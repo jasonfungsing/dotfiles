@@ -1,6 +1,8 @@
 # VS Code Configuration
 
-User-level VS Code settings, symlinked into place by `install.sh`.
+User-level VS Code settings, symlinked into place by `install.sh` — into
+both VS Code and Antigravity IDE (a VS Code fork that reads the same
+config format), so the two editors share one config.
 
 ## File Structure
 
@@ -18,9 +20,10 @@ User-level VS Code settings, symlinked into place by `install.sh`.
 ## How It Works
 
 `install.sh` symlinks both files into
-`~/Library/Application Support/Code/User/`, so edits made in VS Code's
-settings UI write straight back into this repo — commit them like any
-other change.
+`~/Library/Application Support/Code/User/` and
+`~/Library/Application Support/Antigravity IDE/User/`, so edits made in
+either editor's settings UI write straight back into this repo — commit
+them like any other change.
 
 Extensions are not managed here; install them per machine (or via VS Code
 Settings Sync if signed in).
