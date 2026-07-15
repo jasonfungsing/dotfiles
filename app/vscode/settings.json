@@ -1,0 +1,73 @@
+{
+    // Greyscale UI chrome, matching the dotfiles grey ramp
+    // (neovim/theme/palette.lua): #bcbcbc / #949494 / #767676 / #4e4e4e /
+    // #3a3a3a / #262626. Syntax colours and file icons stay.
+    "workbench.colorCustomizations": {
+        "focusBorder": "#767676",
+        "progressBar.background": "#949494",
+        "textLink.foreground": "#bcbcbc",
+        "textLink.activeForeground": "#eeeeee",
+        "button.background": "#4e4e4e",
+        "button.foreground": "#eeeeee",
+        "button.hoverBackground": "#767676",
+        "badge.background": "#767676",
+        "badge.foreground": "#eeeeee",
+        "activityBarBadge.background": "#767676",
+        "activityBarBadge.foreground": "#eeeeee",
+        "activityBar.activeBorder": "#bcbcbc",
+        "tab.activeBorderTop": "#bcbcbc",
+        "panelTitle.activeBorder": "#bcbcbc",
+        "statusBar.debuggingBackground": "#4e4e4e",
+        "statusBar.debuggingForeground": "#eeeeee",
+        "statusBarItem.remoteBackground": "#3a3a3a",
+        "statusBarItem.remoteForeground": "#bcbcbc",
+        "list.highlightForeground": "#eeeeee",
+        "list.focusHighlightForeground": "#eeeeee",
+        "list.activeSelectionBackground": "#3a3a3a",
+        "menu.selectionBackground": "#4e4e4e",
+        "selection.background": "#4e4e4e",
+        "editor.selectionBackground": "#4e4e4e",
+        "editor.findMatchBackground": "#94949466",
+        "editor.findMatchHighlightBackground": "#4e4e4e88",
+        "editorSuggestWidget.highlightForeground": "#eeeeee",
+        "editorSuggestWidget.focusHighlightForeground": "#eeeeee",
+        "pickerGroup.foreground": "#949494",
+        "settings.modifiedItemIndicator": "#949494",
+        "extensionButton.prominentBackground": "#4e4e4e",
+        "extensionButton.prominentHoverBackground": "#767676",
+        "terminal.tab.activeBorder": "#bcbcbc",
+        "gitDecoration.modifiedResourceForeground": "#bcbcbc",
+        "gitDecoration.untrackedResourceForeground": "#949494",
+        "gitDecoration.addedResourceForeground": "#949494",
+        "gitDecoration.deletedResourceForeground": "#767676",
+        "gitDecoration.ignoredResourceForeground": "#6a6a6a",
+        "gitDecoration.conflictingResourceForeground": "#eeeeee",
+        "editorGutter.modifiedBackground": "#949494",
+        "editorGutter.addedBackground": "#949494",
+        "editorGutter.deletedBackground": "#767676",
+        "editorOverviewRuler.modifiedForeground": "#949494",
+        "editorOverviewRuler.addedForeground": "#949494",
+        "editorOverviewRuler.deletedForeground": "#767676"
+    },
+
+    // Editor & workbench
+    "explorer.confirmDelete": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "jdk.telemetry.enabled": false,
+    "http.systemCertificatesNode": true,
+
+    // Git
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+
+    // Terminal: FiraCode NF for nvim file icons; Option-as-meta so
+    // Option+Enter submits in the Claude Code CLI
+    "terminal.integrated.fontFamily": "FiraCode Nerd Font",
+    "terminal.integrated.macOptionIsMeta": true,
+    "terminal.integrated.gpuAcceleration": "off",
+    "terminal.integrated.mouseWheelScrollSensitivity": 3,
+
+    // Claude Code: Enter inserts a newline, Cmd+Enter sends
+    "claudeCode.useCtrlEnterToSend": true
+}

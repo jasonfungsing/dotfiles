@@ -9,9 +9,10 @@ iTerm2 terminal emulator settings.
 ## What It Contains
 
 - Terminal colour schemes
-- Font settings
+- Font settings (Monaco for text, FiraCode Nerd Font for icons/symbols)
 - Window and tab behaviour
-- Keyboard shortcuts
+- Keyboard shortcuts — including Cmd+Enter → ESC+CR, which submits in the
+  Claude Code CLI (and intentionally shadows iTerm2's fullscreen toggle)
 - Session profiles
 - Advanced settings
 

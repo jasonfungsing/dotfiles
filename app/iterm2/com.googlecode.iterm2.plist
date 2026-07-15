@@ -1098,6 +1098,13 @@
 					<key>Text</key>
 					<string>9</string>
 				</dict>
+				<key>0xd-0x100000</key>
+				<dict>
+					<key>Action</key>
+					<integer>11</integer>
+					<key>Text</key>
+					<string>0x1b 0x0d</string>
+				</dict>
 				<key>0xf739-0x0</key>
 				<dict>
 					<key>Action</key>

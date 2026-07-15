@@ -462,6 +462,19 @@ configure_iterm2() {
     success "iTerm2 set to load settings from $REPO_DIR/app/iterm2"
 }
 
+# VS Code reads user config from ~/Library/Application Support/Code/User —
+# symlink settings and keybindings to the repo copies (app/vscode/). The
+# directory is created if missing so the links are in place before VS
+# Code's first launch.
+install_vscode_config() {
+    local vscode_user="$HOME/Library/Application Support/Code/User"
+    if [ "$DRY_RUN" != true ]; then
+        mkdir -p "$vscode_user"
+    fi
+    link_file "$REPO_DIR/app/vscode/settings.json" "$vscode_user/settings.json"
+    link_file "$REPO_DIR/app/vscode/keybindings.json" "$vscode_user/keybindings.json"
+}
+
 install_zsh_theme() {
     log "Installing Zsh theme (cobalt2)..."
     
@@ -951,6 +964,8 @@ run_validation() {
     v_check_symlink "$HOME/.gitconfig" "$REPO_DIR/git/gitconfig"
     v_check_symlink "$HOME/.hushlogin" "$REPO_DIR/mac/hushlogin"
     v_check_symlink "$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme" "$REPO_DIR/terminal/cobalt2.zsh-theme"
+    v_check_symlink "$HOME/Library/Application Support/Code/User/settings.json" "$REPO_DIR/app/vscode/settings.json"
+    v_check_symlink "$HOME/Library/Application Support/Code/User/keybindings.json" "$REPO_DIR/app/vscode/keybindings.json"
 
     # install.sh symlinks every item in neovim/ (except README.md) into ~/.config/nvim
     local item name
@@ -1114,6 +1129,7 @@ main() {
         run_step "Link terminal dotfiles" install_terminal_dotfiles
         run_step "Install tmux plugins" install_tmux_plugins
         run_step "Configure iTerm2 preferences folder" configure_iterm2
+        run_step "Link VS Code settings" install_vscode_config
     fi
 
     if [ "$INSTALL_EDITOR" = true ]; then

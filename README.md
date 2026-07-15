@@ -76,7 +76,7 @@ The `install.sh` script automates the entire setup process:
 2. Uninstalls brew packages, casks, taps, and VS Code extensions **not** declared in the Brewfile (the Brewfile is the source of truth — skip with `--no-prune`)
 3. Installs Oh-My-Zsh and sets Zsh as the default shell
 4. Creates symlinks for all dotfiles to your home directory
-5. Installs tmux plugins and points iTerm2 at its config folder (app/iterm2/)
+5. Installs tmux plugins, points iTerm2 at its config folder (app/iterm2/), and symlinks VS Code settings (app/vscode/)
 6. Sets up the Neovim configuration
 7. Applies macOS system preferences and keyboard shortcuts
 8. Validates the finished setup
@@ -241,8 +241,11 @@ dotfiles/
 │   └── gitconfig             # Git version control configuration
 │
 ├── app/                      # Application configuration
-│   └── iterm2/
-│       └── com.googlecode.iterm2.plist  # iTerm2 terminal settings
+│   ├── iterm2/
+│   │   └── com.googlecode.iterm2.plist  # iTerm2 terminal settings
+│   └── vscode/
+│       ├── settings.json     # VS Code settings (symlinked by install.sh)
+│       └── keybindings.json  # VS Code keybindings (Cmd+Enter → Claude CLI submit)
 │
 └── mac/                      # macOS system configuration
     ├── macos.sh              # macOS system preferences script

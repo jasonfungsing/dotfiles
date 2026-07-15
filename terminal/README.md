@@ -170,6 +170,7 @@ file-type icons and code syntax in nvim:
   zstyle in `zshrc`: file types as grey levels (directories brightest bold,
   executables light, symlinks mid, sockets/pipes dim)
 - **macOS** — Graphite accent/highlight in `mac/macos.sh`
+- **VS Code** — `workbench.colorCustomizations` in `app/vscode/settings.json`
 - **nvim** — see `neovim/theme/palette.lua`, the canonical ramp definition
   all of the above mirror (shell configs use the matching 256-palette
   indices, since not everything accepts hex)
