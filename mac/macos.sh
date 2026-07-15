@@ -82,6 +82,16 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # ═══ 2. Finder ═══
 
+echo "New Finder windows open the home directory"
+defaults write com.apple.finder NewWindowTarget -string "PfHm"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
+
+echo "Hide Recent Tags in the Finder sidebar"
+defaults write com.apple.finder ShowRecentTags -bool false
+
+echo "Use column view by default in Finder windows"
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+
 echo "Hide hidden files by default (toggle in Finder with Cmd+Shift+.)"
 defaults write com.apple.Finder AppleShowAllFiles -bool false
 
