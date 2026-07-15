@@ -22,6 +22,9 @@ echo "=============================="
 
 # ═══ 1. General UI & system ═══
 
+echo "Dark Mode"
+defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
+
 echo "Graphite accent, highlight, and window controls (matches the greyscale terminal/nvim theme)"
 defaults write NSGlobalDomain AppleAccentColor -int -1
 defaults write NSGlobalDomain AppleHighlightColor -string "0.847059 0.847059 0.862745 Graphite"
@@ -42,8 +45,8 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 # echo "Expand print panel by default"
 # defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
 
-# echo "Always show scrollbars"
-# defaults write NSGlobalDomain AppleShowScrollBars -string "Auto"
+echo "Show scroll bars only while scrolling"
+defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 
 # echo "Disable opening and closing window animations"
 # defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
@@ -145,6 +148,16 @@ defaults write com.apple.dock autohide -bool true
 echo "Position the Dock on the right side of the screen"
 defaults write com.apple.dock orientation -string "right"
 
+echo "Magnify Dock icons on hover (to size 58)"
+defaults write com.apple.dock magnification -bool true
+defaults write com.apple.dock largesize -int 58
+
+echo "Minimize windows into their application's icon"
+defaults write com.apple.dock minimize-to-application -bool true
+
+echo "Hide the recent applications section in the Dock"
+defaults write com.apple.dock show-recents -bool false
+
 # echo "Enable the 2D Dock"
 # defaults write com.apple.dock no-glass -bool true
 
@@ -164,6 +177,13 @@ defaults write com.apple.dock orientation -string "right"
 # defaults write com.apple.dock launchanim -bool false
 
 # ═══ 4. Keyboard & input ═══
+
+echo "Remap Caps Lock to Control (all keyboards; per-host preference)"
+defaults -currentHost write -g com.apple.keyboard.modifiermapping.0-0-0 -array \
+  '<dict><key>HIDKeyboardModifierMappingSrc</key><integer>30064771129</integer><key>HIDKeyboardModifierMappingDst</key><integer>30064771300</integer></dict>'
+
+echo "Pressing fn changes the input source (Australian <-> Pinyin)"
+defaults write com.apple.HIToolbox AppleFnUsageType -int 1
 
 echo "Disable press-and-hold for keys in favor of key repeat"
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
