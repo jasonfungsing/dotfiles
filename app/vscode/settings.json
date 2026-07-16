@@ -49,25 +49,22 @@
         "editorOverviewRuler.addedForeground": "#949494",
         "editorOverviewRuler.deletedForeground": "#767676"
     },
-
     // Editor & workbench
     "explorer.confirmDelete": false,
     "security.workspace.trust.untrustedFiles": "open",
     "jdk.telemetry.enabled": false,
     "http.systemCertificatesNode": true,
-
     // Git
     "git.enableSmartCommit": true,
     "git.confirmSync": false,
     "git.autofetch": true,
-
     // Terminal: FiraCode NF for nvim file icons; Option-as-meta so
     // Option+Enter submits in the Claude Code CLI
     "terminal.integrated.fontFamily": "FiraCode Nerd Font",
     "terminal.integrated.macOptionIsMeta": true,
     "terminal.integrated.gpuAcceleration": "off",
     "terminal.integrated.mouseWheelScrollSensitivity": 3,
-
     // Claude Code: Enter inserts a newline, Cmd+Enter sends
-    "claudeCode.useCtrlEnterToSend": true
+    "claudeCode.useCtrlEnterToSend": true,
+    "claudeCode.preferredLocation": "panel"
 }
