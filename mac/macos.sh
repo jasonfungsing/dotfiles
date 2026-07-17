@@ -25,9 +25,13 @@ echo "=============================="
 echo "Dark Mode"
 defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
 
-echo "Graphite accent, highlight, and window controls (matches the greyscale terminal/nvim theme)"
+echo "Graphite accent, grey highlight, and window controls (matches the greyscale terminal/nvim theme)"
 defaults write NSGlobalDomain AppleAccentColor -int -1
-defaults write NSGlobalDomain AppleHighlightColor -string "0.847059 0.847059 0.862745 Graphite"
+# Custom mid-grey selection highlight (#767676) instead of the Graphite
+# preset: the preset is a light grey that vanishes behind light text in
+# dark-mode apps (e.g. selecting text in Slack). Mid grey stays readable
+# against both white and black text.
+defaults write NSGlobalDomain AppleHighlightColor -string "0.462745 0.462745 0.462745"
 defaults write NSGlobalDomain AppleAquaColorVariant -int 6
 
 echo "Expand save dialog by default"
