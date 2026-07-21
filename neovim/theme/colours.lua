@@ -114,9 +114,9 @@ local function greyscale_ui()
   -- must be grey too (bg preserved from the colorscheme)
   local tree_normal = vim.api.nvim_get_hl(0, { name = "NvimTreeNormal", link = false })
   hl(0, "NvimTreeNormal", { fg = c.brightest, bg = tree_normal.bg })
-  hl(0, "NvimTreeFolderIcon", { fg = c.bright })
-  hl(0, "NvimTreeOpenedFolderIcon", { fg = c.bright })
-  hl(0, "NvimTreeClosedFolderIcon", { fg = c.bright })
+  hl(0, "NvimTreeFolderIcon", { fg = "#64748B" })  -- Symbols theme folder slate
+  hl(0, "NvimTreeOpenedFolderIcon", { fg = "#64748B" })
+  hl(0, "NvimTreeClosedFolderIcon", { fg = "#64748B" })
   hl(0, "NvimTreeFolderArrowClosed", { fg = c.mid })
   hl(0, "NvimTreeFolderArrowOpen", { fg = c.mid })
   hl(0, "NvimTreeRootFolder", { fg = c.bright, bold = true })
@@ -154,6 +154,14 @@ local ui_prefixes = {
   "NvimTree", "CmpItem", "GitSigns", "@ibl", "Spell", "lualine_",
 }
 
+-- Icon groups exempt from desaturation (icons keep their colours — the
+-- folder icons carry the Symbols theme's slate)
+local ui_exceptions = {
+  NvimTreeFolderIcon = true,
+  NvimTreeOpenedFolderIcon = true,
+  NvimTreeClosedFolderIcon = true,
+}
+
 local function to_grey(color)
   if not color then return nil end
   local r = math.floor(color / 65536) % 256
@@ -166,7 +174,9 @@ end
 local function desaturate_plugin_ui()
   for name in pairs(vim.api.nvim_get_hl(0, {})) do
     for _, prefix in ipairs(ui_prefixes) do
-      if name:sub(1, #prefix) == prefix then
+      if ui_exceptions[name] then
+        break
+      elseif name:sub(1, #prefix) == prefix then
         local h = vim.api.nvim_get_hl(0, { name = name, link = false })
         if h.fg or h.bg or h.sp then
           h.fg, h.bg, h.sp = to_grey(h.fg), to_grey(h.bg), to_grey(h.sp)
@@ -182,6 +192,20 @@ end
 local function apply_greyscale()
   greyscale_ui()
   desaturate_plugin_ui()
+  -- gruvbox defines its own DevIcon* colours on every :colorscheme, and
+  -- devicons' own refresh derives from its base table rather than the
+  -- override maps — so set the icon highlights directly from the lookup
+  -- tables, which carry the Symbols-theme colours from plugins/icons.lua
+  pcall(function()
+    local devicons = require("nvim-web-devicons")
+    for _, map in ipairs({ devicons.get_icons_by_extension(), devicons.get_icons_by_filename() }) do
+      for _, ic in pairs(map) do
+        if ic.name and ic.color then
+          vim.api.nvim_set_hl(0, "DevIcon" .. ic.name, { fg = ic.color })
+        end
+      end
+    end
+  end)
 end
 
 apply_greyscale()

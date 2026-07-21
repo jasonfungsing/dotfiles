@@ -17,13 +17,14 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim with all plugins
 require("lazy").setup({
-  -- Icons for file types (must load before nvim-tree). Stock devicons =
-  -- VSCode-style per-filetype nerd-font glyphs with colors; needs the
-  -- terminal to use a Nerd Font to render
+  -- Icons for file types (must load before nvim-tree). Config in
+  -- plugins/icons.lua — devicons matched to Antigravity's Symbols theme
   {
     "nvim-tree/nvim-web-devicons",
     lazy = false,
-    opts = { default = true },
+    config = function()
+      require("plugins.icons")
+    end,
   },
 
   -- File navigation
