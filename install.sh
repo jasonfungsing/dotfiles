@@ -479,6 +479,46 @@ install_vscode_config() {
     done
 }
 
+# Install the shared extension list (app/vscode/extensions.txt) into every
+# editor whose CLI is present. Fail-soft per extension: Microsoft-only
+# extensions (pylance, codespaces) can't be installed into forks and are
+# logged as warnings, not failures.
+install_editor_extensions() {
+    local list="$REPO_DIR/app/vscode/extensions.txt"
+    [ -f "$list" ] || { log "No extension list at $list. Skipping."; return; }
+
+    local editors=()
+    command -v code > /dev/null 2>&1 && editors+=("code")
+    [ -x "$HOME/.antigravity-ide/antigravity-ide/bin/antigravity-ide" ] && \
+        editors+=("$HOME/.antigravity-ide/antigravity-ide/bin/antigravity-ide")
+    if [ ${#editors[@]} -eq 0 ]; then
+        log "No editor CLIs found. Skipping extension install."
+        return
+    fi
+
+    local editor ext installed name
+    for editor in "${editors[@]}"; do
+        name=$(basename "$editor")
+        if [ "$DRY_RUN" = true ]; then
+            log "[DRY RUN] Would sync extensions from $list into $name"
+            continue
+        fi
+        installed=$("$editor" --list-extensions 2>/dev/null)
+        while IFS= read -r ext; do
+            case "$ext" in ''|\#*) continue ;; esac
+            if printf '%s\n' "$installed" | grep -qix "$ext"; then
+                continue
+            fi
+            if "$editor" --install-extension "$ext" > /dev/null 2>&1; then
+                success "Installed $ext ($name)"
+            else
+                log "⚠ $ext unavailable for $name (skipped)"
+            fi
+        done < "$list"
+        success "Extensions synced for $name"
+    done
+}
+
 install_zsh_theme() {
     log "Installing Zsh theme (cobalt2)..."
     
@@ -1136,6 +1176,7 @@ main() {
         run_step "Install tmux plugins" install_tmux_plugins
         run_step "Configure iTerm2 preferences folder" configure_iterm2
         run_step "Link VS Code settings" install_vscode_config
+        run_step "Sync editor extensions" install_editor_extensions
     fi
 
     if [ "$INSTALL_EDITOR" = true ]; then

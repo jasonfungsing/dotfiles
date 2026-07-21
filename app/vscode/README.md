@@ -25,5 +25,9 @@ config format), so the two editors share one config.
 either editor's settings UI write straight back into this repo — commit
 them like any other change.
 
-Extensions are not managed here; install them per machine (or via VS Code
-Settings Sync if signed in).
+Extensions are tracked in **`extensions.txt`** — `install.sh` installs the
+list into both editors (idempotent; already-installed ones are skipped).
+Microsoft-proprietary extensions (pylance, codespaces) only install into
+real VS Code — forks get a warning and skip (Antigravity bundles pyrefly
+as its Python language server instead). To capture newly installed
+extensions: `code --list-extensions` and update the file.

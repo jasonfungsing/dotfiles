@@ -1,0 +1,17 @@
+# Extensions installed into VS Code and Antigravity IDE by install.sh.
+# One id per line; lines starting with # are ignored. Installs are
+# fail-soft: extensions unavailable in an editor's marketplace (e.g.
+# Microsoft-proprietary ones in forks) are skipped with a warning.
+anthropic.claude-code
+github.codespaces
+github.github-vscode-theme
+github.vscode-github-actions
+github.vscode-pull-request-github
+golang.go
+mermaidchart.vscode-mermaid-chart
+ms-azuretools.vscode-containers
+ms-azuretools.vscode-docker
+ms-python.debugpy
+ms-python.python
+ms-python.vscode-pylance
+ms-python.vscode-python-envs
