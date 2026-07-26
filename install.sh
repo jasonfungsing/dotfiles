@@ -144,9 +144,15 @@ prime_sudo() {
         log "Non-interactive run — skipping sudo priming; steps needing admin rights may fail and will be listed in the summary."
         return 0
     fi
-    log "Some app installers need admin rights — you may be asked for your password now (once)."
+    log "Admin rights are needed for some steps — enter your password once now, then the install runs unattended."
     if sudo -v; then
-        ( while sleep 50; do sudo -n -v 2> /dev/null || exit; kill -0 "$$" 2> /dev/null || exit; done ) &
+        # Refresh the sudo timestamp until this script exits. Transient
+        # failures don't stop the loop: some cask installers clear the
+        # timestamp (sudo -k) mid-run, and if that forces one extra prompt
+        # at the next sudo step, the refreshed cache is kept alive again
+        # from there. (GUI password dialogs shown by app installers
+        # themselves can't be pre-authorised from here.)
+        ( while sleep 30; do kill -0 "$$" 2> /dev/null || exit; sudo -n -v 2> /dev/null; done ) &
         SUDO_KEEPALIVE_PID=$!
         trap '[ -n "$SUDO_KEEPALIVE_PID" ] && kill "$SUDO_KEEPALIVE_PID" 2> /dev/null' EXIT
     else
@@ -1135,12 +1141,15 @@ main() {
         fi
     fi
 
-    preflight_checks
-    print_installation_plan
-
-    if [ "$INSTALL_BREW" = true ] && [ "$INSTALL_APPS" = true ] && [ "$DRY_RUN" = false ]; then
+    # Ask for the password first — before the Command Line Tools check and
+    # any other step that may need sudo — so the whole install runs
+    # unattended after this single prompt.
+    if [ "$DRY_RUN" = false ]; then
         prime_sudo
     fi
+
+    preflight_checks
+    print_installation_plan
 
     # Packages and applications install first so config steps that need the
     # binaries (tmux plugins, Neovim bootstrap, iTerm2 preferences) find them.
