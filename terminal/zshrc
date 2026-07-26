@@ -126,11 +126,8 @@ alias v="nvim"
 alias y="yarn"
 alias python=python3
 
-# Update everything (brew, oh-my-zsh, neovim plugins).
-# The nvim part must be quoted as one arg ("+Lazy! sync") — unquoted, nvim
-# treats "sync" as a filename and never updates anything. Lazy! waits for
-# the sync to finish; --headless prints progress inline in the terminal.
-alias update='brew update; brew upgrade --yes; brew upgrade --cask --greedy --yes; brew cleanup; omz update; nvim --headless "+Lazy! sync" +qa; echo "\n✅ Update complete"'
+# Update everything — see the update() function in section 7. vu is the
+# verbose nvim-only escape hatch (full Lazy sync output).
 alias u=update
 alias vu='nvim --headless "+Lazy! sync" +qa'
 
@@ -158,6 +155,38 @@ alias weather='f() { curl wttr.in/$1. };f'
 # scripts to check the laptop's physical state (clamshell mode).
 islidclosed() {
   ioreg -r -k AppleClamshellState | awk '/AppleClamshellState/ {print $NF}'
+}
+
+# Update everything: brew (formulae + casks), oh-my-zsh, neovim plugins,
+# and editor extensions (VS Code / Antigravity IDE, guarded so machines
+# without them skip). Neovim's noisy Lazy sync goes to a log file; the
+# summary line lists the plugins whose pins changed, read from the diff of
+# the repo-tracked lazy-lock.json ("+Lazy! sync" must stay one argument —
+# unquoted, nvim treats "sync" as a filename).
+# Re-source safety: earlier revisions defined update as an alias — a live
+# shell still carrying it would alias-expand the definition below.
+unalias update 2>/dev/null
+update() {
+  brew update
+  brew upgrade --yes
+  brew upgrade --cask --greedy --yes
+  brew cleanup
+  omz update
+  echo "Syncing neovim plugins (full log: /tmp/nvim-lazy-sync.log)..."
+  if nvim --headless "+Lazy! sync" +qa > /tmp/nvim-lazy-sync.log 2>&1; then
+    local changed
+    changed=$(git -C ~/Code/dotfiles diff --unified=0 -- neovim/lazy-lock.json 2>/dev/null | grep '^+  "' | cut -d'"' -f2)
+    if [ -n "$changed" ]; then
+      echo "✅ nvim plugins updated: ${(j:, :)${(f)changed}}"
+    else
+      echo "✅ nvim plugins up to date"
+    fi
+  else
+    echo "⚠ nvim plugin sync failed — see /tmp/nvim-lazy-sync.log"
+  fi
+  command -v code > /dev/null && code --update-extensions
+  command -v antigravity-ide > /dev/null && antigravity-ide --update-extensions
+  echo "\n✅ Update complete"
 }
 
 # Check MacBook lid sleep status

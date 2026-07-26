@@ -81,6 +81,7 @@ shortcut-sheet() {
       fdesc=""
       case "$f" in
         shortcut-sheet)         fdesc="THIS sheet" ;;
+        update)                 fdesc="update brew, omz, nvim plugins, editor extensions" ;;
         islidclosed)            fdesc="print Yes/No — is the MacBook lid closed" ;;
         sleepstatus)            fdesc="report whether sleep is currently disabled" ;;
         check-alias-and-accept) fdesc="Enter-key widget: suggests the alias if one exists" ;;
