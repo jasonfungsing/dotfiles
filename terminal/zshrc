@@ -151,12 +151,6 @@ alias weather='f() { curl wttr.in/$1. };f'
 
 # ═══ 7. Functions ═══
 
-# Is the MacBook lid closed? Prints "Yes" or "No" — handy over SSH or in
-# scripts to check the laptop's physical state (clamshell mode).
-islidclosed() {
-  ioreg -r -k AppleClamshellState | awk '/AppleClamshellState/ {print $NF}'
-}
-
 # Update everything: brew (formulae + casks), oh-my-zsh, neovim plugins,
 # and editor extensions (VS Code / Antigravity IDE, guarded so machines
 # without them skip). Neovim's noisy Lazy sync goes to a log file; the
@@ -187,6 +181,12 @@ update() {
   command -v code > /dev/null && code --update-extensions
   command -v antigravity-ide > /dev/null && antigravity-ide --update-extensions
   echo "\n✅ Update complete"
+}
+
+# Is the MacBook lid closed? Prints "Yes" or "No" — handy over SSH or in
+# scripts to check the laptop's physical state (clamshell mode).
+islidclosed() {
+  ioreg -r -k AppleClamshellState | awk '/AppleClamshellState/ {print $NF}'
 }
 
 # Check MacBook lid sleep status
