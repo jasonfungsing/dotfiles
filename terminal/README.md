@@ -83,7 +83,7 @@ All custom aliases are defined in `zshrc`, except where a row notes it comes fro
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `y` | `yarn` | Yarn package manager |
-| `update` | *(function, zshrc § 7)* | Update everything: brew packages & casks, Oh-My-Zsh, Neovim plugins (condensed one-line summary; full log in `/tmp/nvim-lazy-sync.log`), and VS Code / Antigravity IDE extensions |
+| `update` | *(function, zshrc § 7)* | Update everything: brew packages & casks, Mac App Store apps, Oh-My-Zsh, Neovim plugins (condensed one-line summary; full log in `/tmp/nvim-lazy-sync.log`), and VS Code / Antigravity IDE extensions |
 | `u` | `update` | Shorthand for `update` |
 | `vu` | `nvim --headless "+Lazy! sync" +qa` | Update Neovim plugins only, with full verbose output |
 

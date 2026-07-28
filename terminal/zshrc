@@ -151,11 +151,12 @@ alias weather='f() { curl wttr.in/$1. };f'
 
 # ═══ 7. Functions ═══
 
-# Update everything: brew (formulae + casks), oh-my-zsh, neovim plugins,
-# and editor extensions (VS Code / Antigravity IDE, guarded so machines
-# without them skip). Neovim's noisy Lazy sync goes to a log file; the
-# summary line lists the plugins whose pins changed, read from the diff of
-# the repo-tracked lazy-lock.json ("+Lazy! sync" must stay one argument —
+# Update everything: brew (formulae + casks), Mac App Store apps (mas),
+# oh-my-zsh, neovim plugins, and editor extensions (VS Code / Antigravity
+# IDE) — the mas and editor steps are guarded so machines without them
+# skip. Neovim's noisy Lazy sync goes to a log file; the summary line
+# lists the plugins whose pins changed, read from the diff of the
+# repo-tracked lazy-lock.json ("+Lazy! sync" must stay one argument —
 # unquoted, nvim treats "sync" as a filename).
 # Re-source safety: earlier revisions defined update as an alias — a live
 # shell still carrying it would alias-expand the definition below.
@@ -165,6 +166,8 @@ update() {
   brew upgrade --yes
   brew upgrade --cask --greedy --yes
   brew cleanup
+  # mas is silent when everything is current — confirm explicitly
+  command -v mas > /dev/null && mas upgrade && echo "✅ App Store apps up to date"
   omz update
   echo "Syncing neovim plugins (full log: /tmp/nvim-lazy-sync.log)..."
   if nvim --headless "+Lazy! sync" +qa > /tmp/nvim-lazy-sync.log 2>&1; then
