@@ -209,11 +209,14 @@ sleepstatus() {
 # ═══ 8. Completions & tool hooks ═══
 
 # Initialise completion system with caching: full rebuild if the dump is
-# missing or older than a day, otherwise trust the cache (-C, fast)
+# missing or older than a day, otherwise trust the cache (-C, fast).
+# -u skips the insecure-directories audit: Homebrew keeps /opt/homebrew
+# dirs group-writable by design and periodically resets them, and without
+# -u every such reset blocks new shells with a compinit prompt.
 autoload -Uz compinit
 _zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
 if [ ! -f "$_zcompdump" ] || [ -n "$(find "$_zcompdump" -mtime +0 2>/dev/null)" ]; then
-  compinit
+  compinit -u
 else
   compinit -C
 fi
