@@ -122,6 +122,7 @@ alias t='tmux'
 alias mux="tmuxinator"
 
 # Editors & dev tools
+alias i="antigravity-ide"    # i = IDE; i . opens the current directory
 alias v="nvim"
 alias y="yarn"
 alias python=python3

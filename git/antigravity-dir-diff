@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+#
+# antigravity-dir-diff LEFT RIGHT — git difftool --dir-diff driver that opens
+# ONE Antigravity IDE window with a diff tab per changed file, instead of the
+# default one-tool-invocation-per-file loop.
+#
+# git materialises LEFT (old) and RIGHT (new) snapshot directories and deletes
+# them as soon as this script exits, so the script stays alive until every
+# diff tab is closed (closing the window closes them all). Each tab is opened
+# with --wait in the background and the script blocks on the lot. A tab never
+# clicked before the session ends can no longer read the deleted snapshots.
+#
+# Worktree files on the RIGHT side are symlinks, so edits made in a diff tab
+# land directly in the working tree.
+#
+# No set -e on purpose: one failed open must not kill the session and take
+# the snapshots (and every other tab) down with it.
+
+set -uo pipefail
+
+left=$1
+right=$2
+
+# Union of the files in both snapshots: only-in-LEFT = deleted file,
+# only-in-RIGHT = added file. -type l catches the worktree symlinks.
+files=$({ (cd "$left" && find . \( -type f -o -type l \));
+          (cd "$right" && find . \( -type f -o -type l \)); } | sort -u)
+
+[ -n "$files" ] || exit 0
+
+# Stand-in for the missing side of an added/deleted file
+empty=$(mktemp)
+trap 'rm -f "$empty"' EXIT
+
+# --reuse-window only reaches the right window once the app is actually up.
+# On a cold launch that takes several seconds — opening tabs before then
+# silently loses them, so the first open waits for the app process and then
+# some settle time for its window.
+app_was_running=0
+pgrep -qf "Antigravity IDE.app" && app_was_running=1
+
+first=1
+while IFS= read -r f; do
+    f=${f#./}
+    l="$left/$f"
+    r="$right/$f"
+    [ -e "$l" ] || l=$empty
+    [ -e "$r" ] || r=$empty
+    # </dev/null is load-bearing: the CLI reads stdin when it isn't a tty,
+    # and would otherwise swallow the rest of the file list off the loop's
+    # heredoc — ending the loop after a single diff.
+    if (( first )); then
+        first=0
+        antigravity-ide --new-window --wait --diff "$l" "$r" < /dev/null &
+        if (( app_was_running )); then
+            sleep 1
+        else
+            for _ in {1..20}; do
+                pgrep -qf "Antigravity IDE.app" && break
+                sleep 0.5
+            done
+            sleep 3
+        fi
+    else
+        antigravity-ide --reuse-window --wait --diff "$l" "$r" < /dev/null &
+        sleep 0.2   # keep tab order stable
+    fi
+done <<< "$files"
+
+# Blocks until every diff tab is closed; git then deletes the snapshots.
+wait
