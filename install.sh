@@ -486,6 +486,25 @@ install_vscode_config() {
     done
 }
 
+# Sublime Text / Sublime Merge get their whole Packages/User directory
+# symlinked to the repo copies (app/sublime-text/User, app/sublime-merge/
+# User). The directory — not each file — is the link point because
+# Sublime saves settings via write-and-rename, which would replace a
+# per-file symlink with a plain file; it also picks up future additions
+# (keymaps, snippets, package settings) with no installer changes.
+# Parent dirs are created so links are in place before first launch.
+install_sublime_config() {
+    local app repo_name
+    for app in "Sublime Text:sublime-text" "Sublime Merge:sublime-merge"; do
+        repo_name="${app##*:}"
+        if [ "$DRY_RUN" != true ]; then
+            mkdir -p "$HOME/Library/Application Support/${app%%:*}/Packages"
+        fi
+        link_file "$REPO_DIR/app/$repo_name/User" \
+            "$HOME/Library/Application Support/${app%%:*}/Packages/User"
+    done
+}
+
 # Install the shared extension list (app/vscode/extensions.txt) into every
 # editor whose CLI is present. Fail-soft per extension: Microsoft-only
 # extensions (pylance, codespaces) can't be installed into forks and are
@@ -1013,6 +1032,8 @@ run_validation() {
     v_check_symlink "$HOME/.shortcut-sheet.zsh" "$REPO_DIR/terminal/shortcut-sheet.zsh"
     v_check_symlink "$HOME/.tmux.conf" "$REPO_DIR/terminal/tmux.conf"
     v_check_symlink "$HOME/.tmux-gpu.sh" "$REPO_DIR/terminal/tmux-gpu.sh"
+    v_check_symlink "$HOME/Library/Application Support/Sublime Text/Packages/User" "$REPO_DIR/app/sublime-text/User"
+    v_check_symlink "$HOME/Library/Application Support/Sublime Merge/Packages/User" "$REPO_DIR/app/sublime-merge/User"
     v_check_symlink "$HOME/.gitconfig" "$REPO_DIR/git/gitconfig"
     v_check_symlink "$HOME/.hushlogin" "$REPO_DIR/mac/hushlogin"
     v_check_symlink "$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme" "$REPO_DIR/terminal/cobalt2.zsh-theme"
@@ -1187,6 +1208,7 @@ main() {
         run_step "Install tmux plugins" install_tmux_plugins
         run_step "Configure iTerm2 preferences folder" configure_iterm2
         run_step "Link VS Code settings" install_vscode_config
+        run_step "Link Sublime Text / Merge settings" install_sublime_config
         run_step "Sync editor extensions" install_editor_extensions
     fi
 

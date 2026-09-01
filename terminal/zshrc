@@ -124,6 +124,8 @@ alias mux="tmuxinator"
 # Editors & dev tools
 alias i="antigravity-ide"    # i = IDE; i . opens the current directory
 alias v="nvim"
+alias st="subl"              # Sublime Text; st . opens the current directory
+alias sm="smerge"            # Sublime Merge; sm . opens the repo containing .
 alias y="yarn"
 alias python=python3
 

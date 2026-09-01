@@ -68,6 +68,9 @@ All custom aliases are defined in `zshrc`, except where a row notes it comes fro
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `v` | `nvim` | Open Neovim |
+| `i` | `antigravity-ide` | Antigravity IDE; `i .` opens the current directory |
+| `st` | `subl` | Sublime Text; `st .` opens the current directory |
+| `sm` | `smerge` | Sublime Merge; `sm .` opens the repo containing the current directory |
 
 ### Git, Cloud & Kubernetes
 

@@ -119,6 +119,8 @@ cask "okta-verify"
 cask "raycast"
 cask "setapp"
 cask "slack"
+cask "sublime-merge"
+cask "sublime-text"
 cask "visual-studio-code"
 mas "AdBlock", id: 1402042596
 mas "Dark Reader for Safari", id: 1438243180
