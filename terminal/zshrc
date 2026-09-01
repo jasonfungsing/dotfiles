@@ -163,28 +163,42 @@ alias weather='f() { curl wttr.in/$1. };f'
 # shell still carrying it would alias-expand the definition below.
 unalias update 2>/dev/null
 update() {
-  brew update
-  brew upgrade --yes
-  brew upgrade --cask --greedy --yes
-  brew cleanup
-  # mas is silent when everything is current — confirm explicitly
-  command -v mas > /dev/null && mas upgrade && echo "✅ App Store apps up to date"
-  omz update
-  echo "Syncing neovim plugins (full log: /tmp/nvim-lazy-sync.log)..."
-  if nvim --headless "+Lazy! sync" +qa > /tmp/nvim-lazy-sync.log 2>&1; then
-    local changed
-    changed=$(git -C ~/Code/dotfiles diff --unified=0 -- neovim/lazy-lock.json 2>/dev/null | grep '^+  "' | cut -d'"' -f2)
-    if [ -n "$changed" ]; then
-      echo "✅ nvim plugins updated: ${(j:, :)${(f)changed}}"
+  # Ask for the admin password once up front, then refresh sudo's
+  # timestamp in the background: greedy cask upgrades run privileged
+  # installers (Teams, Zoom, …) that each invoke sudo, and macOS's
+  # 5-minute credential cache expires between them on a long run, so a
+  # single update used to prompt several times. The keep-alive exits on
+  # its own if this shell dies (kill -0 $$); the always-block reaps it
+  # even when the run is interrupted with Ctrl-C.
+  sudo -v || return
+  ( while kill -0 $$ 2>/dev/null; do sudo -n -v 2>/dev/null; sleep 50; done ) &!
+  local _sudo_keepalive=$!
+  {
+    brew update
+    brew upgrade --yes
+    brew upgrade --cask --greedy --yes
+    brew cleanup
+    # mas is silent when everything is current — confirm explicitly
+    command -v mas > /dev/null && mas upgrade && echo "✅ App Store apps up to date"
+    omz update
+    echo "Syncing neovim plugins (full log: /tmp/nvim-lazy-sync.log)..."
+    if nvim --headless "+Lazy! sync" +qa > /tmp/nvim-lazy-sync.log 2>&1; then
+      local changed
+      changed=$(git -C ~/Code/dotfiles diff --unified=0 -- neovim/lazy-lock.json 2>/dev/null | grep '^+  "' | cut -d'"' -f2)
+      if [ -n "$changed" ]; then
+        echo "✅ nvim plugins updated: ${(j:, :)${(f)changed}}"
+      else
+        echo "✅ nvim plugins up to date"
+      fi
     else
-      echo "✅ nvim plugins up to date"
+      echo "⚠ nvim plugin sync failed — see /tmp/nvim-lazy-sync.log"
     fi
-  else
-    echo "⚠ nvim plugin sync failed — see /tmp/nvim-lazy-sync.log"
-  fi
-  command -v code > /dev/null && code --update-extensions
-  command -v antigravity-ide > /dev/null && antigravity-ide --update-extensions
-  echo "\n✅ Update complete"
+    command -v code > /dev/null && code --update-extensions
+    command -v antigravity-ide > /dev/null && antigravity-ide --update-extensions
+    echo "\n✅ Update complete"
+  } always {
+    kill $_sudo_keepalive 2>/dev/null
+  }
 }
 
 # Is the MacBook lid closed? Prints "Yes" or "No" — handy over SSH or in
