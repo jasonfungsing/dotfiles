@@ -156,9 +156,10 @@ alias weather='f() { curl wttr.in/$1. };f'
 # oh-my-zsh, neovim plugins, and editor extensions (VS Code / Antigravity
 # IDE) — the mas and editor steps are guarded so machines without them
 # skip. Neovim's noisy Lazy sync goes to a log file; the summary line
-# lists the plugins whose pins changed, read from the diff of the
-# repo-tracked lazy-lock.json ("+Lazy! sync" must stay one argument —
-# unquoted, nvim treats "sync" as a filename).
+# lists the plugins this run updated or removed, read by diffing
+# lazy-lock.json against a snapshot taken just before the sync
+# ("+Lazy! sync" must stay one argument — unquoted, nvim treats "sync"
+# as a filename).
 # Re-source safety: earlier revisions defined update as an alias — a live
 # shell still carrying it would alias-expand the definition below.
 unalias update 2>/dev/null
@@ -184,11 +185,22 @@ update() {
     command -v mas > /dev/null && mas upgrade && echo "✅ App Store apps up to date"
     omz update
     echo "Syncing neovim plugins (full log: /tmp/nvim-lazy-sync.log)..."
+    # Snapshot the lockfile and diff against that, not against git — a
+    # git diff also picks up still-uncommitted changes from earlier
+    # runs, re-listing plugins this run never touched.
+    local lock=~/Code/dotfiles/neovim/lazy-lock.json
+    local lock_before=/tmp/nvim-lazy-lock.before.json
+    cp "$lock" "$lock_before" 2>/dev/null || : > "$lock_before"
     if nvim --headless "+Lazy! sync" +qa > /tmp/nvim-lazy-sync.log 2>&1; then
-      local changed
-      changed=$(git -C ~/Code/dotfiles diff --unified=0 -- neovim/lazy-lock.json 2>/dev/null | grep '^+  "' | cut -d'"' -f2)
-      if [ -n "$changed" ]; then
-        echo "✅ nvim plugins updated: ${(j:, :)${(f)changed}}"
+      local lockdiff=$(diff -U0 "$lock_before" "$lock" 2>/dev/null)
+      local -a changed=(${(f)"$(grep '^+  "' <<< "$lockdiff" | cut -d'"' -f2)"})
+      local -a removed=(${(f)"$(grep '^-  "' <<< "$lockdiff" | cut -d'"' -f2)"})
+      removed=(${removed:|changed})  # a changed pin appears on both sides
+      if (( ${#changed} || ${#removed} )); then
+        local summary=""
+        (( ${#changed} )) && summary="updated: ${(j:, :)changed}"
+        (( ${#removed} )) && summary+="${summary:+; }removed: ${(j:, :)removed}"
+        echo "✅ nvim plugins $summary"
       else
         echo "✅ nvim plugins up to date"
       fi
