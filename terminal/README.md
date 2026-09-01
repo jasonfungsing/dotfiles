@@ -83,7 +83,7 @@ All custom aliases are defined in `zshrc`, except where a row notes it comes fro
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `y` | `yarn` | Yarn package manager |
-| `update` | *(function, zshrc § 7)* | Update everything: brew packages & casks, Mac App Store apps, Oh-My-Zsh, Neovim plugins (condensed one-line summary; full log in `/tmp/nvim-lazy-sync.log`), and VS Code / Antigravity IDE extensions |
+| `update` | *(function, zshrc § 7)* | Update everything: brew packages & casks, Mac App Store apps, Oh-My-Zsh, Neovim plugins (condensed one-line summary; full log in `/tmp/nvim-lazy-sync.log`), and VS Code / Antigravity IDE extensions. Asks for the admin password at most once per run, and only if a cask installer actually needs it |
 | `u` | `update` | Shorthand for `update` |
 | `vu` | `nvim --headless "+Lazy! sync" +qa` | Update Neovim plugins only, with full verbose output |
 
@@ -344,13 +344,15 @@ The status bar sits at the **top** of the screen and displays:
 - Window list with active indicator
 - Battery percentage *(tmux-battery)*
 - CPU percentage *(tmux-cpu)*
-- Day, date and time
+- GPU percentage *(tmux-gpu.sh — the tmux-cpu placeholder is NVIDIA-only,
+  so Apple Silicon GPU load is read from the IORegistry instead)*
+- Day, date and 12-hour time
 
 Customise by editing `tmux.conf`:
 ```bash
 set-option -g status-position top
 set -g status-style fg=white,bg=blue
-set -g status-right 'Batt:#{battery_percentage} | CPU:#{cpu_percentage} | %a %d %h %H:%M '
+set -g status-right 'Battery:#{battery_percentage} | CPU:#{cpu_percentage} | GPU:#(~/.tmux-gpu.sh) | %a %d %h %I:%M %p '
 ```
 
 ## Common Workflows

@@ -333,6 +333,7 @@ install_terminal_dotfiles() {
     # Note: iTerm2 config (app/iterm2/) is not symlinked — configure_iterm2
     # points iTerm2's "load settings from a custom folder" setting at it.
     link_file "$REPO_DIR/terminal/tmux.conf" "$HOME/.tmux.conf"
+    link_file "$REPO_DIR/terminal/tmux-gpu.sh" "$HOME/.tmux-gpu.sh"
     return 0
 }
 
@@ -1011,6 +1012,7 @@ run_validation() {
     v_check_symlink "$HOME/.alias_prompt.sh" "$REPO_DIR/terminal/alias_prompt.sh"
     v_check_symlink "$HOME/.shortcut-sheet.zsh" "$REPO_DIR/terminal/shortcut-sheet.zsh"
     v_check_symlink "$HOME/.tmux.conf" "$REPO_DIR/terminal/tmux.conf"
+    v_check_symlink "$HOME/.tmux-gpu.sh" "$REPO_DIR/terminal/tmux-gpu.sh"
     v_check_symlink "$HOME/.gitconfig" "$REPO_DIR/git/gitconfig"
     v_check_symlink "$HOME/.hushlogin" "$REPO_DIR/mac/hushlogin"
     v_check_symlink "$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme" "$REPO_DIR/terminal/cobalt2.zsh-theme"
