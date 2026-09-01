@@ -163,14 +163,16 @@ alias weather='f() { curl wttr.in/$1. };f'
 # shell still carrying it would alias-expand the definition below.
 unalias update 2>/dev/null
 update() {
-  # Ask for the admin password once up front, then refresh sudo's
-  # timestamp in the background: greedy cask upgrades run privileged
-  # installers (Teams, Zoom, …) that each invoke sudo, and macOS's
-  # 5-minute credential cache expires between them on a long run, so a
-  # single update used to prompt several times. The keep-alive exits on
-  # its own if this shell dies (kill -0 $$); the always-block reaps it
-  # even when the run is interrupted with Ctrl-C.
-  sudo -v || return
+  # Prompt for the admin password at most once per run: greedy cask
+  # upgrades run privileged installers (Teams, Zoom, …) that each invoke
+  # sudo, and macOS's 5-minute credential cache expires between them on
+  # a long run, so a single update used to prompt several times. The
+  # background loop refreshes the timestamp with `sudo -n -v`, which
+  # never prompts — it silently no-ops until the first installer asks
+  # for the password, then keeps that credential alive for the rest of
+  # the run. A run needing no sudo therefore never asks at all. The
+  # keep-alive exits on its own if this shell dies (kill -0 $$); the
+  # always-block reaps it even when the run is interrupted with Ctrl-C.
   ( while kill -0 $$ 2>/dev/null; do sudo -n -v 2>/dev/null; sleep 50; done ) &!
   local _sudo_keepalive=$!
   {
