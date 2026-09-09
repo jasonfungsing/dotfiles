@@ -22,29 +22,30 @@
 # ═══ Diff & merge ═══
 
 [diff]
-    tool = antigravity
+    tool = vscode
     algorithm = patience
 
 [difftool]
     prompt = false
 
-[difftool "antigravity"]
-    cmd = antigravity-ide --wait --diff \"$LOCAL\" \"$REMOTE\"
+[difftool "vscode"]
+    cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
 
 # One window, every changed file as a diff tab — requires --dir-diff, which
 # hands the tool two snapshot directories instead of a file pair per call.
 # Used by the dk/dkc aliases below.
-[difftool "antigravity-dir"]
-    cmd = ~/Code/dotfiles/git/antigravity-dir-diff \"$LOCAL\" \"$REMOTE\"
+[difftool "vscode-dir"]
+    cmd = ~/Code/dotfiles/git/vscode-dir-diff \"$LOCAL\" \"$REMOTE\"
 
 [merge]
-    tool = antigravity
+    tool = vscode
 
 [mergetool]
     prompt = false
 
-[mergetool "antigravity"]
-    cmd = antigravity-ide --wait --merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+# code --merge opens VS Code's 3-way merge editor (needs VS Code ≥ 1.69)
+[mergetool "vscode"]
+    cmd = code --wait --merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
 
 # ═══ Workflow behaviour ═══
 
@@ -128,10 +129,10 @@
     # Review helpers
     pr = "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
 
-    # Diff/merge tool shortcuts — default (antigravity, all files as tabs in
+    # Diff/merge tool shortcuts — default (VS Code, all files as tabs in
     # one window); postfix "v" for nvim
-    dk = difftool --dir-diff --tool=antigravity-dir
-    dkc = difftool --dir-diff --cached --tool=antigravity-dir
+    dk = difftool --dir-diff --tool=vscode-dir
+    dkc = difftool --dir-diff --cached --tool=vscode-dir
     mk = mergetool
     dkv = difftool --tool=nvimdiff
     dkcv = difftool --tool=nvimdiff --cached

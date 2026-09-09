@@ -83,8 +83,8 @@ matching a known plugin-UI prefix (re-run on colorscheme changes and every
 lazy plugin load). Adding a plugin with coloured UI? Add its highlight
 prefix to `ui_prefixes` there.
 
-File-type icons follow Antigravity IDE's "Symbols" icon theme as closely
-as a terminal font allows — see `plugins/icons.lua` for the mapping and
+File-type icons follow the "Symbols" VS Code icon theme as closely as a
+terminal font allows — see `plugins/icons.lua` for the mapping and
 where its glyphs/colours come from.
 
 ## Key Bindings

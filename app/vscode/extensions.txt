@@ -1,13 +1,14 @@
-# Extensions installed into VS Code and Antigravity IDE by install.sh.
-# One id per line; lines starting with # are ignored. Installs are
-# fail-soft: extensions unavailable in an editor's marketplace (e.g.
-# Microsoft-proprietary ones in forks) are skipped with a warning.
+# Extensions installed into VS Code by install.sh. One id per line;
+# lines starting with # are ignored. Installs are fail-soft: extensions
+# the marketplace doesn't carry are skipped with a warning. GitHub
+# Copilot is absent deliberately — it ships built into VS Code itself.
 anthropic.claude-code
 github.codespaces
 github.github-vscode-theme
 github.vscode-github-actions
 github.vscode-pull-request-github
 golang.go
+google.google-antigravity
 mermaidchart.vscode-mermaid-chart
 ms-azuretools.vscode-containers
 ms-azuretools.vscode-docker

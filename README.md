@@ -49,7 +49,7 @@ Organized by category:
 See the [full package list with rationale](brew/README.md).
 
 ### Applications (via Homebrew Cask & Mac App Store)
-- IDEs: Xcode, Visual Studio Code, Antigravity IDE
+- IDEs: Xcode, Visual Studio Code
 - Terminal: iTerm2 (+ Powerline fonts)
 - Browsers: Google Chrome
 - AI assistants: Claude desktop, Claude Code CLI, Gemini
@@ -243,7 +243,7 @@ dotfiles/
 ├── app/                      # Application configuration
 │   ├── iterm2/
 │   │   └── com.googlecode.iterm2.plist  # iTerm2 terminal settings
-│   ├── vscode/               # Shared by VS Code AND Antigravity IDE
+│   ├── vscode/               # VS Code editor configuration
 │   │   ├── settings.json     # Editor settings (symlinked by install.sh)
 │   │   └── keybindings.json  # Keybindings (Cmd+Enter → Claude CLI submit)
 │   ├── sublime-text/

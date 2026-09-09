@@ -469,21 +469,16 @@ configure_iterm2() {
     success "iTerm2 set to load settings from $REPO_DIR/app/iterm2"
 }
 
-# VS Code (and Antigravity IDE, a VS Code fork that reads the same config
-# format) get their user settings and keybindings symlinked to the shared
-# repo copies (app/vscode/). Directories are created if missing so the
-# links are in place before each editor's first launch.
+# VS Code gets its user settings and keybindings symlinked to the repo
+# copies (app/vscode/). The directory is created if missing so the links
+# are in place before the editor's first launch.
 install_vscode_config() {
-    local user_dir
-    for user_dir in \
-        "$HOME/Library/Application Support/Code/User" \
-        "$HOME/Library/Application Support/Antigravity IDE/User"; do
-        if [ "$DRY_RUN" != true ]; then
-            mkdir -p "$user_dir"
-        fi
-        link_file "$REPO_DIR/app/vscode/settings.json" "$user_dir/settings.json"
-        link_file "$REPO_DIR/app/vscode/keybindings.json" "$user_dir/keybindings.json"
-    done
+    local user_dir="$HOME/Library/Application Support/Code/User"
+    if [ "$DRY_RUN" != true ]; then
+        mkdir -p "$user_dir"
+    fi
+    link_file "$REPO_DIR/app/vscode/settings.json" "$user_dir/settings.json"
+    link_file "$REPO_DIR/app/vscode/keybindings.json" "$user_dir/keybindings.json"
 }
 
 # Sublime Text / Sublime Merge get their whole Packages/User directory
@@ -506,17 +501,14 @@ install_sublime_config() {
 }
 
 # Install the shared extension list (app/vscode/extensions.txt) into every
-# editor whose CLI is present. Fail-soft per extension: Microsoft-only
-# extensions (pylance, codespaces) can't be installed into forks and are
-# logged as warnings, not failures.
+# editor whose CLI is present. Fail-soft per extension: ones a marketplace
+# doesn't carry are logged as warnings, not failures.
 install_editor_extensions() {
     local list="$REPO_DIR/app/vscode/extensions.txt"
     [ -f "$list" ] || { log "No extension list at $list. Skipping."; return; }
 
     local editors=()
     command -v code > /dev/null 2>&1 && editors+=("code")
-    [ -x "$HOME/.antigravity-ide/antigravity-ide/bin/antigravity-ide" ] && \
-        editors+=("$HOME/.antigravity-ide/antigravity-ide/bin/antigravity-ide")
     if [ ${#editors[@]} -eq 0 ]; then
         log "No editor CLIs found. Skipping extension install."
         return
@@ -1039,8 +1031,6 @@ run_validation() {
     v_check_symlink "$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme" "$REPO_DIR/terminal/cobalt2.zsh-theme"
     v_check_symlink "$HOME/Library/Application Support/Code/User/settings.json" "$REPO_DIR/app/vscode/settings.json"
     v_check_symlink "$HOME/Library/Application Support/Code/User/keybindings.json" "$REPO_DIR/app/vscode/keybindings.json"
-    v_check_symlink "$HOME/Library/Application Support/Antigravity IDE/User/settings.json" "$REPO_DIR/app/vscode/settings.json"
-    v_check_symlink "$HOME/Library/Application Support/Antigravity IDE/User/keybindings.json" "$REPO_DIR/app/vscode/keybindings.json"
 
     # install.sh symlinks every item in neovim/ (except README.md) into ~/.config/nvim
     local item name

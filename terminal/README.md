@@ -68,7 +68,7 @@ All custom aliases are defined in `zshrc`, except where a row notes it comes fro
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `v` | `nvim` | Open Neovim |
-| `i` | `antigravity-ide` | Antigravity IDE; `i .` opens the current directory |
+| `i` | `code` | VS Code; `i .` opens the current directory |
 | `st` | `subl` | Sublime Text; `st .` opens the current directory |
 | `sm` | `smerge` | Sublime Merge; `sm .` opens the repo containing the current directory |
 
@@ -86,7 +86,7 @@ All custom aliases are defined in `zshrc`, except where a row notes it comes fro
 | Alias | Command | Purpose |
 |-------|---------|---------|
 | `y` | `yarn` | Yarn package manager |
-| `update` | *(function, zshrc § 7)* | Update everything: brew packages & casks, Mac App Store apps, Oh-My-Zsh, Neovim plugins (condensed one-line summary; full log in `/tmp/nvim-lazy-sync.log`), and VS Code / Antigravity IDE extensions. Asks for the admin password at most once per run, and only if a cask installer actually needs it |
+| `update` | *(function, zshrc § 7)* | Update everything: brew packages & casks, Mac App Store apps, Oh-My-Zsh, Neovim plugins (condensed one-line summary; full log in `/tmp/nvim-lazy-sync.log`), and VS Code extensions. Asks for the admin password at most once per run, and only if a cask installer actually needs it |
 | `u` | `update` | Shorthand for `update` |
 | `vu` | `nvim --headless "+Lazy! sync" +qa` | Update Neovim plugins only, with full verbose output |
 

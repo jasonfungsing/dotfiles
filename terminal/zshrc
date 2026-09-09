@@ -84,9 +84,9 @@ source ~/.alias_prompt.sh
 export PATH="$BREW_PREFIX/sbin:$PATH"
 export PATH="$BREW_PREFIX/bin:$PATH"
 
-# Antigravity CLI + IDE
+# Antigravity CLI (agy) — self-updating install lands here and should
+# shadow the brew-linked binary
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-export PATH="$HOME/.antigravity-ide/antigravity-ide/bin:$PATH"
 
 # ═══ 5. Environment ═══
 
@@ -122,7 +122,7 @@ alias t='tmux'
 alias mux="tmuxinator"
 
 # Editors & dev tools
-alias i="antigravity-ide"    # i = IDE; i . opens the current directory
+alias i="code"               # i = IDE (VS Code); i . opens the current directory
 alias v="nvim"
 alias st="subl"              # Sublime Text; st . opens the current directory
 alias sm="smerge"            # Sublime Merge; sm . opens the repo containing .
@@ -155,8 +155,8 @@ alias weather='f() { curl wttr.in/$1. };f'
 # ═══ 7. Functions ═══
 
 # Update everything: brew (formulae + casks), Mac App Store apps (mas),
-# oh-my-zsh, neovim plugins, and editor extensions (VS Code / Antigravity
-# IDE) — the mas and editor steps are guarded so machines without them
+# oh-my-zsh, neovim plugins, and VS Code extensions — the mas and
+# editor steps are guarded so machines without them
 # skip. Neovim's noisy Lazy sync goes to a log file; the summary line
 # lists the plugins this run updated or removed, read by diffing
 # lazy-lock.json against a snapshot taken just before the sync
@@ -210,7 +210,6 @@ update() {
       echo "⚠ nvim plugin sync failed — see /tmp/nvim-lazy-sync.log"
     fi
     command -v code > /dev/null && code --update-extensions
-    command -v antigravity-ide > /dev/null && antigravity-ide --update-extensions
     echo "\n✅ Update complete"
   } always {
     kill $_sudo_keepalive 2>/dev/null

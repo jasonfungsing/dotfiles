@@ -67,5 +67,6 @@
     // Claude Code: Enter inserts a newline, Cmd+Enter sends
     "claudeCode.useCtrlEnterToSend": true,
     "claudeCode.preferredLocation": "panel",
-    "python.languageServer": "Default"
+    "python.languageServer": "Default",
+    "workbench.startupEditor": "none"
 }

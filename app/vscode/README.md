@@ -1,8 +1,6 @@
 # VS Code Configuration
 
-User-level VS Code settings, symlinked into place by `install.sh` — into
-both VS Code and Antigravity IDE (a VS Code fork that reads the same
-config format), so the two editors share one config.
+User-level VS Code settings, symlinked into place by `install.sh`.
 
 ## File Structure
 
@@ -20,14 +18,13 @@ config format), so the two editors share one config.
 ## How It Works
 
 `install.sh` symlinks both files into
-`~/Library/Application Support/Code/User/` and
-`~/Library/Application Support/Antigravity IDE/User/`, so edits made in
-either editor's settings UI write straight back into this repo — commit
+`~/Library/Application Support/Code/User/`, so edits made in the
+editor's settings UI write straight back into this repo — commit
 them like any other change.
 
-Extensions are tracked in **`extensions.txt`** — `install.sh` installs the
-list into both editors (idempotent; already-installed ones are skipped).
-Microsoft-proprietary extensions (pylance, codespaces) only install into
-real VS Code — forks get a warning and skip (Antigravity bundles pyrefly
-as its Python language server instead). To capture newly installed
-extensions: `code --list-extensions` and update the file.
+Extensions are tracked in **`extensions.txt`** — `install.sh` installs
+the list (idempotent; already-installed ones are skipped, unavailable
+ones warn and skip). GitHub Copilot is deliberately not listed: it
+ships built into VS Code itself, no extension install needed. To
+capture newly installed extensions: `code --list-extensions` and
+update the file.

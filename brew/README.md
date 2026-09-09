@@ -83,7 +83,7 @@ brew list --cask
 
 ### Casks (GUI applications)
 
-`visual-studio-code`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `claude` (Claude desktop), `claude-code` (CLI), `google-gemini`, `antigravity-cli`/`antigravity-ide`, `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
+`visual-studio-code`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `claude` (Claude desktop), `claude-code` (CLI), `google-gemini`, `antigravity-cli` (terminal Gemini agent), `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
 
 > Corporate security agents (CrowdStrike Falcon, Workspace ONE Hub) are deliberately not managed by brew — they belong to device management.
 
