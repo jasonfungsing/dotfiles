@@ -90,6 +90,11 @@
 [credential]
     helper = osxkeychain
 
+# github.com auth flows through the GitHub CLI's stored login (gh auth
+# login) — lets https clones of private repos work without a PAT.
+[credential "https://github.com"]
+    helper = !gh auth git-credential
+
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f

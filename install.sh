@@ -14,8 +14,19 @@ INSTALL_TERMINAL=true
 INSTALL_SYSTEM=true
 INSTALL_BREW=true
 INSTALL_APPS=true
+INSTALL_CLAUDE=true
 PRUNE_BREW=true
 VALIDATE_ONLY=false
+
+CLAUDE_TOOLKIT_REPO="https://github.com/jasonfungsing/agentic-sdlc.git"
+CLAUDE_TOOLKIT_DIR="$HOME/Code/agentic-sdlc"
+
+# The plugin list is read from the toolkit's own marketplace.json (single
+# source of truth) — plugins added to the toolkit later install with no
+# change to this script.
+claude_toolkit_plugins() {
+    jq -r '.plugins[].name' "$CLAUDE_TOOLKIT_DIR/.claude-plugin/marketplace.json" 2>/dev/null
+}
 
 log() {
     echo "→ $1"
@@ -212,6 +223,7 @@ parse_arguments() {
                 INSTALL_SYSTEM=false
                 INSTALL_BREW=false
                 INSTALL_APPS=false
+                INSTALL_CLAUDE=false
                 shift
                 ;;
             --editor-only)
@@ -221,6 +233,7 @@ parse_arguments() {
                 INSTALL_SYSTEM=false
                 INSTALL_BREW=false
                 INSTALL_APPS=false
+                INSTALL_CLAUDE=false
                 shift
                 ;;
             --git-only)
@@ -230,6 +243,7 @@ parse_arguments() {
                 INSTALL_SYSTEM=false
                 INSTALL_BREW=false
                 INSTALL_APPS=false
+                INSTALL_CLAUDE=false
                 shift
                 ;;
             --terminal-only)
@@ -239,6 +253,7 @@ parse_arguments() {
                 INSTALL_SYSTEM=false
                 INSTALL_BREW=false
                 INSTALL_APPS=false
+                INSTALL_CLAUDE=false
                 shift
                 ;;
             --system-only)
@@ -248,6 +263,7 @@ parse_arguments() {
                 INSTALL_TERMINAL=false
                 INSTALL_BREW=false
                 INSTALL_APPS=false
+                INSTALL_CLAUDE=false
                 shift
                 ;;
             --no-brew)
@@ -256,6 +272,10 @@ parse_arguments() {
                 ;;
             --no-apps)
                 INSTALL_APPS=false
+                shift
+                ;;
+            --no-claude)
+                INSTALL_CLAUDE=false
                 shift
                 ;;
             --no-prune)
@@ -291,6 +311,7 @@ OPTIONS:
   --system-only     Install only macOS system preferences
   --no-brew         Skip Homebrew packages
   --no-apps         Skip applications
+  --no-claude       Skip the Claude Code toolkit (agentic-sdlc marketplace)
   --no-prune        Keep brew packages that are not declared in the Brewfile
   --validate        Validate the current setup without installing anything
   --dry-run         Show what would be done without making changes
@@ -586,6 +607,86 @@ install_tmux_plugins() {
         return 1
     fi
     success "Tmux plugins installed"
+}
+
+# Claude Code toolkit (agentic-sdlc): clone the marketplace repo alongside
+# this one, register it as a plugin marketplace, and install its plugins.
+# No symlink is involved by design — a directory-sourced marketplace IS a
+# live pointer at the repo. Maintain the toolkit in $CLAUDE_TOOLKIT_DIR;
+# ship edits to this machine with:  claude plugin marketplace update agentic-sdlc
+install_claude_toolkit() {
+    log "Setting up Claude Code toolkit (agentic-sdlc)..."
+
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would clone $CLAUDE_TOOLKIT_REPO to $CLAUDE_TOOLKIT_DIR, register it as a marketplace, and install every plugin its marketplace.json lists"
+        return 0
+    fi
+
+    if ! command_exists claude; then
+        log "✗ claude not found — it should have been installed by the packages step (cask claude-code)"
+        return 1
+    fi
+
+    if [ ! -d "$CLAUDE_TOOLKIT_DIR/.git" ]; then
+        # The toolkit repo is private — clone through the GitHub CLI's
+        # login (gitconfig routes github.com credentials via gh).
+        if ! command_exists gh; then
+            log "✗ gh not found — it should have been installed by the packages step"
+            return 1
+        fi
+        if ! gh auth status > /dev/null 2>&1; then
+            if [ -t 0 ]; then
+                log "The toolkit repo is private — sign in to GitHub to clone it (browser opens with a one-time code)..."
+                if ! gh auth login --hostname github.com --git-protocol https --web; then
+                    log "✗ GitHub login failed — re-run ./install.sh after: gh auth login"
+                    return 1
+                fi
+            else
+                log "✗ Not logged in to GitHub and running non-interactively — run: gh auth login, then re-run ./install.sh"
+                return 1
+            fi
+        fi
+        log "Cloning agentic-sdlc toolkit..."
+        if ! git clone "$CLAUDE_TOOLKIT_REPO" "$CLAUDE_TOOLKIT_DIR"; then
+            log "✗ Failed to clone $CLAUDE_TOOLKIT_REPO"
+            return 1
+        fi
+        success "Toolkit cloned to $CLAUDE_TOOLKIT_DIR"
+    else
+        success "Toolkit repo already present at $CLAUDE_TOOLKIT_DIR"
+    fi
+
+    if claude plugin marketplace list 2>/dev/null | grep -q "agentic-sdlc"; then
+        success "Marketplace agentic-sdlc already registered"
+    else
+        if ! claude plugin marketplace add "$CLAUDE_TOOLKIT_DIR"; then
+            log "✗ Failed to register the agentic-sdlc marketplace"
+            return 1
+        fi
+        success "Marketplace agentic-sdlc registered"
+    fi
+
+    local plugins plugin installed rc=0
+    plugins=$(claude_toolkit_plugins)
+    if [ -z "$plugins" ]; then
+        log "✗ Could not read plugin list from $CLAUDE_TOOLKIT_DIR/.claude-plugin/marketplace.json (is jq installed?)"
+        return 1
+    fi
+    installed=$(claude plugin list 2>/dev/null)
+    for plugin in $plugins; do
+        if printf '%s\n' "$installed" | grep -q "${plugin}@agentic-sdlc"; then
+            success "Plugin $plugin@agentic-sdlc already installed"
+            continue
+        fi
+        if claude plugin install "${plugin}@agentic-sdlc"; then
+            success "Plugin $plugin@agentic-sdlc installed"
+        else
+            FAILED_STEPS+=("claude plugin: ${plugin}@agentic-sdlc")
+            echo "⚠ Failed to install ${plugin}@agentic-sdlc (continuing)" >&2
+            rc=1
+        fi
+    done
+    return $rc
 }
 
 restore_keyboard_shortcuts() {
@@ -1092,6 +1193,25 @@ run_validation() {
         fi
     fi
 
+    v_section "Claude Code Toolkit"
+
+    if command_exists claude; then
+        v_pass "claude is installed"
+        [ -d "$CLAUDE_TOOLKIT_DIR/.git" ] && v_pass "toolkit repo at $CLAUDE_TOOLKIT_DIR" || v_fail "toolkit repo at $CLAUDE_TOOLKIT_DIR" "not cloned"
+        v_check "marketplace agentic-sdlc registered" sh -c 'claude plugin marketplace list 2>/dev/null | grep -q agentic-sdlc'
+        local ctp installed_plugins
+        installed_plugins=$(claude plugin list 2>/dev/null)
+        for ctp in $(claude_toolkit_plugins); do
+            if printf '%s\n' "$installed_plugins" | grep -q "${ctp}@agentic-sdlc"; then
+                v_pass "plugin ${ctp}@agentic-sdlc installed"
+            else
+                v_fail "plugin ${ctp}@agentic-sdlc installed" "missing"
+            fi
+        done
+    else
+        v_fail "claude is installed" "not found"
+    fi
+
     v_section "Repo Health"
 
     if command_exists jq; then
@@ -1129,6 +1249,7 @@ print_installation_plan() {
     [ "$INSTALL_SYSTEM" = true ] && echo "✓ macOS system preferences"
     [ "$INSTALL_BREW" = true ] && echo "✓ Homebrew packages"
     [ "$INSTALL_APPS" = true ] && echo "✓ Applications (Casks, App Store)"
+    [ "$INSTALL_CLAUDE" = true ] && echo "✓ Claude Code toolkit (agentic-sdlc marketplace + plugins)"
     
     [ "$DRY_RUN" = true ] && echo "" && echo "MODE: DRY RUN (no changes will be made)"
     
@@ -1205,6 +1326,11 @@ main() {
     if [ "$INSTALL_EDITOR" = true ]; then
         log "═ Editor Configuration ═"
         run_step "Link Neovim config" install_neovim_config
+    fi
+
+    if [ "$INSTALL_CLAUDE" = true ]; then
+        log "═ Claude Code Toolkit ═"
+        run_step "Install agentic-sdlc marketplace and plugins" install_claude_toolkit
     fi
 
     if [ "$INSTALL_SYSTEM" = true ]; then
