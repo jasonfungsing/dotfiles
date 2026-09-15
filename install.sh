@@ -627,6 +627,21 @@ install_claude_toolkit() {
         return 1
     fi
 
+    # Sign-in gate: browser OAuth, credentials land in the macOS keychain —
+    # never in dotfiles. Skipped when this machine is already signed in.
+    if ! claude auth status 2>/dev/null | grep -q '"loggedIn": true'; then
+        if [ -t 0 ]; then
+            log "Not signed in to Claude — completing sign-in in your browser..."
+            if ! claude auth login; then
+                log "✗ Claude sign-in failed — re-run ./install.sh after: claude auth login"
+                return 1
+            fi
+        else
+            log "✗ Not signed in to Claude and running non-interactively — run: claude auth login, then re-run ./install.sh"
+            return 1
+        fi
+    fi
+
     if [ ! -d "$CLAUDE_TOOLKIT_DIR/.git" ]; then
         # The toolkit repo is private — clone through the GitHub CLI's
         # login (gitconfig routes github.com credentials via gh).
@@ -655,6 +670,18 @@ install_claude_toolkit() {
     else
         success "Toolkit repo already present at $CLAUDE_TOOLKIT_DIR"
     fi
+
+    # Arm the toolkit repo's own pre-push hook (validates before pushing) —
+    # local git config, so a fresh clone arrives without it.
+    git -C "$CLAUDE_TOOLKIT_DIR" config core.hooksPath .githooks
+
+    # Personal Claude Code config — same symlink pattern as VS Code.
+    # Note: Claude Code writes to settings.json (plugin enables, new
+    # permission approvals), so the dotfiles copy tracks that drift —
+    # commit or discard it like any other change.
+    link_file "$REPO_DIR/app/claude/settings.json" "$HOME/.claude/settings.json"
+    link_file "$REPO_DIR/app/claude/keybindings.json" "$HOME/.claude/keybindings.json"
+    link_file "$REPO_DIR/app/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 
     if claude plugin marketplace list 2>/dev/null | grep -q "agentic-sdlc"; then
         success "Marketplace agentic-sdlc already registered"
@@ -1197,8 +1224,13 @@ run_validation() {
 
     if command_exists claude; then
         v_pass "claude is installed"
+        v_check "signed in to Claude" sh -c 'claude auth status 2>/dev/null | grep -q "\"loggedIn\": true"'
         [ -d "$CLAUDE_TOOLKIT_DIR/.git" ] && v_pass "toolkit repo at $CLAUDE_TOOLKIT_DIR" || v_fail "toolkit repo at $CLAUDE_TOOLKIT_DIR" "not cloned"
         v_check "marketplace agentic-sdlc registered" sh -c 'claude plugin marketplace list 2>/dev/null | grep -q agentic-sdlc'
+        v_check_symlink "$HOME/.claude/settings.json" "$REPO_DIR/app/claude/settings.json"
+        v_check_symlink "$HOME/.claude/keybindings.json" "$REPO_DIR/app/claude/keybindings.json"
+        v_check_symlink "$HOME/.claude/statusline-command.sh" "$REPO_DIR/app/claude/statusline-command.sh"
+        v_check "toolkit pre-push hook armed" sh -c "[ \"\$(git -C \"$CLAUDE_TOOLKIT_DIR\" config core.hooksPath)\" = .githooks ]"
         local ctp installed_plugins
         installed_plugins=$(claude plugin list 2>/dev/null)
         for ctp in $(claude_toolkit_plugins); do

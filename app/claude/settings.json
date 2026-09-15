@@ -1,0 +1,46 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git mv *)",
+      "Bash(git rm *)",
+      "Bash(git config *)",
+      "Bash(git check-ignore *)",
+      "Bash(brew bundle *)",
+      "Bash(mas list *)",
+      "Bash(mas info *)",
+      "Bash(mas outdated *)",
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(npx jest *)",
+      "Bash(python3 *)",
+      "Bash(node -e ' *)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "fable[1m]",
+  "enabledPlugins": {
+    "pdf-viewer@inline": false,
+    "engineering@inline": false,
+    "productivity@inline": false,
+    "data@inline": false,
+    "stages@agentic-sdlc": true,
+    "skills@agentic-sdlc": true,
+    "mcp@agentic-sdlc": true,
+    "define@agentic-sdlc": true
+  },
+  "extraKnownMarketplaces": {
+    "agentic-sdlc": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/jasonfeng/Code/agentic-sdlc"
+      }
+    }
+  },
+  "effortLevel": "xhigh",
+  "theme": "dark"
+}
