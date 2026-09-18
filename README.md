@@ -124,6 +124,7 @@ If you prefer to install manually:
    ln -s ~/.dotfiles/terminal/alias_prompt.sh ~/.alias_prompt.sh
    ln -s ~/.dotfiles/terminal/tmux.conf ~/.tmux.conf
    ln -s ~/.dotfiles/git/gitconfig ~/.gitconfig
+   ln -s ~/.dotfiles/git/gitignore_global ~/.gitignore_global
    ln -s ~/.dotfiles/mac/hushlogin ~/.hushlogin
    # Neovim is modular — link everything, not just init.lua
    mkdir -p ~/.config/nvim
@@ -238,7 +239,8 @@ dotfiles/
 │   └── tmux.conf             # tmux configuration
 │
 ├── git/                      # Git configuration
-│   └── gitconfig             # Git version control configuration
+│   ├── gitconfig             # Git version control configuration
+│   └── gitignore_global      # Global ignore rules (core.excludesfile)
 │
 ├── app/                      # Application configuration
 │   ├── iterm2/
@@ -246,6 +248,9 @@ dotfiles/
 │   ├── vscode/               # VS Code editor configuration
 │   │   ├── settings.json     # Editor settings (symlinked by install.sh)
 │   │   └── keybindings.json  # Keybindings (Cmd+Enter → Claude CLI submit)
+│   ├── claude/               # Claude Code config (settings, keybindings, status line)
+│   ├── copilot/
+│   │   └── settings.json     # Copilot CLI preferences (symlinked by install.sh)
 │   ├── sublime-text/
 │   │   └── User/             # Whole Packages/User dir (symlinked by install.sh)
 │   └── sublime-merge/

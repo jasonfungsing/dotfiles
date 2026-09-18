@@ -346,6 +346,9 @@ install_shell_dotfiles() {
 install_git_dotfiles() {
     log "Linking git config..."
     link_file "$REPO_DIR/git/gitconfig" "$HOME/.gitconfig"
+    # gitconfig's core.excludesfile points here — without it every ignore
+    # rule in the global ignore list silently stops applying
+    link_file "$REPO_DIR/git/gitignore_global" "$HOME/.gitignore_global"
     return 0
 }
 
@@ -519,6 +522,18 @@ install_sublime_config() {
         link_file "$REPO_DIR/app/$repo_name/User" \
             "$HOME/Library/Application Support/${app%%:*}/Packages/User"
     done
+}
+
+# GitHub Copilot CLI preferences (model choice, allowed URLs) — same
+# symlink pattern as the Claude Code config. Only settings.json is
+# tracked: config.json holds machine state (logins, trusted folders)
+# and stays local. The parent dir is created so the link is in place
+# before copilot's first launch.
+install_copilot_config() {
+    if [ "$DRY_RUN" != true ]; then
+        mkdir -p "$HOME/.copilot"
+    fi
+    link_file "$REPO_DIR/app/copilot/settings.json" "$HOME/.copilot/settings.json"
 }
 
 # Install the shared extension list (app/vscode/extensions.txt) into every
@@ -1155,6 +1170,8 @@ run_validation() {
     v_check_symlink "$HOME/Library/Application Support/Sublime Text/Packages/User" "$REPO_DIR/app/sublime-text/User"
     v_check_symlink "$HOME/Library/Application Support/Sublime Merge/Packages/User" "$REPO_DIR/app/sublime-merge/User"
     v_check_symlink "$HOME/.gitconfig" "$REPO_DIR/git/gitconfig"
+    v_check_symlink "$HOME/.gitignore_global" "$REPO_DIR/git/gitignore_global"
+    v_check_symlink "$HOME/.copilot/settings.json" "$REPO_DIR/app/copilot/settings.json"
     v_check_symlink "$HOME/.hushlogin" "$REPO_DIR/mac/hushlogin"
     v_check_symlink "$HOME/.oh-my-zsh/custom/themes/cobalt2.zsh-theme" "$REPO_DIR/terminal/cobalt2.zsh-theme"
     v_check_symlink "$HOME/Library/Application Support/Code/User/settings.json" "$REPO_DIR/app/vscode/settings.json"
@@ -1352,6 +1369,7 @@ main() {
         run_step "Configure iTerm2 preferences folder" configure_iterm2
         run_step "Link VS Code settings" install_vscode_config
         run_step "Link Sublime Text / Merge settings" install_sublime_config
+        run_step "Link Copilot CLI settings" install_copilot_config
         run_step "Sync editor extensions" install_editor_extensions
     fi
 

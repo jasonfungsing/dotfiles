@@ -73,9 +73,10 @@ brew list --cask
 | Version & package managers | `fnm`, `nvm`, `rbenv`/`ruby-build`, `jabba`, `pnpm`, `yarn`, `pipenv`, `uv`, `cocoapods` |
 | Build tools | `make`, `cmake`, `gcc`, `gradle`, `maven`, `openjdk`, `protobuf`, `buf`, `pkgconf` |
 | DevOps & cloud | `docker`, `docker-compose`, `docker-credential-helper`, `kubernetes-cli` (kubectl), `kind`, `minikube`, `kops`, `kubectx`, `kustomize`, `helm`, `skaffold`, `stern`, `k6`, `lazydocker` |
-| Git & GitHub | `git`, `git-lfs`, `gh`, `lazygit`, `tig`, `gnupg` |
+| Git, GitHub & GitLab | `git`, `git-lfs`, `gh`, `glab`, `lazygit`, `tig`, `gnupg` |
+| AI assistants | `gemini-cli` (Google Gemini CLI) |
 | System & terminal | `tmux`, `tmuxinator`, `reattach-to-user-namespace`, `htop`, `btop`, `coreutils`, `zsh`, `zsh-completions`, `zsh-syntax-highlighting`, `bash-completion@2`, `direnv`, `entr`, `watchman`, `shellcheck` |
-| Editors | `neovim` (configuration lives in [neovim/](../neovim/README.md)) |
+| Editors | `neovim` (configuration lives in [neovim/](../neovim/README.md)), `tree-sitter`/`tree-sitter-cli` |
 | Networking | `curl`, `wget`, `nmap`, `mosh`, `tailscale` |
 | Documentation & media | `pandoc`, `markdown`, `tesseract` (OCR), `graphviz`, `cloc`, `figlet`, `cmatrix` |
 | Productivity helpers | `cheat`, `navi`, `thefuck`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
@@ -83,7 +84,9 @@ brew list --cask
 
 ### Casks (GUI applications)
 
-`visual-studio-code`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `claude` (Claude desktop), `claude-code` (CLI), `google-gemini`, `antigravity-cli` (terminal Gemini agent), `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
+`visual-studio-code`, `sublime-text`, `sublime-merge`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `microsoft-teams`, `claude` (Claude desktop), `claude-code` (CLI), `copilot-cli` (GitHub Copilot CLI), `github-copilot-app`, `google-gemini`, `antigravity-cli` (terminal Gemini agent), `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-fira-code-nerd-font`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
+
+> Raycast's own settings (hotkeys, quicklinks, extensions) live in its internal database, not in files this repo can track — carry them to a new machine with Raycast → Settings → Advanced → Export.
 
 > Corporate security agents (CrowdStrike Falcon, Workspace ONE Hub) are deliberately not managed by brew — they belong to device management.
 

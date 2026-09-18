@@ -28,20 +28,6 @@
             ]
           }
         },
-        "65": {
-          "enabled": false,
-          "value": {
-            "type": "standard",
-            "parameters": [
-              32,
-              49,
-              1572864
-            ]
-          }
-        },
-        "20": {
-          "enabled": false
-        },
         "28": {
           "enabled": false,
           "value": {
@@ -50,6 +36,20 @@
               51,
               20,
               1179648
+            ]
+          }
+        },
+        "20": {
+          "enabled": false
+        },
+        "65": {
+          "enabled": false,
+          "value": {
+            "type": "standard",
+            "parameters": [
+              32,
+              49,
+              1572864
             ]
           }
         },
@@ -104,6 +104,12 @@
             ]
           }
         },
+        "23": {
+          "enabled": false
+        },
+        "16": {
+          "enabled": false
+        },
         "60": {
           "enabled": true,
           "value": {
@@ -114,12 +120,6 @@
               1048576
             ]
           }
-        },
-        "16": {
-          "enabled": false
-        },
-        "23": {
-          "enabled": false
         },
         "164": {
           "enabled": false,
@@ -164,9 +164,9 @@
     },
     "com.apple.Safari": {
       "NSUserKeyEquivalents": {
-        "New Jason Feng Window": "@$0",
+        "New DigIO Window": "@$1",
         "New GI Window": "@$2",
-        "New DigIO Window": "@$1"
+        "New Jason Feng Window": "@$0"
       }
     }
   }

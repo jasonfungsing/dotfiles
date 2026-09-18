@@ -1,0 +1,6 @@
+{
+  "model": "gpt-6-astra (max)",
+  "allowedUrls": [
+    "https://docs.github.com"
+  ]
+}
