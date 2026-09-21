@@ -1,0 +1,9 @@
+# ~/.zshenv — sourced by EVERY zsh, including the non-interactive shells
+# sshd spawns for remote commands (mosh's mosh-server bootstrap, `ssh host
+# cmd`, scp). Those shells never read .zshrc, so Homebrew's bin must land
+# on PATH here or remotely-invoked brew tools appear "not installed".
+# Keep this file minimal: it runs for every script too — interactive
+# setup stays in .zshrc, which prepends these paths again (harmless).
+BREW_PREFIX="/opt/homebrew"                           # Apple Silicon
+[ -d "$BREW_PREFIX" ] || BREW_PREFIX="/usr/local"     # Intel
+export PATH="$BREW_PREFIX/bin:$BREW_PREFIX/sbin:$PATH"

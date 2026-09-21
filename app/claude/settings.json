@@ -31,7 +31,11 @@
     "stages@agentic-sdlc": true,
     "skills@agentic-sdlc": true,
     "mcp@agentic-sdlc": true,
-    "define@agentic-sdlc": true
+    "define@agentic-sdlc": true,
+    "figma@inline": false,
+    "slack-by-salesforce@inline": false,
+    "cowork-plugin-management@inline": false,
+    "ship@agentic-sdlc": true
   },
   "extraKnownMarketplaces": {
     "agentic-sdlc": {

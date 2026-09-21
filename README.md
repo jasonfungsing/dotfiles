@@ -234,6 +234,7 @@ dotfiles/
 │
 ├── terminal/                 # Terminal configuration (zsh + tmux)
 │   ├── zshrc                 # Zsh shell configuration
+│   ├── zshenv                # PATH for non-interactive shells (ssh/mosh remote commands)
 │   ├── alias_prompt.sh       # Custom aliases and prompt
 │   ├── cobalt2.zsh-theme     # Zsh theme
 │   └── tmux.conf             # tmux configuration
