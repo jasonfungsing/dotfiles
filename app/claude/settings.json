@@ -35,7 +35,8 @@
     "figma@inline": false,
     "slack-by-salesforce@inline": false,
     "cowork-plugin-management@inline": false,
-    "ship@agentic-sdlc": true
+    "ship@agentic-sdlc": true,
+    "build@agentic-sdlc": true
   },
   "extraKnownMarketplaces": {
     "agentic-sdlc": {

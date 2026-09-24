@@ -84,7 +84,7 @@ brew list --cask
 
 ### Casks (GUI applications)
 
-`visual-studio-code`, `sublime-text`, `sublime-merge`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `microsoft-teams`, `claude` (Claude desktop), `claude-code` (CLI), `copilot-cli` (GitHub Copilot CLI), `github-copilot-app`, `google-gemini`, `antigravity-cli` (terminal Gemini agent), `raycast` (launcher), `little-snitch` (network firewall), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-fira-code-nerd-font`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
+`visual-studio-code`, `sublime-text`, `sublime-merge`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `microsoft-teams`, `claude` (Claude desktop), `claude-code` (CLI), `copilot-cli` (GitHub Copilot CLI), `github-copilot-app`, `google-gemini`, `antigravity-cli` (terminal Gemini agent), `raycast` (launcher), `little-snitch` (network firewall), `private-internet-access` (VPN), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-fira-code-nerd-font`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
 
 > Raycast's own settings (hotkeys, quicklinks, extensions) live in its internal database, not in files this repo can track — carry them to a new machine with Raycast → Settings → Advanced → Export.
 

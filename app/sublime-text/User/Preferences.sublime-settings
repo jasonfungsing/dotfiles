@@ -9,4 +9,5 @@
 	"dark_theme": "Monokai Classic.sublime-theme",
 	"light_color_scheme": "Monokai Pro Light.sublime-color-scheme",
 	"light_theme": "Monokai Pro Light.sublime-theme",
+	"index_files": true,
 }
