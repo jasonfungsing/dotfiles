@@ -537,6 +537,74 @@ install_copilot_config() {
     link_file "$REPO_DIR/app/copilot/settings.json" "$HOME/.copilot/settings.json"
 }
 
+# Setapp apps can't be scripted — Setapp ships no CLI or install API, so
+# its apps install only through the Setapp UI after sign-in. This step
+# automates everything around that click: compare the tracked list
+# (app/setapp/apps.txt) against /Applications/Setapp, print what's
+# missing, and open Setapp so the remaining installs happen right away.
+# Regenerate the list after adding/removing apps: app/setapp/export-apps.sh
+install_setapp_apps() {
+    local list="$REPO_DIR/app/setapp/apps.txt"
+    [ -f "$list" ] || { log "No Setapp app list at $list. Skipping."; return; }
+
+    if [ ! -d "/Applications/Setapp.app" ]; then
+        log "Setapp not installed (cask setapp) — skipping Setapp app check"
+        return
+    fi
+
+    local app missing=()
+    while IFS= read -r app; do
+        case "$app" in ''|\#*) continue ;; esac
+        [ -d "/Applications/Setapp/$app.app" ] || missing+=("$app")
+    done < "$list"
+
+    if [ ${#missing[@]} -eq 0 ]; then
+        success "All tracked Setapp apps are installed"
+        return
+    fi
+
+    log "⚠ Setapp apps still to install by hand (no Setapp CLI exists):"
+    for app in "${missing[@]}"; do
+        log "    • $app"
+    done
+    if [ "$DRY_RUN" != true ]; then
+        open -a Setapp 2>/dev/null || true
+        log "Opened Setapp — sign in and install the apps above (search or Favorites)"
+    fi
+}
+
+# Setapp app settings — prefs/<domain>.plist exports made by
+# app/setapp/export-prefs.sh. Imported only when the domain doesn't
+# exist on this machine yet (i.e. a fresh install): macOS's cfprefsd
+# owns live preference domains, so symlinking is off the table, and a
+# re-run must never clobber settings changed since the last export.
+# Force-apply by hand with `defaults import <domain> <file>` — with the
+# app not running, or its cached prefs win when it quits.
+install_setapp_prefs() {
+    local prefs_dir="$REPO_DIR/app/setapp/prefs"
+    [ -d "$prefs_dir" ] || { log "No Setapp prefs at $prefs_dir. Skipping."; return; }
+
+    local f domain
+    for f in "$prefs_dir"/*.plist; do
+        [ -e "$f" ] || continue
+        domain="$(basename "$f" .plist)"
+        if defaults read "$domain" > /dev/null 2>&1; then
+            success "Prefs for $domain already present (not overwriting)"
+            continue
+        fi
+        if [ "$DRY_RUN" = true ]; then
+            log "[DRY RUN] Would import prefs for $domain"
+            continue
+        fi
+        if defaults import "$domain" "$f"; then
+            success "Imported prefs for $domain"
+        else
+            FAILED_STEPS+=("setapp prefs import $domain")
+            echo "⚠ Failed to import prefs for $domain" >&2
+        fi
+    done
+}
+
 # Install the shared extension list (app/vscode/extensions.txt) into every
 # editor whose CLI is present. Fail-soft per extension: ones a marketplace
 # doesn't carry are logged as warnings, not failures.
@@ -1220,6 +1288,26 @@ run_validation() {
     if command_exists brew; then
         v_pass "Homebrew is installed"
         v_check "Brewfile packages installed (brew bundle check)" v_check_brew_bundle
+        # Setapp apps are manual installs (no Setapp CLI) — this check keeps
+        # the reminder visible until the tracked list is satisfied.
+        if [ -f "$REPO_DIR/app/setapp/apps.txt" ] && [ -d "/Applications/Setapp.app" ]; then
+            local sa_app sa_missing=""
+            while IFS= read -r sa_app; do
+                case "$sa_app" in ''|\#*) continue ;; esac
+                [ -d "/Applications/Setapp/$sa_app.app" ] || sa_missing="$sa_missing $sa_app"
+            done < "$REPO_DIR/app/setapp/apps.txt"
+            if [ -z "$sa_missing" ]; then
+                v_pass "Setapp apps from app/setapp/apps.txt installed"
+            else
+                v_fail "Setapp apps from app/setapp/apps.txt installed" "missing:$sa_missing — install via the Setapp UI"
+            fi
+        fi
+        # Repo copies of Setapp app prefs must stay valid plists
+        local sa_pref
+        for sa_pref in "$REPO_DIR"/app/setapp/prefs/*.plist; do
+            [ -e "$sa_pref" ] || continue
+            v_check "Setapp prefs $(basename "$sa_pref") is a valid plist" plutil -lint "$sa_pref"
+        done
     else
         v_fail "Homebrew is installed" "not found"
     fi
@@ -1348,6 +1436,10 @@ main() {
         run_step "Install Brewfile packages and applications" install_packages
         if [ "$PRUNE_BREW" = true ]; then
             run_step "Prune brew packages not in the Brewfile" prune_packages
+        fi
+        if [ "$INSTALL_APPS" = true ]; then
+            run_step "Check Setapp apps against tracked list" install_setapp_apps
+            run_step "Import Setapp app prefs (fresh domains only)" install_setapp_prefs
         fi
     fi
 

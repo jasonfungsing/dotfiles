@@ -114,6 +114,12 @@ Detailed explanations of the settings applied by `macos.sh`.
 
 ### General UI & System
 
+**Tile windows edge-to-edge**
+```bash
+defaults write com.apple.WindowManager EnableTiledWindowMargins -bool false
+```
+Removes the gap macOS window tiling leaves between tiled windows, so they butt against each other and the screen edges.
+
 **Expand save dialog**
 ```bash
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
@@ -177,6 +183,24 @@ Automatically hides the Dock when not in use, providing more screen space. Move 
 defaults write com.apple.dock orientation -string "right"
 ```
 Positions the Dock on the right side of the screen.
+
+**Icon size and hover magnification**
+```bash
+defaults write com.apple.dock tilesize -int 43
+defaults write com.apple.dock magnification -bool true
+defaults write com.apple.dock largesize -int 58
+```
+Resting icon size 43, growing to 58 under the pointer.
+
+**Pinned Dock apps**
+
+The `DOCK_APPS` array in `macos.sh` lists the pinned apps in order
+(Calendar, Mail, Safari, Chrome, Slack, VS Code, Claude, GitHub
+Copilot, iTerm). `dockutil` (from the Brewfile) rebuilds the Dock to
+match — but only when the current pins differ, so re-runs don't touch
+it; apps not yet installed are skipped with a warning. To change the
+lineup, edit the array and re-run `macos.sh` (or rearrange the Dock by
+hand and mirror the change into the array).
 
 ### Keyboard & Input
 

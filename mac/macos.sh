@@ -46,6 +46,9 @@ defaults write NSGlobalDomain AppleFontSmoothing -int 2
 echo "Disable the 'Are you sure you want to open this application?' dialog"
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
+echo "Tile windows edge-to-edge (no margins between tiled windows)"
+defaults write com.apple.WindowManager EnableTiledWindowMargins -bool false
+
 # echo "Expand print panel by default"
 # defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
 
@@ -156,11 +159,51 @@ echo "Magnify Dock icons on hover (to size 58)"
 defaults write com.apple.dock magnification -bool true
 defaults write com.apple.dock largesize -int 58
 
+echo "Dock icon size 43"
+defaults write com.apple.dock tilesize -int 43
+
 echo "Minimize windows into their application's icon"
 defaults write com.apple.dock minimize-to-application -bool true
 
 echo "Hide the recent applications section in the Dock"
 defaults write com.apple.dock show-recents -bool false
+
+# Pinned Dock apps, in order (needs dockutil, installed by the Brewfile —
+# persistent-apps is a plist-blob array that raw `defaults write` can't
+# sanely express). Convergent: the Dock is only rebuilt when its current
+# pins differ from this list, so re-runs are no-ops; an app not installed
+# yet is skipped with a warning and picked up on the next run. The
+# rebuild itself uses --no-restart — section 7's killall Dock applies it.
+DOCK_APPS=(
+    "/System/Applications/Calendar.app"
+    "/System/Applications/Mail.app"
+    "/Applications/Safari.app"
+    "/Applications/Google Chrome.app"
+    "/Applications/Slack.app"
+    "/Applications/Visual Studio Code.app"
+    "/Applications/Claude.app"
+    "/Applications/GitHub Copilot.app"
+    "/Applications/iTerm.app"
+)
+if command -v dockutil > /dev/null 2>&1; then
+    desired=$(for app in "${DOCK_APPS[@]}"; do basename "$app" .app; done)
+    current=$(dockutil --list 2>/dev/null | awk -F'\t' '{print $1}')
+    if [ "$desired" = "$current" ]; then
+        echo "Pinned Dock apps already match the list"
+    else
+        echo "Rebuilding pinned Dock apps"
+        dockutil --remove all --no-restart > /dev/null 2>&1
+        for app in "${DOCK_APPS[@]}"; do
+            if [ -e "$app" ]; then
+                dockutil --add "$app" --no-restart > /dev/null 2>&1
+            else
+                echo "  ⚠ Skipped $app (not installed yet)"
+            fi
+        done
+    fi
+else
+    echo "⚠ dockutil not found — skipped pinning Dock apps"
+fi
 
 # echo "Enable the 2D Dock"
 # defaults write com.apple.dock no-glass -bool true
@@ -185,6 +228,15 @@ defaults write com.apple.dock show-recents -bool false
 echo "Remap Caps Lock to Control (all keyboards; per-host preference)"
 defaults -currentHost write -g com.apple.keyboard.modifiermapping.0-0-0 -array \
   '<dict><key>HIDKeyboardModifierMappingSrc</key><integer>30064771129</integer><key>HIDKeyboardModifierMappingDst</key><integer>30064771300</integer></dict>'
+
+echo "Enabled input sources: Australian layout + Chinese Pinyin (with character palette)"
+# The list the fn-key switcher below cycles through. Takes effect at next
+# login — mid-session, the text-input agent keeps its cached copy alive.
+defaults write com.apple.HIToolbox AppleEnabledInputSources -array \
+  '<dict><key>InputSourceKind</key><string>Keyboard Layout</string><key>KeyboardLayout ID</key><integer>15</integer><key>KeyboardLayout Name</key><string>Australian</string></dict>' \
+  '<dict><key>Bundle ID</key><string>com.apple.CharacterPaletteIM</string><key>InputSourceKind</key><string>Non Keyboard Input Method</string></dict>' \
+  '<dict><key>Bundle ID</key><string>com.apple.inputmethod.TCIM</string><key>InputSourceKind</key><string>Keyboard Input Method</string></dict>' \
+  '<dict><key>Bundle ID</key><string>com.apple.inputmethod.TCIM</string><key>Input Mode</key><string>com.apple.inputmethod.TCIM.Pinyin</string><key>InputSourceKind</key><string>Input Mode</string></dict>'
 
 echo "Pressing fn changes the input source (Australian <-> Pinyin)"
 defaults write com.apple.HIToolbox AppleFnUsageType -int 1

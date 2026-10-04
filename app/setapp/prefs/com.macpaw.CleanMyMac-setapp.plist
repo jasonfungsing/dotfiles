@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CMIsUserEligibleForAppsStatistics</key>
+	<true/>
+	<key>FRServiceLastKnownBootDate</key>
+	<real>1789941025.9562931</real>
+	<key>FRServiceLastKnownVersion</key>
+	<string>50600.0.2608201305</string>
+	<key>KeychainAccessibilityMigration</key>
+	<string>true</string>
+	<key>MenuAppEnabled</key>
+	<false/>
+	<key>STP_is_first_launch</key>
+	<false/>
+	<key>STP_last_used_version</key>
+	<string>4.2.1</string>
+</dict>
+</plist>

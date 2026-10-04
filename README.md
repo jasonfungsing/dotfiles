@@ -252,6 +252,11 @@ dotfiles/
 │   ├── claude/               # Claude Code config (settings, keybindings, status line)
 │   ├── copilot/
 │   │   └── settings.json     # Copilot CLI preferences (symlinked by install.sh)
+│   ├── setapp/
+│   │   ├── apps.txt          # Tracked Setapp app list (no Setapp CLI — installs stay manual)
+│   │   ├── export-apps.sh    # Regenerate apps.txt from /Applications/Setapp
+│   │   ├── export-prefs.sh   # Export each Setapp app's settings to prefs/
+│   │   └── prefs/            # App settings plists (imported on fresh machines only)
 │   ├── sublime-text/
 │   │   └── User/             # Whole Packages/User dir (symlinked by install.sh)
 │   └── sublime-merge/

@@ -79,16 +79,18 @@ brew list --cask
 | Editors | `neovim` (configuration lives in [neovim/](../neovim/README.md)), `tree-sitter`/`tree-sitter-cli` |
 | Networking | `curl`, `wget`, `nmap`, `mosh`, `tailscale` |
 | Documentation & media | `pandoc`, `markdown`, `tesseract` (OCR), `graphviz`, `cloc`, `figlet`, `cmatrix` |
-| Productivity helpers | `cheat`, `navi`, `thefuck`, `noti`, `wtf`, `mas`, `mutt`, `weechat` |
+| Productivity helpers | `cheat`, `navi`, `thefuck`, `noti`, `wtf`, `mas`, `dockutil` (Dock pinning for mac/macos.sh), `mutt`, `weechat` |
 | Libraries & databases | `rocksdb` |
 
 ### Casks (GUI applications)
 
-`visual-studio-code`, `sublime-text`, `sublime-merge`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `microsoft-teams`, `claude` (Claude desktop), `claude-code` (CLI), `copilot-cli` (GitHub Copilot CLI), `github-copilot-app`, `google-gemini`, `antigravity-cli` (terminal Gemini agent), `raycast` (launcher), `little-snitch` (network firewall), `private-internet-access` (VPN), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-fira-code-nerd-font`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
+`visual-studio-code`, `sublime-text`, `sublime-merge`, `iterm2`, `google-chrome`, `docker-desktop`, `slack`, `microsoft-teams`, `claude` (Claude desktop), `claude-code` (CLI), `copilot-cli` (GitHub Copilot CLI), `github-copilot-app`, `fluidvoice` (voice dictation), `google-gemini`, `antigravity-cli` (terminal Gemini agent), `raycast` (launcher), `little-snitch` (network firewall), `private-internet-access` (VPN), `okta-verify`, `logi-options+` (Logitech devices), `setapp`, `basictex` (LaTeX), and coding fonts (`font-fira-code`, `font-fira-code-nerd-font`, `font-cascadia-mono`, plus the Powerline-glyph Nerd Font `font-3270-nerd-font`).
 
 > Raycast's own settings (hotkeys, quicklinks, extensions) live in its internal database, not in files this repo can track — carry them to a new machine with Raycast → Settings → Advanced → Export.
 
 > Corporate security agents (CrowdStrike Falcon, Workspace ONE Hub) are deliberately not managed by brew — they belong to device management.
+
+> Setapp's own apps (CleanMyMac, CleanShot X, …) can't be brew-managed either — Setapp has no CLI or install API. The tracked list lives in [app/setapp/apps.txt](../app/setapp/apps.txt); `install.sh` reports which are missing and opens Setapp for the final clicks, and `app/setapp/export-apps.sh` regenerates the list from what's installed. Each app's *settings* (CleanShot hotkeys, save paths, …) are exported to `app/setapp/prefs/` by `export-prefs.sh` and imported by `install.sh` on machines where the app's preference domain doesn't exist yet — existing settings are never overwritten.
 
 ### Mac App Store
 

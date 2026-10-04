@@ -1,0 +1,8 @@
+# Setapp apps installed on this machine — one name per line (the .app
+# name under /Applications/Setapp, without the extension). Setapp ships
+# no CLI or install API, so these can't be auto-installed: on a new
+# machine install.sh prints which ones are missing and opens Setapp so
+# the remaining clicks happen right away (sign in first). Regenerate
+# this list after adding/removing Setapp apps: app/setapp/export-apps.sh
+CleanMyMac
+CleanShot X
