@@ -2,6 +2,8 @@
 #
 # Machine-specific overrides (work identity, proxy settings) belong in
 # ~/.gitconfig.local — included at the bottom, so it wins over everything.
+# That file is linked from the PRIVATE dotfiles repo by its installer
+# (~/Code/private-dotfiles), never tracked here.
 
 # ═══ Identity ═══
 
@@ -129,7 +131,15 @@
     bd = branch -d
     bD = branch -D
     rbom = rebase origin/master
-    cleanup = "!git fetch -p origin && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D"
+    # Two sweeps, because git's official command only covers half the job:
+    #   1. branch --delete-merged origin (git >= 2.56) — branches whose work
+    #      landed on the upstream they still track; native and safe (skips
+    #      checked-out branches and anything ambiguous right after a pull)
+    #   2. the awk pass — branches whose upstream is GONE (remote branch
+    #      deleted after a merged PR), which --delete-merged deliberately
+    #      refuses to touch; -D because a squash-merged branch's tip is
+    #      never reachable from its upstream, so -d would refuse too
+    cleanup = "!git fetch -p origin && git branch --delete-merged origin && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D"
 
     # Review helpers
     pr = "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"

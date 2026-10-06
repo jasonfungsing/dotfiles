@@ -1,3 +1,9 @@
 .DS_Store
 # Machine-local Package Control artifact inside the symlinked Sublime User dirs
 Package Control.user-ca-bundle
+# License files must never reach the public repo. The Monokai Pro
+# license lives in the PRIVATE dotfiles repo, whose installer links it
+# into the symlinked Sublime User dir — this rule keeps that link (or
+# the raw file the app writes on a machine without the private repo)
+# out of the public tree.
+app/sublime-*/User/Theme - Monokai Pro.sublime-settings

@@ -103,10 +103,22 @@ Install only specific components:
 ./install.sh --system-only       # Only macOS settings
 ./install.sh --no-brew           # Skip Homebrew packages
 ./install.sh --no-apps           # Skip applications
+./install.sh --no-private        # Skip the private dotfiles repo
 ./install.sh --dry-run           # Show what would be done
 ```
 
 Flags can be combined, e.g. `./install.sh --no-brew --no-apps`.
+
+### Private companion repo
+
+Licenses and machine-private overrides live in a separate **private**
+GitHub repo, not here. Near the end of a full run, `install.sh` asks
+whether to set it up: answering yes opens a GitHub login in the browser
+(if `gh` isn't already authenticated), clones the private repo to
+`~/Code/private-dotfiles`, and runs its own `install.sh`, which links
+its files into place. Answering no (or `--no-private`, or a
+non-interactive run) skips it — re-run `./install.sh` anytime to set it
+up later.
 
 ### Manual Installation
 
@@ -176,21 +188,18 @@ Edit `alias_prompt.sh` and `zshrc` to add or modify aliases. See the [terminal d
 
 ### Private Configuration
 
-Two untracked files hold machine-specific settings, both loaded automatically:
+Three files hold machine-private settings, all loaded automatically when
+present and all provided by the [private companion repo](#private-companion-repo)'s
+installer (never tracked here):
 
-`~/.zshrc.private` — shell settings:
+- `~/.zshrc.private` — shell extras (keys, work aliases), sourced near
+  the end of zshrc
+- `~/.gitconfig.local` — git overrides (work identity, proxy), included
+  at the bottom of the shared gitconfig so it wins
+- `~/.tmux.private` — tmux extras, sourced at the end of tmux.conf
 
-```bash
-export API_KEY="your-key"
-alias work="cd /path/to/work"
-```
-
-`~/.gitconfig.local` — git overrides (wins over the shared gitconfig):
-
-```ini
-[user]
-    email = work.email@company.com
-```
+On a machine without the private repo, plain local files at the same
+paths work identically.
 
 ### Changing macOS Settings
 

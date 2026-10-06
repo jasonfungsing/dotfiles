@@ -15,11 +15,14 @@ INSTALL_SYSTEM=true
 INSTALL_BREW=true
 INSTALL_APPS=true
 INSTALL_CLAUDE=true
+INSTALL_PRIVATE=true
 PRUNE_BREW=true
 VALIDATE_ONLY=false
 
 CLAUDE_TOOLKIT_REPO="https://github.com/jasonfungsing/agentic-sdlc.git"
 CLAUDE_TOOLKIT_DIR="$HOME/Code/agentic-sdlc"
+PRIVATE_DOTFILES_REPO="jasonfungsing/private-dotfiles"
+PRIVATE_DOTFILES_DIR="$HOME/Code/private-dotfiles"
 
 # The plugin list is read from the toolkit's own marketplace.json (single
 # source of truth) — plugins added to the toolkit later install with no
@@ -224,6 +227,7 @@ parse_arguments() {
                 INSTALL_BREW=false
                 INSTALL_APPS=false
                 INSTALL_CLAUDE=false
+                INSTALL_PRIVATE=false
                 shift
                 ;;
             --editor-only)
@@ -234,6 +238,7 @@ parse_arguments() {
                 INSTALL_BREW=false
                 INSTALL_APPS=false
                 INSTALL_CLAUDE=false
+                INSTALL_PRIVATE=false
                 shift
                 ;;
             --git-only)
@@ -244,6 +249,7 @@ parse_arguments() {
                 INSTALL_BREW=false
                 INSTALL_APPS=false
                 INSTALL_CLAUDE=false
+                INSTALL_PRIVATE=false
                 shift
                 ;;
             --terminal-only)
@@ -254,6 +260,7 @@ parse_arguments() {
                 INSTALL_BREW=false
                 INSTALL_APPS=false
                 INSTALL_CLAUDE=false
+                INSTALL_PRIVATE=false
                 shift
                 ;;
             --system-only)
@@ -264,6 +271,7 @@ parse_arguments() {
                 INSTALL_BREW=false
                 INSTALL_APPS=false
                 INSTALL_CLAUDE=false
+                INSTALL_PRIVATE=false
                 shift
                 ;;
             --no-brew)
@@ -276,6 +284,10 @@ parse_arguments() {
                 ;;
             --no-claude)
                 INSTALL_CLAUDE=false
+                shift
+                ;;
+            --no-private)
+                INSTALL_PRIVATE=false
                 shift
                 ;;
             --no-prune)
@@ -312,6 +324,7 @@ OPTIONS:
   --no-brew         Skip Homebrew packages
   --no-apps         Skip applications
   --no-claude       Skip the Claude Code toolkit (agentic-sdlc marketplace)
+  --no-private      Skip the private dotfiles repo (GitHub login + clone + its installer)
   --no-prune        Keep brew packages that are not declared in the Brewfile
   --validate        Validate the current setup without installing anything
   --dry-run         Show what would be done without making changes
@@ -640,6 +653,68 @@ install_editor_extensions() {
         done < "$list"
         success "Extensions synced for $name"
     done
+}
+
+# Private companion repo (github.com/jasonfungsing/private-dotfiles) —
+# licenses and machine-private overrides the PUBLIC repo must never
+# carry. This repo stays the master installer; this step offers to
+# clone the private one and run ITS install.sh, which does its own
+# linking. Interactive by design: asks first, and `gh auth login --web`
+# opens the browser when not yet logged in. Skipped when stdin isn't a
+# terminal (scripted runs) or with --no-private; a `no` answer skips
+# without failing the install.
+install_private_dotfiles() {
+    if ! command_exists gh; then
+        log "gh not found (the packages step installs it) — skipping private dotfiles"
+        return
+    fi
+    if [ "$DRY_RUN" = true ]; then
+        log "[DRY RUN] Would offer to clone $PRIVATE_DOTFILES_REPO into $PRIVATE_DOTFILES_DIR and run its install.sh"
+        return
+    fi
+
+    if [ ! -d "$PRIVATE_DOTFILES_DIR/.git" ]; then
+        if [ ! -t 0 ]; then
+            log "Non-interactive run — skipping private dotfiles (needs a login prompt)"
+            return
+        fi
+        printf "Set up private dotfiles from github.com/%s? Requires a GitHub login. [y/N] " "$PRIVATE_DOTFILES_REPO"
+        read -r reply
+        case "$reply" in
+            [Yy]*) ;;
+            *) log "Skipped private dotfiles (answered no — re-run install.sh anytime to set up)"; return ;;
+        esac
+
+        if ! gh auth status > /dev/null 2>&1; then
+            log "Opening GitHub login in the browser..."
+            if ! gh auth login --web --git-protocol https; then
+                FAILED_STEPS+=("private dotfiles (GitHub login failed)")
+                return 1
+            fi
+        fi
+        if ! gh repo clone "$PRIVATE_DOTFILES_REPO" "$PRIVATE_DOTFILES_DIR"; then
+            FAILED_STEPS+=("private dotfiles clone")
+            return 1
+        fi
+        success "Cloned private dotfiles to $PRIVATE_DOTFILES_DIR"
+    else
+        if git -C "$PRIVATE_DOTFILES_DIR" pull --ff-only > /dev/null 2>&1; then
+            success "Private dotfiles already cloned (pulled latest)"
+        else
+            log "Private dotfiles already cloned (pull skipped — local changes or offline)"
+        fi
+    fi
+
+    if [ -f "$PRIVATE_DOTFILES_DIR/install.sh" ]; then
+        if bash "$PRIVATE_DOTFILES_DIR/install.sh"; then
+            success "Private dotfiles installed"
+        else
+            FAILED_STEPS+=("private dotfiles install.sh")
+            return 1
+        fi
+    else
+        log "No install.sh in the private repo yet — clone only"
+    fi
 }
 
 install_zsh_theme() {
@@ -1308,6 +1383,14 @@ run_validation() {
             [ -e "$sa_pref" ] || continue
             v_check "Setapp prefs $(basename "$sa_pref") is a valid plist" plutil -lint "$sa_pref"
         done
+        # Private dotfiles are optional — only checked when the clone exists
+        if [ -d "$PRIVATE_DOTFILES_DIR/.git" ]; then
+            if git -C "$PRIVATE_DOTFILES_DIR" remote get-url origin 2>/dev/null | grep -q "$PRIVATE_DOTFILES_REPO"; then
+                v_pass "private dotfiles clone at $PRIVATE_DOTFILES_DIR (origin OK)"
+            else
+                v_fail "private dotfiles clone at $PRIVATE_DOTFILES_DIR" "origin does not point at $PRIVATE_DOTFILES_REPO"
+            fi
+        fi
     else
         v_fail "Homebrew is installed" "not found"
     fi
@@ -1475,6 +1558,11 @@ main() {
     if [ "$INSTALL_CLAUDE" = true ]; then
         log "═ Claude Code Toolkit ═"
         run_step "Install agentic-sdlc marketplace and plugins" install_claude_toolkit
+    fi
+
+    if [ "$INSTALL_PRIVATE" = true ]; then
+        log "═ Private Dotfiles ═"
+        run_step "Set up private dotfiles (optional, prompts first)" install_private_dotfiles
     fi
 
     if [ "$INSTALL_SYSTEM" = true ]; then
