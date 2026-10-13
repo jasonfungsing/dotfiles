@@ -40,12 +40,19 @@
     cmd = ~/Code/dotfiles/git/vscode-dir-diff \"$LOCAL\" \"$REMOTE\"
 
 [merge]
-    tool = vscode
+    tool = smerge
 
 [mergetool]
     prompt = false
 
-# code --merge opens VS Code's 3-way merge editor (needs VS Code ≥ 1.69)
+# Sublime Merge's purpose-built 3-way conflict editor (official syntax).
+# trustExitCode stays false: git judges resolution by whether $MERGED
+# was written, not by the app's exit status.
+[mergetool "smerge"]
+    cmd = smerge mergetool \"$BASE\" \"$LOCAL\" \"$REMOTE\" -o \"$MERGED\"
+    trustExitCode = false
+
+# VS Code's merge editor, kept as a fallback: git mergetool --tool=vscode
 [mergetool "vscode"]
     cmd = code --wait --merge \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
 
@@ -144,8 +151,9 @@
     # Review helpers
     pr = "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
 
-    # Diff/merge tool shortcuts — default (VS Code, all files as tabs in
-    # one window); postfix "v" for nvim
+    # Diff/merge tool shortcuts — diffs open in VS Code (all files as
+    # tabs in one window; Sublime Merge has no file-pair diff command),
+    # merges in Sublime Merge; postfix "v" for nvim
     dk = difftool --dir-diff --tool=vscode-dir
     dkc = difftool --dir-diff --cached --tool=vscode-dir
     mk = mergetool
