@@ -24,11 +24,19 @@
 # ═══ Diff & merge ═══
 
 [diff]
-    tool = vscode
+    tool = smerge
     algorithm = patience
 
 [difftool]
     prompt = false
+
+# Sublime Merge has NO file-pair diff command (smerge --help: repo,
+# search, blame, log, mergetool only), so this drives its mergetool in
+# two-way mode as a diff viewer: left/right panes plus an output pane
+# whose result goes to a throwaway temp file. Clunkier than a real diff
+# view — revert to VS Code by setting tool = vscode above.
+[difftool "smerge"]
+    cmd = smerge mergetool \"$LOCAL\" \"$REMOTE\" -o \"$(mktemp)\"
 
 [difftool "vscode"]
     cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
@@ -151,10 +159,15 @@
     # Review helpers
     pr = "!f() { git fetch origin pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
 
-    # Diff/merge tool shortcuts — diffs open in VS Code (all files as
-    # tabs in one window; Sublime Merge has no file-pair diff command),
-    # merges in Sublime Merge; postfix "v" for nvim
-    dk = difftool --dir-diff --tool=vscode-dir
+    # Diff/merge tool shortcuts — dk opens Sublime Merge's repo view:
+    # its native UI for working-tree review, staged AND unstaged in one
+    # window, so it replaces the plain dk dir-diff. Revision-range diffs
+    # (e.g. `git dkd HEAD~3`) and staged-only review keep the VS Code
+    # one-window dir-diff, because Sublime Merge can't drive --dir-diff
+    # file pairs. Plain `git difftool` and merges open in Sublime Merge;
+    # postfix "v" for nvim
+    dk = "!smerge ."
+    dkd = difftool --dir-diff --tool=vscode-dir
     dkc = difftool --dir-diff --cached --tool=vscode-dir
     mk = mergetool
     dkv = difftool --tool=nvimdiff

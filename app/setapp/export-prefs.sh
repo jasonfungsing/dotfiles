@@ -29,6 +29,8 @@ DOMAINS=(
 STRIP_KEYS=(
     "mediaHistory"
     "lastOneOverlayArea"
+    "FRServiceLastKnownBootDate"
+    "FRServiceLastKnownVersion"
 )
 
 for domain in "${DOMAINS[@]}"; do

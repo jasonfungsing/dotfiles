@@ -88,13 +88,13 @@ brew list --cask
 
 > Raycast's own settings (hotkeys, quicklinks, extensions) live in its internal database, not in files this repo can track — carry them to a new machine with Raycast → Settings → Advanced → Export.
 
-> Corporate security agents (CrowdStrike Falcon, Workspace ONE Hub) are deliberately not managed by brew — they belong to device management.
+> Corporate security agents (CrowdStrike Falcon, Workspace ONE Hub, Iru Self Service) are deliberately not managed by brew — they belong to device management.
 
 > Setapp's own apps (CleanMyMac, CleanShot X, …) can't be brew-managed either — Setapp has no CLI or install API. The tracked list lives in [app/setapp/apps.txt](../app/setapp/apps.txt); `install.sh` reports which are missing and opens Setapp for the final clicks, and `app/setapp/export-apps.sh` regenerates the list from what's installed. Each app's *settings* (CleanShot hotkeys, save paths, …) are exported to `app/setapp/prefs/` by `export-prefs.sh` and imported by `install.sh` on machines where the app's preference domain doesn't exist yet — existing settings are never overwritten.
 
 ### Mac App Store
 
-Installed via `mas`: AdBlock, Dark Reader for Safari, Xcode.
+Installed via `mas`: AdBlock, Dark Reader for Safari, WhatsApp, Windows App (Microsoft remote desktop). Xcode is installed by hand, not via mas.
 
 ### VS Code extensions
 

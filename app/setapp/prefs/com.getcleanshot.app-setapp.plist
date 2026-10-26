@@ -235,7 +235,7 @@
 	AAAAAAANuA==
 	</data>
 	<key>markupLastToolIndex</key>
-	<integer>1</integer>
+	<integer>7</integer>
 	<key>markupLastWidth</key>
 	<real>7</real>
 	<key>mediaNameTemplate</key>
@@ -343,13 +343,13 @@
 	<key>s000</key>
 	<integer>1782711290</integer>
 	<key>s001</key>
-	<integer>202</integer>
+	<integer>233</integer>
 	<key>s005</key>
-	<integer>1</integer>
+	<integer>4</integer>
 	<key>s006</key>
-	<integer>6</integer>
+	<integer>7</integer>
 	<key>s008</key>
-	<integer>48</integer>
+	<integer>66</integer>
 	<key>screenshotFormat</key>
 	<string>jpg</string>
 	<key>shouldShowHorizontalScrollingCaptureGuide</key>
@@ -360,10 +360,10 @@
 	<true/>
 	<key>sttys</key>
 	<data>
-	W3sidmlkZW9zIjowLCJzY3JvbGxpbmdDYXB0dXJlcyI6MSwiYXBwTGF1bmNoIjo0OCwi
-	c3RhcnRUaW1lU3RhbXAiOjE3ODI3MTEyOTAsImFubm90YXRlcyI6NiwiYW5ub3RhdGVU
-	b29scyI6eyJyZWN0YW5nbGUiOjYsImFycm93IjoxfSwic2NyZWVuc2hvdHMiOjIwMiwi
-	eWVhciI6MjAyNiwiZ2lmcyI6MCwidXBsb2FkcyI6MH1d
+	W3sic2NyZWVuc2hvdHMiOjIzMywiZ2lmcyI6MCwidXBsb2FkcyI6MCwieWVhciI6MjAy
+	NiwiYXBwTGF1bmNoIjo2NiwiYW5ub3RhdGVUb29scyI6eyJwaXhlbGF0ZSI6MywiYXJy
+	b3ciOjEsInJlY3RhbmdsZSI6Nn0sInNjcm9sbGluZ0NhcHR1cmVzIjo0LCJhbm5vdGF0
+	ZXMiOjcsInN0YXJ0VGltZVN0YW1wIjoxNzgyNzExMjkwLCJ2aWRlb3MiOjB9XQ==
 	</data>
 	<key>transparentWindowBackground</key>
 	<false/>

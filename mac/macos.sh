@@ -182,8 +182,10 @@ DOCK_APPS=(
     "/Applications/Slack.app"
     "/Applications/Visual Studio Code.app"
     "/Applications/Claude.app"
+    "/Applications/Gemini.app"
     "/Applications/GitHub Copilot.app"
     "/Applications/iTerm.app"
+    "/Applications/Windows App.app"
 )
 if command -v dockutil > /dev/null 2>&1; then
     desired=$(for app in "${DOCK_APPS[@]}"; do basename "$app" .app; done)
