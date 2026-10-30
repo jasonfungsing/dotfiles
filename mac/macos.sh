@@ -8,7 +8,8 @@
 #   4. Keyboard & input
 #   5. Trackpad
 #   6. Safari & Mail (mostly disabled — see note)
-#   7. Apply (restart affected apps)
+#   7. Remote access (ssh / mosh)
+#   8. Apply (restart affected apps)
 #
 # Commented-out settings are kept on purpose: they're the menu of options —
 # uncomment to enable. See mac/README.md for what each setting does.
@@ -285,7 +286,49 @@ defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 # defaults write com.apple.Mail DisableReplyAnimations -bool true
 # defaults write com.apple.Mail DisableSendAnimations -bool true
 
-# ═══ 7. Apply ═══
+# ═══ 7. Remote access (ssh / mosh) ═══
+
+# mosh has no daemon of its own: every connection starts over ssh, which
+# spawns a mosh-server for that session (its PATH comes from terminal/zshenv).
+# So remote access surviving a restart just needs Remote Login (sshd) on —
+# it's a launchd system service that persists across reboots once enabled.
+# Both commands here need root; the checks keep re-runs sudo-free when
+# everything is already in place.
+#
+# FileVault caveat: after a normal restart the Mac sits at the unlock screen
+# and nothing (sshd, Tailscale) runs until someone logs in locally. For a
+# planned remote reboot use `sudo fdesetup authrestart` — it stashes a
+# one-time unlock so the machine boots straight back to remote-accessible.
+
+echo "Enable Remote Login (sshd) so ssh/mosh can reach this Mac"
+if ! nc -z -w 2 127.0.0.1 22 >/dev/null 2>&1; then
+    # systemsetup is TCC-gated: without Full Disk Access for the terminal it
+    # refuses ("requires Full Disk Access privileges") — the fallback is the
+    # Sharing pane, which needs no special grant.
+    sudo systemsetup -setremotelogin on
+    sleep 2
+    if ! nc -z -w 2 127.0.0.1 22 >/dev/null 2>&1; then
+        echo "  ↳ still off — toggle System Settings → General → Sharing → Remote Login"
+        open "x-apple.systempreferences:com.apple.Sharing-Settings.extension" 2>/dev/null
+    fi
+fi
+
+# The application firewall binds rules to the real Cellar binary, which is
+# only ad-hoc signed — "automatically allow signed software" never covers
+# it — so every brew upgrade of mosh needs a fresh entry. On MDM-managed
+# Macs (firewall locked by a com.apple.security.firewall profile) manual
+# edits are refused, CLI and Settings pane alike; the one path that still
+# works is clicking Allow on the popup when a mosh connection arrives.
+echo "Allow mosh-server through the application firewall"
+MOSH_SERVER="$(realpath "$(command -v mosh-server)" 2>/dev/null)"
+if [ -n "$MOSH_SERVER" ] && ! /usr/libexec/ApplicationFirewall/socketfilterfw --listapps 2>/dev/null | grep -q "$MOSH_SERVER"; then
+    sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add "$MOSH_SERVER" >/dev/null 2>&1
+    sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp "$MOSH_SERVER" >/dev/null 2>&1
+    /usr/libexec/ApplicationFirewall/socketfilterfw --listapps 2>/dev/null | grep -q "$MOSH_SERVER" \
+        || echo "  ↳ not added (managed Mac) — mosh in from a remote device while at this Mac and click Allow on the popup"
+fi
+
+# ═══ 8. Apply ═══
 
 echo "Kill affected applications"
 for app in Finder Dock Mail SystemUIServer; do

@@ -1291,7 +1291,8 @@ v_check_tmux_config() {
 
 v_check_brew_bundle() {
     local out rc missing
-    out=$(brew bundle check --file="$REPO_DIR/brew/Brewfile" --verbose 2>/dev/null)
+    # the "needs to be installed" list goes to stderr, so capture both streams
+    out=$(brew bundle check --file="$REPO_DIR/brew/Brewfile" --verbose 2>&1)
     rc=$?
     if [ $rc -ne 0 ]; then
         missing=$(echo "$out" | grep -c "needs to be installed")
@@ -1407,6 +1408,23 @@ run_validation() {
             v_pass "iTerm2 loads preferences from app/iterm2"
         else
             v_fail "iTerm2 loads preferences from app/iterm2" "PrefsCustomFolder is $(defaults read com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null || echo unset)"
+        fi
+    fi
+
+    # Remote access: mosh rides on sshd (no daemon of its own), so Remote
+    # Login must be on — macos.sh section 7 enables it and the firewall rule.
+    # Catches drift too: an OS update can silently disable Remote Login.
+    v_check "Remote Login (sshd) listening on port 22 (ssh/mosh access)" nc -z -w 2 127.0.0.1 22
+    if command_exists mosh-server; then
+        # Rules bind to the ad-hoc-signed Cellar binary, so each brew upgrade
+        # of mosh stales the entry; on this MDM-managed Mac only the
+        # connection-time Allow popup can add a fresh one.
+        local mosh_real
+        mosh_real="$(realpath "$(command -v mosh-server)" 2>/dev/null)"
+        if /usr/libexec/ApplicationFirewall/socketfilterfw --listapps 2>/dev/null | grep -q "$mosh_real"; then
+            v_pass "mosh-server allowed through the application firewall"
+        else
+            v_fail "mosh-server allowed through the application firewall" "$mosh_real not in allow-list — mosh in from a remote device while at this Mac and click Allow on the popup"
         fi
     fi
 

@@ -230,6 +230,24 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 ```
 Enables tapping on trackpad to register as a click instead of requiring physical click.
 
+### Remote access (ssh / mosh)
+
+**Remote Login (sshd)**
+```bash
+sudo systemsetup -setremotelogin on
+```
+mosh has no daemon of its own — each connection starts over ssh, which spawns a per-session `mosh-server` (found via the PATH set in `terminal/zshenv`). Remote Login is a launchd system service, so once enabled it starts on every boot automatically. The script checks port 22 first and only asks for sudo when sshd isn't already on.
+
+**Firewall allowance for mosh-server**
+mosh switches to UDP (ports 60000–61000) after the ssh handshake; the application firewall must allow the `mosh-server` binary or connections hang right after login. Rules bind to the real Cellar binary — which carries only an ad-hoc signature, so "automatically allow signed software" never covers it — meaning every brew upgrade of mosh stales the entry. `macos.sh` tries `socketfilterfw --add`, but on an MDM-managed Mac (firewall locked by a `com.apple.security.firewall` profile) manual edits are refused, CLI and Settings pane alike. The path that always works, managed or not: make a mosh connection from a remote device while at the Mac and click **Allow** on the popup — that's how entries land in the list. `install.sh --validate` flags when the current binary is missing.
+
+Note: `systemsetup -setremotelogin on` is TCC-gated (the terminal needs Full Disk Access). Without that grant, toggle **System Settings → General → Sharing → Remote Login** instead — `macos.sh` detects the failure and opens that pane.
+
+Reachability notes:
+- **FileVault:** after a normal restart the Mac waits at the unlock screen — nothing runs (sshd, Tailscale) until a local login. For a planned remote reboot use `sudo fdesetup authrestart`, which stashes a one-time unlock so the machine boots straight back up remote-accessible.
+- **Sleep:** on AC power the machine never sleeps and wakes for network access (`pmset`: `sleep 0`, `womp 1`), so it stays reachable. On battery it sleeps normally and goes unreachable until woken locally.
+- The network path is Tailscale (`jasons-macbook-pro`), whose daemon is a root LaunchDaemon (`brew services`) that also starts at boot.
+
 ### Commented Out Settings
 
 The `macos.sh` script includes many commented-out settings, grouped under the same section headings as the active ones. These are disabled by default but can be uncommented if desired:
