@@ -244,6 +244,7 @@ mosh switches to UDP (ports 60000–61000) after the ssh handshake; the applicat
 Note: `systemsetup -setremotelogin on` is TCC-gated (the terminal needs Full Disk Access). Without that grant, toggle **System Settings → General → Sharing → Remote Login** instead — `macos.sh` detects the failure and opens that pane.
 
 Reachability notes:
+- **MDM re-disables Remote Login:** on the managed work Mac, Iru (Kandji) reverts the Remote Login toggle on its periodic check-in — observed on 2026-10-30: enabled manually, confirmed working, disabled again within the hour by `kandji-library-manager`. The toggle only sticks until the next sync, so persistent ssh/mosh access needs an exception from IT (a blueprint change for this device). `install.sh --validate`'s port-22 check surfaces when it has been flipped off again.
 - **FileVault:** after a normal restart the Mac waits at the unlock screen — nothing runs (sshd, Tailscale) until a local login. For a planned remote reboot use `sudo fdesetup authrestart`, which stashes a one-time unlock so the machine boots straight back up remote-accessible.
 - **Sleep:** on AC power the machine never sleeps and wakes for network access (`pmset`: `sleep 0`, `womp 1`), so it stays reachable. On battery it sleeps normally and goes unreachable until woken locally.
 - The network path is Tailscale (`jasons-macbook-pro`), whose daemon is a root LaunchDaemon (`brew services`) that also starts at boot.

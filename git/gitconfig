@@ -25,7 +25,12 @@
 
 [diff]
     tool = smerge
-    algorithm = patience
+    # histogram = patience plus better handling of reordered code, and faster
+    algorithm = histogram
+    # Paint moved lines distinctly from added/deleted ones — kept greyscale
+    # via the oldMoved/newMoved colours in the Colours section
+    colorMoved = default
+    colorMovedWS = allow-indentation-change
 
 [difftool]
     prompt = false
@@ -49,9 +54,14 @@
 
 [merge]
     tool = smerge
+    # zdiff3 markers add the merge base between ours/theirs, so a conflict
+    # shows what the code was before both sides changed it
+    conflictstyle = zdiff3
 
 [mergetool]
     prompt = false
+    # no .orig files left behind after resolving conflicts
+    keepBackup = false
 
 # Sublime Merge's purpose-built 3-way conflict editor (official syntax).
 # trustExitCode stays false: git judges resolution by whether $MERGED
@@ -69,14 +79,49 @@
 [push]
     default = simple
     autoSetupRemote = true
+    # annotated tags riding on pushed commits go up with them
+    followTags = true
 
 [pull]
     ff = only
     rebase = true
 
+[fetch]
+    # every fetch prunes remote-tracking refs deleted on the remote (the
+    # cleanup alias keeps its own -p for standalone use)
+    prune = true
+
+[commit]
+    # show the full diff in the commit-message editor
+    verbose = true
+
+[rerere]
+    # remember conflict resolutions and replay them when the same conflict
+    # reappears (long rebases, cherry-picks); undo a bad memory with
+    # `git rerere forget <path>`
+    enabled = true
+
+[help]
+    # `git stauts` offers the correction and waits for y/n
+    autocorrect = prompt
+
+[branch]
+    # `git b` lists most recently committed-to first
+    sort = -committerdate
+
+[tag]
+    sort = -taggerdate
+
 [rebase]
     instructionFormat = "[%an - %ar] %s"
     autoStash = true
+    # fold fixup!/squash! commits into their targets automatically
+    autoSquash = true
+    # rebasing a branch drags along any other branches stacked on it
+    updateRefs = true
+    # deleting a line in the interactive todo aborts instead of silently
+    # dropping the commit — use an explicit `drop` to really drop one
+    missingCommitsCheck = error
 
 # ═══ Colours ═══
 # Greyscale output, matching the prompt/nvim grey ramp (256-palette:
@@ -89,6 +134,10 @@
     commit = 250
     old = 243
     new = 250 bold
+    # moved lines sit outside the plain old/new greys: dimmer when moved
+    # away, brightest-italic where they land
+    oldMoved = 239
+    newMoved = 255 italic
     whitespace = 239 reverse
 
 [color "status"]
